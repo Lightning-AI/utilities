@@ -89,8 +89,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apt-get update
-          apt-get install -y texlive-latex-extra dvipng texlive-pictures
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-extra dvipng texlive-pictures
           pip install -qU -r requirements.txt -f https://download.pytorch.org/whl/torch_stable.html
           pip install -r docs/requirements.txt
           python --version
