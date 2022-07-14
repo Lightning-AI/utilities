@@ -3,6 +3,7 @@
 import os
 from importlib.util import module_from_spec, spec_from_file_location
 
+from pkg_resources import parse_requirements
 from setuptools import find_packages, setup
 
 _PATH_ROOT = os.path.realpath(os.path.dirname(__file__))
@@ -18,7 +19,6 @@ def _load_py_module(fname, pkg="pl_devtools"):
 
 
 about = _load_py_module("__about__.py")
-setup_tools = _load_py_module("setup_tools.py")
 with open(os.path.join(_PATH_REQUIRE, "base.txt")) as fp:
     requirements = list(map(str, parse_requirements(fp.readline())))
 
