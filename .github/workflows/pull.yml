@@ -1,4 +1,3 @@
-# This is just an example of how to use reusable workflows
 name: pull
 
 on:
@@ -15,5 +14,5 @@ jobs:
   check-typing:
     uses: ./.github/workflows/check-typing.yml
 
-  check-typing:
+  check-schema:
     uses: ./.github/workflows/check-schema.yml
