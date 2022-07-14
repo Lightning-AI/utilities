@@ -18,7 +18,7 @@ inputs:
   dirs:
     description: Testing folders per domains
     required: false
-    default: "unittests"
+    default: "."
   test-timeout:
     description: PyTest timeout
     required: false
@@ -40,20 +40,6 @@ runs:
 
   - run: echo "PYTEST_ARTEFACT=test-results-${{ inputs.os }}-py${{ inputs.python-version }}-pt{{ inputs.pytorch-version }}-${{ inputs.requires }}" >> $GITHUB_ENV
     shell: bash
-
-  - name: Pull testing data from S3
-    working-directory: ./tests
-    run: |
-      pip install -q "urllib3>1.0"
-      # wget is simpler but does not work on Windows
-      python -c "from urllib.request import urlretrieve ; urlretrieve('https://pl-public-data.s3.amazonaws.com/metrics/data.zip', 'data.zip')"
-      unzip -o data.zip
-      ls -l _data/*
-    shell: ${{ inputs.shell-type }}
-
-  - name: Export README tests
-    run: python -m phmdoctest README.md --outfile tests/unittests/test_readme.py
-    shell: ${{ inputs.shell-type }}
 
   - name: Unittests
     working-directory: ./tests
