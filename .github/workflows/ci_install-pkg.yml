@@ -18,19 +18,18 @@ jobs:
 
       - name: Check package
         run: |
-          # TODO: Enable check on MANIFEST.in
-          # pip install check-manifest
-          # check-manifest
+          pip install -U check-manifest
+          check-manifest
           python setup.py check --metadata --strict
 
       - name: Create package
         run: |
-          pip install --upgrade setuptools wheel
+          pip install -U setuptools wheel
           python setup.py sdist bdist_wheel
 
       - name: Verify package
         run: |
-          pip install twine>=3.2
+          pip install -U twine
           twine check dist/*
           python setup.py clean
 
@@ -39,12 +38,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04, macOS-10.15, windows-2019]  #
-        python-version: [3.7]  #, 3.8
+        os: [ubuntu-20.04, macos-12, windows-2022]
+        python-version: [3.8]
 
     steps:
       - uses: actions/checkout@master
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -57,6 +56,6 @@ jobs:
         working-directory: dist
         run: |
           ls
-          pip install $(python -c "import glob ; print(' '.join(glob.glob('*.whl')))")
+          pip install $(python -c "import glob; print(' '.join(glob.glob('*.whl')))")
           pip show lightning-devtools
-          python -c "import pl_devtools ;  print(pl_devtools.__version__)"
+          python -c "import pl_devtools; print(pl_devtools.__version__)"
