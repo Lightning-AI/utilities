@@ -19,8 +19,8 @@ def _load_py_module(fname, pkg="pl_devtools"):
 
 about = _load_py_module("__about__.py")
 setup_tools = _load_py_module("setup_tools.py")
-long_description = setup_tools._load_readme_description(_PATH_ROOT, homepage=about.__homepage__, ver=about.__version__)
-
+with open(os.path.join(_PATH_REQUIRE, "base.txt")) as fp:
+    requirements = list(map(str, parse_requirements(fp.readline())))
 
 setup(
     name="lightning-devtools",
@@ -33,14 +33,14 @@ setup(
     license=about.__license__,
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    long_description=long_description,
-    long_description_content_type="text/markdown",
+    # long_description=long_description,
+    # long_description_content_type="text/markdown",
     include_package_data=True,
     zip_safe=False,
     keywords=["DevOps", "CI/CD"],
     python_requires=">=3.7",
     setup_requires=[],
-    install_requires=setup_tools._load_requirements(path_dir=_PATH_ROOT, file_name="requirements.txt"),
+    install_requires=requirements,
     project_urls={
         "Bug Tracker": "https://github.com/Lightning-AI/dev-toolbox/issues",
         "Documentation": "https://dev-toolbox.rtfd.io/en/latest/",
