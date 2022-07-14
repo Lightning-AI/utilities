@@ -21,6 +21,8 @@ def _load_py_module(fname, pkg="pl_devtools"):
 about = _load_py_module("__about__.py")
 with open(os.path.join(_PATH_REQUIRE, "base.txt")) as fp:
     requirements = list(map(str, parse_requirements(fp.readline())))
+with open(os.path.join(_PATH_ROOT, "README.md")) as fp:
+    readme = fp.read()
 
 setup(
     name="lightning-devtools",
@@ -33,8 +35,8 @@ setup(
     license=about.__license__,
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    # long_description=long_description,
-    # long_description_content_type="text/markdown",
+    long_description=readme,
+    long_description_content_type="text/markdown",
     include_package_data=True,
     zip_safe=False,
     keywords=["DevOps", "CI/CD"],
