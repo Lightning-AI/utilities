@@ -11,6 +11,9 @@ inputs:
   pytorch-version:
     description: PyTorch version
     required: true
+  pkg-name:
+    description: package name for coverage collctions
+    required: true
   requires:
     description: define oldest or latest
     required: false
@@ -19,8 +22,8 @@ inputs:
     description: Testing folders per domains
     required: false
     default: "."
-  test-timeout:
-    description: PyTest timeout
+  pytest-args:
+    description: Additional pytest arguments such as `--timeout=120`
     required: false
     default: ""
   shell-type:
@@ -43,7 +46,7 @@ runs:
 
   - name: Unittests
     working-directory: ./tests
-    run: python -m pytest ${{ inputs.dirs }} --cov=torchmetrics --junitxml="$PYTEST_ARTEFACT.xml" --durations=50 ${{ inputs.test-timeout }}
+    run: python -m pytest ${{ inputs.dirs }} --cov=${{ inputs.pkg-name }} --junitxml="$PYTEST_ARTEFACT.xml" --durations=50 ${{ inputs.test-timeout }}
     shell: ${{ inputs.shell-type }}
 
   - name: Upload pytest results

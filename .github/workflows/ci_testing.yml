@@ -53,7 +53,8 @@ jobs:
         os: ${{ runner.os }}
         python-version: ${{ matrix.python-version }}
         pytorch-version: ${{ matrix.pytorch-version }}
-        test-timeout: "--timeout=120"
+        pkg-name: "pl_devtools"
+        pytest-args: "--timeout=120"
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
