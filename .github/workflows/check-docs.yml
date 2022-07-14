@@ -34,7 +34,7 @@ jobs:
         docs-folder: "docs/"
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
 
-  test:
+  doctest:
     runs-on: ubuntu-20.04
 
     steps:
@@ -51,9 +51,6 @@ jobs:
           python --version
           pip --version
           pip list
-          # First run the same pipeline as Read-The-Docs
-          apt-get update --fix-missing
-          apt-get install -y cmake
         shell: bash
 
       - name: Test Documentation

@@ -16,6 +16,8 @@ jobs:
 
   check-schema:
     uses: ./.github/workflows/check-schema.yml
+    with:
+      azure-dir: ""
 
   check-package:
     uses: ./.github/workflows/check-package.yml
