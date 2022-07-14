@@ -19,3 +19,6 @@ jobs:
 
   check-package:
     uses: ./.github/workflows/check-package.yml
+
+  check-docs:
+    uses: ./.github/workflows/check-docs.yml

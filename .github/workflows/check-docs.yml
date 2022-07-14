@@ -1,16 +1,31 @@
-name: "Docs check"
-# https://github.com/marketplace/actions/sphinx-build
+name: reuse check docs
 
 on:
-  push: {}
-  pull_request:
-    branches: [master]
+  workflow_call:
+    inputs:
+      python-version:
+        description: 'Python version to use'
+        default: '3.9'
+        required: false
+        type: string
+      docs-dir:
+        description: 'Working directory to run make docs in'
+        default: './docs'
+        required: false
+        type: string
+      timeout-minutes:
+        description: 'timeout-minutes for each job'
+        default: 15
+        required: false
+        type: number
 
 jobs:
-  check-docs:
+  check:
     runs-on: ubuntu-20.04
+
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+
     - uses: ammaraskar/sphinx-action@master
       with:
         # git is required to clone the docs theme
@@ -19,17 +34,16 @@ jobs:
         docs-folder: "docs/"
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
 
-  test-docs:
+  test:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.7
+      - uses: actions/checkout@v3
 
-      # Note: This uses an internal pip API and may not always work
-      # https://github.com/actions/cache/blob/master/examples.md#multiple-oss-in-a-workflow
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
       - name: Cache pip
         uses: actions/cache@v2
         with:
@@ -40,9 +54,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install  --requirement requirements.txt -U -f https://download.pytorch.org/whl/cpu/torch_stable.html  --quiet
-          pip install  --requirement docs/requirements.txt
-          python --version ; pip --version ; pip list
+          pip install -qU -r requirements.txt -f https://download.pytorch.org/whl/cpu/torch_stable.html
+          pip install -r docs/requirements.txt
+          python --version; pip --version; pip list
         shell: bash
 
       - name: Test Documentation
@@ -55,19 +69,18 @@ jobs:
           make doctest
           make coverage
 
-  make-docs:
+  build:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.7
+      - uses: actions/checkout@v3
 
-      # Note: This uses an internal pip API and may not always work
-      # https://github.com/actions/cache/blob/master/examples.md#multiple-oss-in-a-workflow
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
       - name: Cache pip
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
@@ -76,26 +89,23 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install  --requirement requirements.txt -U -f https://download.pytorch.org/whl/torch_stable.html  --quiet
-          pip install  --requirement docs/requirements.txt
-          # install Texlive, see https://linuxconfig.org/how-to-install-latex-on-ubuntu-20-04-focal-fossa-linux
-          sudo apt-get update
-          sudo apt-get install -y texlive-latex-extra dvipng texlive-pictures
+          apt-get update
+          apt-get install -y texlive-latex-extra dvipng texlive-pictures
+          pip install -qU -r requirements.txt -f https://download.pytorch.org/whl/torch_stable.html
+          pip install -r docs/requirements.txt
           python --version
           pip --version
           pip list
         shell: bash
 
-      - name: Make Documentation
+      - name: Build documentation
+        working-directory: docs
         run: |
-          # First run the same pipeline as Read-The-Docs
-          cd docs
-          make clean
           make html --debug --jobs 2 SPHINXOPTS="-W --keep-going"
 
       - name: Upload built docs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: docs-results-${{ github.sha }}
+          name: docs-${{ github.sha }}
           path: docs/build/html/
         if: success()
