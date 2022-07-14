@@ -1,25 +1,26 @@
-name: Install pkg
+name: check package
 
-# see: https://help.github.com/en/actions/reference/events-that-trigger-workflows
-on:  # Trigger the workflow on push or pull request, but only for the master branch
-  push: {}
+on:
+  push:
+    branches: [master, "release/*"]
   pull_request:
-    branches: [master]
+    branches: [master, "release/*"]
 
 jobs:
   pkg-check:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
-          python-version: 3.7
+          python-version: 3.8
 
       - name: Check package
         run: |
-          pip install check-manifest
-          check-manifest
+          # TODO: Enable check on MANIFEST.in
+          # pip install check-manifest
+          # check-manifest
           python setup.py check --metadata --strict
 
       - name: Create package
