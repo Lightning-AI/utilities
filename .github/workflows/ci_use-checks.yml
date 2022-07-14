@@ -1,4 +1,4 @@
-name: pull
+name: Apply checks
 
 on:
   push:
