@@ -9,7 +9,7 @@ _PATH_ROOT = os.path.dirname(__file__)
 
 
 def _load_py_module(fname, pkg="pl_devtools"):
-    spec = spec_from_file_location(os.path.join(pkg, fname), os.path.join(_PATH_ROOT, pkg, fname))
+    spec = spec_from_file_location(os.path.join(pkg, fname), os.path.join(_PATH_ROOT, "src", pkg, fname))
     py = module_from_spec(spec)
     spec.loader.exec_module(py)
     return py
