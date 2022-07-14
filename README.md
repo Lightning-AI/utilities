@@ -14,7 +14,6 @@ You still need to enable some external integrations such as:
 - in GH setting, set `gh-pages` as website and _docs_ as source folder
 - init Read-The-Docs (add this new project)
 - add credentials for releasing package to PyPI
-- specify license in `LICENSE` file and package init
 
 ## Tests / Docs notes
 
