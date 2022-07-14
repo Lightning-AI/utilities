@@ -34,9 +34,8 @@ jobs:
     - name: Set oldest dependencies
       if: matrix.requires == 'oldest'
       run: |
-        for fpath in ('requirements/base.txt', 'requirements/test.txt'):
-            req = open(fpath).read().replace('>=', '==')
-            open(fpath, 'w').write(req)
+        pip install -e .
+        python -m pl_devtools requirements set-oldest
       shell: python
 
     - name: Get pip cache
