@@ -89,18 +89,16 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y texlive-latex-extra dvipng texlive-pictures
+          apt-get update
+          apt-get install -y texlive-latex-extra dvipng texlive-pictures
           pip install -qU -r requirements.txt -f https://download.pytorch.org/whl/torch_stable.html
           pip install -r docs/requirements.txt
           python --version
           pip --version
           pip list
-        shell: bash
 
       - name: Build documentation
-        run: |
-          make docs
+        run: make docs
 
       - name: Upload built docs
         uses: actions/upload-artifact@v3
