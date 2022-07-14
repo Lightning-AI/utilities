@@ -1,4 +1,4 @@
-name: check package
+name: reuse check package
 
 on:
   workflow_call:

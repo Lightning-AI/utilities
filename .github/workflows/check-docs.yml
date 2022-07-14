@@ -99,9 +99,8 @@ jobs:
         shell: bash
 
       - name: Build documentation
-        working-directory: docs
         run: |
-          make html --debug --jobs 2 SPHINXOPTS="-W --keep-going"
+          make docs
 
       - name: Upload built docs
         uses: actions/upload-artifact@v3
