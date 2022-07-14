@@ -37,7 +37,7 @@ setup(
     long_description_content_type="text/markdown",
     include_package_data=True,
     zip_safe=False,
-    keywords=["deep learning", "pytorch", "AI"],
+    keywords=["DevOps", "CI/CD"],
     python_requires=">=3.7",
     setup_requires=[],
     install_requires=setup_tools._load_requirements(path_dir=_PATH_ROOT, file_name="requirements.txt"),
@@ -54,9 +54,6 @@ setup(
         "Development Status :: 3 - Alpha",
         # Indicate who your project is intended for
         "Intended Audience :: Developers",
-        "Topic :: Scientific/Engineering :: Artificial Intelligence",
-        "Topic :: Scientific/Engineering :: Image Recognition",
-        "Topic :: Scientific/Engineering :: Information Analysis",
         # Pick your license as you wish
         # 'License :: OSI Approved :: BSD License',
         "Operating System :: OS Independent",
