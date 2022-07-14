@@ -19,7 +19,7 @@ test:
 	# python -m coverage run --source src/pl_devtools -m pytest --flake8 --durations=0 -v -k
 
 docs: clean
-	pip install -e . -r requirements/docs.txt
+	pip install -e . -q -r requirements/docs.txt
 	cd docs && $(MAKE) html
 
 clean:
