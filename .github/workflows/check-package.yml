@@ -1,4 +1,4 @@
-name: reuse check package
+name: Check package flow
 
 on:
   workflow_call:
@@ -30,7 +30,7 @@ jobs:
 
       - name: Check local package
         run: |
-          pip install -qU check-manifest
+          pip install -q -U check-manifest
           # check MANIFEST.in
           check-manifest
           # check package
@@ -38,13 +38,13 @@ jobs:
 
       - name: Create package
         run: |
-          pip install -qU setuptools wheel
+          pip install -q -U setuptools wheel
           python setup.py sdist bdist_wheel
           python setup.py clean
 
       - name: Check build package
         run: |
-          pip install -qU twine
+          pip install -q -U twine
           # check package description
           twine check dist/*
 

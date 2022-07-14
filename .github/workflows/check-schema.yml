@@ -1,4 +1,4 @@
-name: reuse check schema
+name: Check schema flow
 
 on:
   workflow_call:
@@ -20,7 +20,7 @@ jobs:
         run: pip install check-jsonschema
 
       - name: Scan repo
-        run: python -c "import os, is_dir = os.path.isdir('.github/actions'); print(f'GH_ACTIONS={int(is_dir)}')" >> $GITHUB_ENV
+        run: python -c "import os; is_dir = os.path.isdir('.github/actions'); print(f'GH_ACTIONS={int(is_dir)}')" >> $GITHUB_ENV
 
       - name: GitHub Actions - workflow
         run: check-jsonschema $(find .github/workflows -name '*.yml' -a ! -name '_*.yml') --builtin-schema "github-workflows"

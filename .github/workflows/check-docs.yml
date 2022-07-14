@@ -1,4 +1,4 @@
-name: reuse check docs
+name: Check docs flow
 
 on:
   workflow_call:
@@ -46,7 +46,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -eqU . -f https://download.pytorch.org/whl/cpu/torch_stable.html
+          pip install -e . -U -f https://download.pytorch.org/whl/cpu/torch_stable.html
           pip install -r docs/requirements.txt
           python --version
           pip --version
@@ -76,7 +76,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -qU -r requirements.txt -r docs/requirements.txt -f https://download.pytorch.org/whl/torch_stable.html
+          pip install -e . -U -r docs/requirements.txt -f https://download.pytorch.org/whl/torch_stable.html
           sudo apt-get update --fix-missing
           sudo apt-get install -y texlive-latex-extra dvipng texlive-pictures
           python --version
