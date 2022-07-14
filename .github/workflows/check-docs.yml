@@ -42,22 +42,22 @@ jobs:
 
       - uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ inputs.python-version }}
 
       - name: Install dependencies
         run: |
           pip install -qU -r requirements.txt -f https://download.pytorch.org/whl/cpu/torch_stable.html
           pip install -r docs/requirements.txt
           python --version; pip --version; pip list
+          # First run the same pipeline as Read-The-Docs
+          apt-get update && sudo apt-get install -y cmake
         shell: bash
 
       - name: Test Documentation
+        working-directory: ${{ inputs.docs-dir }}
         env:
           SPHINX_MOCK_REQUIREMENTS: 0
         run: |
-          # First run the same pipeline as Read-The-Docs
-          apt-get update && sudo apt-get install -y cmake
-          cd docs
           make doctest
           make coverage
 
@@ -69,7 +69,7 @@ jobs:
 
       - uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ inputs.python-version }}
 
       - name: Install dependencies
         run: |
@@ -81,11 +81,12 @@ jobs:
           pip list
 
       - name: Build documentation
-        run: make docs
+        working-directory: ${{ inputs.docs-dir }}
+        run: make html --debug SPHINXOPTS="-W --keep-going"
 
       - name: Upload built docs
         uses: actions/upload-artifact@v3
         with:
           name: docs-${{ github.sha }}
-          path: docs/build/html/
+          path: ${{ inputs.docs-dir }}/build/html/
         if: success()
