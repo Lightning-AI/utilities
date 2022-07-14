@@ -23,6 +23,5 @@ jobs:
       import-name: "pl_devtools"
       pypi-name: "lightning-devtools"
 
-
   check-docs:
     uses: ./.github/workflows/check-docs.yml
