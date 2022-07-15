@@ -1,6 +1,6 @@
 import fire
 
-from pl_devtools.dependencies import replace_oldest_ver, prune_pkgs_in_requirements
+from pl_devtools.dependencies import prune_pkgs_in_requirements, replace_oldest_ver
 
 
 def main() -> None:
