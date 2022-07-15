@@ -2,9 +2,6 @@ name: Complex caching
 description: some more complex caching - pip & conda
 
 inputs:
-  os:
-    description: operating system
-    required: true
   python-version:
     description: Python version
     required: true
@@ -52,12 +49,12 @@ runs:
     uses: actions/cache@v3
     with:
       path: $PIP_CACHE_DIR
-      key: ${{ inputs.os }}-py${{ inputs.python-version }}-pip-td${TIME_PERIOD}-${{ inputs.offset }}-${{ hashFiles('requirements.txt') }}
-      restore-keys: ${{ inputs.os }}-py${{ inputs.python-version }}-pip-td${TIME_PERIOD}-${{ inputs.offset }}-
+      key: ${{ runner.os }}-py${{ inputs.python-version }}-pip-td${TIME_PERIOD}-${{ inputs.offset }}-${{ hashFiles('requirements.txt') }}
+      restore-keys: ${{ runner.os }}-py${{ inputs.python-version }}-pip-td${TIME_PERIOD}-${{ inputs.offset }}-
 
   - name: Cache conda
     uses: actions/cache@v3
-    if: inputs.os == 'Linux'
+    if: runner.os == 'Linux'
     with:
       path: ~/conda_pkgs_dir
       key: py${{ inputs.python-version }}-conda-td${TIME_PERIOD}-${{ inputs.offset }}

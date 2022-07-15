@@ -2,9 +2,6 @@ name: Unittesting and coverage
 description: pull data samples -> unittests
 
 inputs:
-  os:
-    description: operation system
-    required: true
   python-version:
     description: Python version
     required: true
@@ -41,7 +38,7 @@ runs:
       pip list
     shell: ${{ inputs.shell-type }}
 
-  - run: echo "PYTEST_ARTEFACT=test-results-${{ inputs.os }}-py${{ inputs.python-version }}-pt{{ inputs.pytorch-version }}-${{ inputs.requires }}" >> $GITHUB_ENV
+  - run: echo "PYTEST_ARTEFACT=test-results-${{ runner.os }}-py${{ inputs.python-version }}-pt{{ inputs.pytorch-version }}-${{ inputs.requires }}" >> $GITHUB_ENV
     shell: bash
 
   - name: Unittests
