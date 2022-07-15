@@ -3,13 +3,13 @@ description: some more complex caching - pip & conda
 
 inputs:
   os:
-    description: operation system
+    description: operating system
     required: true
   python-version:
     description: Python version
     required: true
   requires:
-    description: define oldest or latest
+    description: define oldest, latest, or an empty string
     required: false
     default: ""
   offset:
