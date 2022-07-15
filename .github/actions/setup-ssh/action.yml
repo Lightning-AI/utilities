@@ -1,0 +1,19 @@
+# https://github.com/mxschmitt/action-tmate/
+name: setup ssh
+
+on:
+  workflow_dispatch:
+    inputs:
+      runnerType:
+        description: 'The type of runner you would like to reserve'
+        default: "linux.2xlarge"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@f708e7bca76af1b52bb8c8e5fe790ef5e01a4fc8
+      timeout-minutes: 120
+      with:
+        limit-access-to-actor: true
+        install_dependencies: false

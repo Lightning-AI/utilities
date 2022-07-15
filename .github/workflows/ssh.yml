@@ -1,0 +1,25 @@
+name: ssh
+
+on:
+  workflow_dispatch:
+    inputs:
+      debug_enabled:
+        description: 'Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)'
+        required: false
+        default: false
+      timeout-minutes:
+        description: 'timeout-minutes for the tmate session'
+        required: false
+        default: 120
+
+jobs:
+  reserve-runner:
+    runs-on:
+    steps:
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
+        timeout-minutes: 120
+        with:
+          limit-access-to-actor: true
+          install_dependencies: false
