@@ -10,7 +10,7 @@ if os.path.isfile(REQUIREMENT_ROOT):
     REQUIREMENT_FILES_ALL += [REQUIREMENT_ROOT]
 
 
-def requirements_prune_pkgs(packages: Sequence[str], req_files: Sequence[str] = REQUIREMENT_FILES_ALL) -> None:
+def prune_pkgs_in_requirements(packages: Sequence[str], req_files: Sequence[str] = REQUIREMENT_FILES_ALL) -> None:
     """Remove some packages from given requirement files."""
     if isinstance(req_files, str):
         req_files = [req_files]
