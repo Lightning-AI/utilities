@@ -1,22 +1,70 @@
-# Lightning Sample project/package
-
-This is starter project template which shall simplify initial steps for each new PL project...
+# Lightning Devtools
 
 [![UnitTests](https://github.com/Lightning-AI/dev-toolbox/actions/workflows/ci_testing.yml/badge.svg?event=push)](https://github.com/Lightning-AI/dev-toolbox/actions/workflows/ci_testing.yml)
 [![Apply checks](https://github.com/Lightning-AI/dev-toolbox/actions/workflows/ci_use-checks.yml/badge.svg?event=push)](https://github.com/Lightning-AI/dev-toolbox/actions/workflows/ci_use-checks.yml)
 [![Documentation Status](https://readthedocs.org/projects/pt-dev-toolbox/badge/?version=latest)](https://pt-dev-toolbox.readthedocs.io/en/latest/?badge=latest)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Lightning-AI/dev-toolbox/main.svg?badge_token=mqheL1-cTn-280Vx4cJUdg)](https://results.pre-commit.ci/latest/github/Lightning-AI/dev-toolbox/main?badge_token=mqheL1-cTn-280Vx4cJUdg)
 
-## To be Done
+This repository provides:
+1. reusable GitHub workflows and actions
+2. tooling package used in our CI `pl_devtools`.
 
-You still need to enable some external integrations such as:
 
-- in GH setting, set `gh-pages` as website and _docs_ as source folder
-- init Read-The-Docs (add this new project)
-- add credentials for releasing package to PyPI
+### 1. Reusable workflows
 
-## Tests / Docs notes
+#### Example
+```yml
+name: Check schema
 
-- We are using [Napoleon style](https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html), and we shall use static types...
-- It is nice to se [doctest](https://docs.python.org/3/library/doctest.html) as they are also generated as examples in documentation
-- For wider and edge cases testing use [pytest parametrization](https://docs.pytest.org/en/stable/parametrize.html) :\]
+on: [push]
+
+jobs:
+  check-schema:
+    uses: Lightning-AI/lightning-devtools/.github/workflows/check-schema.yml@main
+    with:
+      azure-dir: ""
+```
+
+See usage of other workflows in [.github/workflows/ci_use-checks.yml](.github/workflows/ci_use-checks.yml)
+
+### 2. Reusable composite actions
+
+#### Example
+```yml
+name: Do something with cache
+
+on: [push]
+
+jobs:
+  do_something:
+    - name: Cache
+      uses: Lightning-AI/lightning-devtools/.github/actions/cache
+      with:
+        python-version: 3.9
+```
+
+### 3. Tooling package
+
+The package provides common CLI commands used in our CI.
+
+#### Installation
+```
+pip install lightning-devtools
+```
+
+#### Example
+```console
+$ cat requirements/test.txt
+coverage>=5.0
+codecov>=2.1
+pytest>=6.0
+pytest-cov
+pytest-timeout
+$ python -m pl_devtools requirements set-oldest
+$ cat requirements/test.txt
+coverage==5.0
+codecov==2.1
+pytest==6.0
+pytest-cov
+pytest-timeout
+```
