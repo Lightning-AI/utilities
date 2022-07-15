@@ -34,7 +34,7 @@ jobs:
             open(fpath, 'w').write(req)
       shell: python
 
-    - uses: ./.github/actions/caching
+    - uses: ./.github/actions/cache
       with:
         os: ${{ runner.os }}
         python-version: ${{ matrix.python-version }}
