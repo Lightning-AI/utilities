@@ -12,7 +12,7 @@ This repository provides:
 
 ### 1. Reusable workflows
 
-#### Example
+#### Usage
 ```yml
 name: Check schema
 
@@ -28,10 +28,9 @@ jobs:
 See usage of other workflows in [.github/workflows/ci_use-checks.yml](.github/workflows/ci_use-checks.yml).
 
 ### 2. Reusable composite actions
-
 See available composite actions [.github/actions/](.github/actions/).
 
-#### Example
+#### Usage
 ```yml
 name: Do something with cache
 
@@ -53,19 +52,18 @@ jobs:
 ```
 
 ### 3. CLI
-
 The package provides common CLI commands.
-
-```
-python -m pl_devtools [group] [command]
-```
 
 #### Installation
 ```
 pip install lightning-devtools
 ```
 
-#### Example
+#### Usage
+```
+python -m pl_devtools [group] [command]
+```
+
 ```console
 $ cat requirements/test.txt
 coverage>=5.0
