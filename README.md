@@ -31,7 +31,7 @@ See usage of other workflows in [`https://github.com/Lightning-AI/devtools/tree/
 
 ## 2. Reusable composite actions
 
-See available composite actions [`.github/actions/`](https://github.com/Lightning-AI/devtools/tree/main/.github/actions ).
+See available composite actions [`.github/actions/`](https://github.com/Lightning-AI/devtools/tree/main/.github/actions).
 
 __Usage:__
 
