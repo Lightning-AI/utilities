@@ -1,9 +1,9 @@
 # Lightning Devtools
 
-[![UnitTests](https://github.com/Lightning-AI/dev-toolbox/actions/workflows/ci_testing.yml/badge.svg?event=push)](https://github.com/Lightning-AI/dev-toolbox/actions/workflows/ci_testing.yml)
-[![Apply checks](https://github.com/Lightning-AI/dev-toolbox/actions/workflows/ci_use-checks.yml/badge.svg?event=push)](https://github.com/Lightning-AI/dev-toolbox/actions/workflows/ci_use-checks.yml)
+[![UnitTests](https://github.com/Lightning-AI/devtools/actions/workflows/ci_testing.yml/badge.svg?event=push)](https://github.com/Lightning-AI/devtools/actions/workflows/ci_testing.yml)
+[![Apply checks](https://github.com/Lightning-AI/devtools/actions/workflows/ci_use-checks.yml/badge.svg?event=push)](https://github.com/Lightning-AI/devtools/actions/workflows/ci_use-checks.yml)
 [![Documentation Status](https://readthedocs.org/projects/pt-dev-toolbox/badge/?version=latest)](https://pt-dev-toolbox.readthedocs.io/en/latest/?badge=latest)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Lightning-AI/dev-toolbox/main.svg?badge_token=mqheL1-cTn-280Vx4cJUdg)](https://results.pre-commit.ci/latest/github/Lightning-AI/dev-toolbox/main?badge_token=mqheL1-cTn-280Vx4cJUdg)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Lightning-AI/devtools/main.svg?badge_token=mqheL1-cTn-280Vx4cJUdg)](https://results.pre-commit.ci/latest/github/Lightning-AI/devtools/main?badge_token=mqheL1-cTn-280Vx4cJUdg)
 
 This repository provides:
 1. reusable GitHub workflows and actions
@@ -20,7 +20,7 @@ on: [push]
 
 jobs:
   check-schema:
-    uses: Lightning-AI/lightning-devtools/.github/workflows/check-schema.yml@main
+    uses: Lightning-AI/devtools/.github/workflows/check-schema.yml@main
     with:
       azure-dir: ""
 ```
@@ -38,7 +38,7 @@ on: [push]
 jobs:
   do_something:
     - name: Cache
-      uses: Lightning-AI/lightning-devtools/.github/actions/cache
+      uses: Lightning-AI/devtools/.github/actions/cache
       with:
         python-version: 3.9
 ```
