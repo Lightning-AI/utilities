@@ -27,11 +27,11 @@ jobs:
       azure-dir: ""
 ```
 
-See usage of other workflows in [`.github/workflows/ci_use-checks.yml`](.github/workflows/ci_use-checks.yml).
+See usage of other workflows in [`.github/workflows/ci_use-checks.yml`](./.github/workflows/ci_use-checks.yml).
 
 ## 2. Reusable composite actions
 
-See available composite actions [`.github/actions/`](.github/actions/).
+See available composite actions [`.github/actions/`](./.github/actions/).
 
 __Usage:__
 
