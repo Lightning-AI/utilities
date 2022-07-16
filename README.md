@@ -6,13 +6,15 @@
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Lightning-AI/devtools/main.svg?badge_token=mqheL1-cTn-280Vx4cJUdg)](https://results.pre-commit.ci/latest/github/Lightning-AI/devtools/main?badge_token=mqheL1-cTn-280Vx4cJUdg)
 
 This repository provides:
+
 1. GitHub workflows
-2. GitHub actions
-3. CLI `pl_devtools`
+1. GitHub actions
+1. CLI `pl_devtools`
 
 ### 1. Reusable workflows
 
 #### Usage
+
 ```yml
 name: Check schema
 
@@ -28,9 +30,11 @@ jobs:
 See usage of other workflows in [.github/workflows/ci_use-checks.yml](.github/workflows/ci_use-checks.yml).
 
 ### 2. Reusable composite actions
+
 See available composite actions [.github/actions/](.github/actions/).
 
 #### Usage
+
 ```yml
 name: Do something with cache
 
@@ -52,14 +56,17 @@ jobs:
 ```
 
 ### 3. CLI
+
 The package provides common CLI commands.
 
 #### Installation
+
 ```
 pip install lightning-devtools
 ```
 
 #### Usage
+
 ```
 python -m pl_devtools [group] [command]
 ```
