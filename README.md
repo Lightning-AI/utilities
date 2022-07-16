@@ -13,7 +13,7 @@ __This repository covers the following use-cases:__
 
 ## 1. Reusable workflows
 
-### Usage
+__Usage:__
 
 ```yml
 name: Check schema
@@ -33,7 +33,7 @@ See usage of other workflows in [.github/workflows/ci_use-checks.yml](.github/wo
 
 See available composite actions [.github/actions/](.github/actions/).
 
-### Usage
+__Usage:__
 
 ```yml
 name: Do something with cache
@@ -59,7 +59,7 @@ jobs:
 
 The package provides common CLI commands.
 
-### Installation
+__Installation:__
 
 ```bash
 pip install lightning-devtools
@@ -67,7 +67,7 @@ pip install lightning-devtools
 pip install https://github.com/Lightning-AI/devtools/archive/refs/heads/main.zip
 ```
 
-### Usage
+__Usage:__
 
 ```bash
 python -m pl_devtools [group] [command]
