@@ -55,12 +55,14 @@ jobs:
 The package provides common CLI commands.
 
 #### Installation
-```
+```bash
 pip install lightning-devtools
+# OR from source
+pip install https://github.com/Lightning-AI/devtools/archive/refs/heads/main.zip
 ```
 
 #### Usage
-```
+```bash
 python -m pl_devtools [group] [command]
 ```
 
