@@ -36,11 +36,18 @@ name: Do something with cache
 on: [push]
 
 jobs:
-  do_something:
-    - name: Cache
-      uses: Lightning-AI/devtools/.github/actions/cache
+  pytest:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
       with:
         python-version: 3.9
+    - uses: Lightning-AI/devtools/.github/actions/cache
+      with:
+        python-version: 3.9
+        requires: oldest
+        # requires: latest
 ```
 
 ### 3. CLI
