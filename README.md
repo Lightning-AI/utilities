@@ -15,7 +15,7 @@ __This repository covers the following use-cases:__
 
 __Usage:__
 
-```yml
+```yaml
 name: Check schema
 
 on: [push]
@@ -35,7 +35,7 @@ See available composite actions [.github/actions/](.github/actions/).
 
 __Usage:__
 
-```yml
+```yaml
 name: Do something with cache
 
 on: [push]
