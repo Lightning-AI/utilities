@@ -25,9 +25,11 @@ jobs:
       azure-dir: ""
 ```
 
-See usage of other workflows in [.github/workflows/ci_use-checks.yml](.github/workflows/ci_use-checks.yml)
+See usage of other workflows in [.github/workflows/ci_use-checks.yml](.github/workflows/ci_use-checks.yml).
 
 ### 2. Reusable composite actions
+
+See available composite actions [.github/actions/](.github/actions/).
 
 #### Example
 ```yml
@@ -52,7 +54,11 @@ jobs:
 
 ### 3. CLI
 
-The package provides common CLI commands used in our CI.
+The package provides common CLI commands.
+
+```
+python -m pl_devtools [group] [command]
+```
 
 #### Installation
 ```
