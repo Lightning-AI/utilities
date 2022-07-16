@@ -5,11 +5,11 @@
 [![Documentation Status](https://readthedocs.org/projects/pt-dev-toolbox/badge/?version=latest)](https://pt-dev-toolbox.readthedocs.io/en/latest/?badge=latest)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Lightning-AI/devtools/main.svg?badge_token=mqheL1-cTn-280Vx4cJUdg)](https://results.pre-commit.ci/latest/github/Lightning-AI/devtools/main?badge_token=mqheL1-cTn-280Vx4cJUdg)
 
-# This repository covers the following use-cases
+__This repository covers the following use-cases:__
 
-1. GitHub workflows
-1. GitHub actions
-1. CLI `pl_devtools`
+1. **GitHub workflows**
+1. **GitHub actions**
+1. **CLI `pl_devtools`**
 
 ## 1. Reusable workflows
 
