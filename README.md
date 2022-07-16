@@ -11,9 +11,9 @@ This repository provides:
 1. GitHub actions
 1. CLI `pl_devtools`
 
-### 1. Reusable workflows
+## 1. Reusable workflows
 
-#### Usage
+### Usage
 
 ```yml
 name: Check schema
@@ -29,11 +29,11 @@ jobs:
 
 See usage of other workflows in [.github/workflows/ci_use-checks.yml](.github/workflows/ci_use-checks.yml).
 
-### 2. Reusable composite actions
+## 2. Reusable composite actions
 
 See available composite actions [.github/actions/](.github/actions/).
 
-#### Usage
+### Usage
 
 ```yml
 name: Do something with cache
@@ -55,11 +55,11 @@ jobs:
         # requires: latest
 ```
 
-### 3. CLI
+## 3. CLI
 
 The package provides common CLI commands.
 
-#### Installation
+### Installation
 
 ```bash
 pip install lightning-devtools
@@ -67,7 +67,7 @@ pip install lightning-devtools
 pip install https://github.com/Lightning-AI/devtools/archive/refs/heads/main.zip
 ```
 
-#### Usage
+### Usage
 
 ```bash
 python -m pl_devtools [group] [command]
