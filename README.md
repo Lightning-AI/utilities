@@ -1,4 +1,4 @@
-# Lightning Devtools
+# Devtools
 
 [![UnitTests](https://github.com/Lightning-AI/devtools/actions/workflows/ci_testing.yml/badge.svg?event=push)](https://github.com/Lightning-AI/devtools/actions/workflows/ci_testing.yml)
 [![Apply checks](https://github.com/Lightning-AI/devtools/actions/workflows/ci_use-checks.yml/badge.svg?event=push)](https://github.com/Lightning-AI/devtools/actions/workflows/ci_use-checks.yml)
@@ -6,9 +6,9 @@
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Lightning-AI/devtools/main.svg?badge_token=mqheL1-cTn-280Vx4cJUdg)](https://results.pre-commit.ci/latest/github/Lightning-AI/devtools/main?badge_token=mqheL1-cTn-280Vx4cJUdg)
 
 This repository provides:
-1. reusable GitHub workflows and actions
-2. tooling package used in our CI `pl_devtools`.
-
+1. GitHub workflows
+2. GitHub actions
+3. CLI `pl_devtools`
 
 ### 1. Reusable workflows
 
@@ -43,7 +43,7 @@ jobs:
         python-version: 3.9
 ```
 
-### 3. Tooling package
+### 3. CLI
 
 The package provides common CLI commands used in our CI.
 
