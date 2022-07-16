@@ -59,19 +59,30 @@ jobs:
 
 The package provides common CLI commands.
 
-__Installation:__
+<details>
+  <summary>Installation</summary>
+From source:
+
+```bash
+pip install https://github.com/Lightning-AI/devtools/archive/refs/heads/main.zip
+```
+
+From pypi:
 
 ```bash
 pip install lightning-devtools
-# OR from source
-pip install https://github.com/Lightning-AI/devtools/archive/refs/heads/main.zip
 ```
+
+</details>
 
 __Usage:__
 
 ```bash
 python -m pl_devtools [group] [command]
 ```
+
+<details>
+  <summary>Example for setting min versions</summary>
 
 ```console
 $ cat requirements/test.txt
@@ -88,3 +99,5 @@ pytest==6.0
 pytest-cov
 pytest-timeout
 ```
+
+</details>
