@@ -11,15 +11,22 @@ on:
         description: 'PyPI name to install the package with'
         required: true
         type: string
+      test-matrix:
+        description: 'what test configs to run in json format'
+        required: false
+        type: string
+        default: |
+          {
+            os: ["ubuntu-20.04", "macos-11", "windows-2022"],
+            python-version: ["3.7", "3.9"],
+          }
 
 jobs:
   pkg-check:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      matrix:
-        os: [ubuntu-20.04, macos-12, windows-2022]
-        python-version: [3.7, 3.9]  # todo: make this as input too
+      matrix: ${{ fromJSON(inputs.test-matrix) }}
 
     steps:
       - uses: actions/checkout@v3
