@@ -22,7 +22,7 @@ on:
           }
 
 jobs:
-  check:
+  pkg-check:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
