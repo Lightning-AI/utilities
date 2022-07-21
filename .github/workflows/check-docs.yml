@@ -35,7 +35,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -e . -U -f https://download.pytorch.org/whl/cpu/torch_stable.html
+          pip install -e ".[dev]" -U --extra-index-url https://download.pytorch.org/whl/cpu
           pip install -r requirements/docs.txt
           python --version
           pip --version
@@ -64,7 +64,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -e ".[dev]" -U -r requirements/docs.txt --extra-index-url https://download.pytorch.org/whl/cpu
+          pip install -e . -U -r requirements/docs.txt --extra-index-url https://download.pytorch.org/whl/cpu
           sudo apt-get update --fix-missing
           sudo apt-get install -y texlive-latex-extra dvipng texlive-pictures
           python --version
