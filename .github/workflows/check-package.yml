@@ -11,7 +11,7 @@ on:
         description: 'PyPI name to install the package with'
         required: true
         type: string
-      test-matrix:
+      strategy-matrix:
         description: 'what test configs to run in json format'
         required: false
         type: string
@@ -28,7 +28,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(inputs.test-matrix) }}
+      matrix: ${{ fromJSON(inputs.strategy-matrix) }}
 
     steps:
       - name: Checkout
