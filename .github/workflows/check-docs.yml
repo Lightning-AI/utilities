@@ -35,7 +35,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -e ".[dev]" -U --extra-index-url https://download.pytorch.org/whl/cpu
+          pip install -e . -U --extra-index-url https://download.pytorch.org/whl/cpu
           pip install -r requirements/docs.txt
           python --version
           pip --version
