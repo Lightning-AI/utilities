@@ -18,6 +18,36 @@ def _load_py_module(fname, pkg="pl_devtools"):
     return py
 
 
+def _load_requirements(path_dir: str, file_name: str = "requirements.txt", comment_char: str = "#") -> list:
+    """Load requirements from a file.
+
+    >>> _load_requirements(_PATH_ROOT)  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+    ['torch...', 'pytorch-lightning...'...]
+    """
+    with open(os.path.join(path_dir, file_name)) as file:
+        lines = [ln.strip() for ln in file.readlines()]
+    reqs = []
+    for ln in lines:
+        # filer all comments
+        if comment_char in ln:
+            ln = ln[: ln.index(comment_char)].strip()
+        # skip directly installed dependencies
+        if ln.startswith("http"):
+            continue
+        if ln:  # if requirement is not empty
+            reqs.append(ln)
+    return reqs
+
+
+def _prepare_extras():
+    extras = {
+        "docs": _load_requirements(path_dir=_PATH_REQUIRE, file_name="docs.txt"),
+        "test": _load_requirements(path_dir=_PATH_REQUIRE, file_name="test.txt"),
+    }
+    extras["dev"] = extras["docs"] + extras["test"]
+    return extras
+
+
 about = _load_py_module("__about__.py")
 with open(os.path.join(_PATH_REQUIRE, "base.txt")) as fp:
     requirements = list(map(str, parse_requirements(fp.readline())))
@@ -43,6 +73,7 @@ setup(
     python_requires=">=3.7",
     setup_requires=[],
     install_requires=requirements,
+    extras_require=_prepare_extras(),
     project_urls={
         "Bug Tracker": "https://github.com/Lightning-AI/devtools/issues",
         "Documentation": "https://dev-toolbox.rtfd.io/en/latest/",  # TODO: Update domain
