@@ -19,7 +19,7 @@ on:
         required: false
         type: number
       pip-install-extra:
-        description: 'timeout-minutes for each job'
+        description: 'A full pip command to install extra dependencies for doctest.'
         default: 'pip install -e ".[dev]" -U --extra-index-url https://download.pytorch.org/whl/cpu'
         required: false
         type: string
