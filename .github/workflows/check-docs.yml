@@ -18,6 +18,11 @@ on:
         default: 15
         required: false
         type: number
+      pip-install-extra:
+        description: 'timeout-minutes for each job'
+        default: 'pip install -e ".[dev]" -U --extra-index-url https://download.pytorch.org/whl/cpu'
+        required: false
+        type: string
 
 jobs:
 
@@ -35,8 +40,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -e ".[dev]" -U --extra-index-url https://download.pytorch.org/whl/cpu
-          pip install -r requirements/docs.txt
+          pip install -e ".[docs]" -U --extra-index-url https://download.pytorch.org/whl/cpu
+          if [ -n "${{ inputs.pip-install-extra }}" ]; then
+            ${{ inputs.pip-install-extra }}
+          fi
           python --version
           pip --version
           pip list
@@ -64,7 +71,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -e . -U -r requirements/docs.txt --extra-index-url https://download.pytorch.org/whl/cpu
+          pip install -e ".[docs]" -U --extra-index-url https://download.pytorch.org/whl/cpu
           sudo apt-get update --fix-missing
           sudo apt-get install -y texlive-latex-extra dvipng texlive-pictures
           python --version
