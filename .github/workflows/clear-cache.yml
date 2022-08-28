@@ -1,0 +1,31 @@
+name: Clear cache flow
+
+on:
+  workflow_call:
+
+jobs:
+  clear-cache:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Remove caches
+        run: |
+          TOTAL_COUNT=0
+          while true; do
+            LIST_CACHES=$(gh api -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches)
+            REMAINING_COUNT=$(echo $LIST_CACHES | jq .total_count)
+            [[ $REMAINING_COUNT > 0 ]] || break
+            IDS=$(echo $LIST_CACHES | jq .actions_caches[].id)
+            for ID in ${IDS[@]}; do
+              echo "Clearing $ID"
+              gh api --method DELETE -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches/$ID
+              TOTAL_COUNT=$((TOTAL_COUNT + 1))
+            done
+          done
+          echo "Cleared $TOTAL_COUNT caches"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: List available caches
+        run: |
+          gh api -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches/$ID
