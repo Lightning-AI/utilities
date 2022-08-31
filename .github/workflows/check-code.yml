@@ -28,6 +28,8 @@ jobs:
         pip list
 
     - uses: ./.github/actions/pip-list
+      with:
+        unfold: true
 
     - name: Check typing
       # mypy uses the config file found in the following order:
