@@ -11,7 +11,7 @@ _PATH_SOURCE = os.path.join(_PATH_ROOT, "src")
 _PATH_REQUIRE = os.path.join(_PATH_ROOT, "requirements")
 
 
-def _load_py_module(fname, pkg="pl_devtools"):
+def _load_py_module(fname, pkg="lit_devtools"):
     spec = spec_from_file_location(os.path.join(pkg, fname), os.path.join(_PATH_SOURCE, pkg, fname))
     py = module_from_spec(spec)
     spec.loader.exec_module(py)

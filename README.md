@@ -9,7 +9,8 @@ __This repository covers the following use-cases:__
 
 1. **GitHub workflows**
 1. **GitHub actions**
-1. **CLI `pl_devtools`**
+1. **CLI `lit_devtools`**
+1. **General Python utilities**
 1. **General Python utilities**
 
 ## 1. Reusable workflows
@@ -79,7 +80,7 @@ pip install lightning-devtools
 __Usage:__
 
 ```bash
-python -m pl_devtools [group] [command]
+python -m lit_devtools [group] [command]
 ```
 
 <details>
@@ -92,7 +93,7 @@ codecov>=2.1
 pytest>=6.0
 pytest-cov
 pytest-timeout
-$ python -m pl_devtools requirements set-oldest
+$ python -m lit_devtools requirements set-oldest
 $ cat requirements/test.txt
 coverage==5.0
 codecov==2.1
