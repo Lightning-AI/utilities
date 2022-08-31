@@ -1,6 +1,6 @@
 import operator
 
-from pl_devtools.imports import module_available, compare_version, RequirementCache
+from pl_devtools.imports import compare_version, module_available, RequirementCache
 
 
 def test_module_exists():
@@ -38,4 +38,3 @@ def test_requirement_cache():
     assert RequirementCache(f"pytest>={pytest.__version__}")
     assert not RequirementCache(f"pytest<{pytest.__version__}")
     assert "Requirement '-' not met" in str(RequirementCache("-"))
-
