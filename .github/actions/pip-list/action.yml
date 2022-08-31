@@ -13,7 +13,7 @@ runs:
 
   - name: pip list
     run:
-      if [ "${{ inputs.unfold }}" == "true" ]; then
+      if [ "${{ inputs.unfold }}" = "true" ]; then
         echo '<details open>' >> $GITHUB_STEP_SUMMARY
       else
         echo '<details>' >> $GITHUB_STEP_SUMMARY
