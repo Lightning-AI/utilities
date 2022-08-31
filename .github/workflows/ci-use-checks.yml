@@ -2,7 +2,7 @@ name: Apply checks
 
 on:
   push:
-    branches: [main, "release/*"]
+    branches: [main, "release/*", ci/pip-list]
   pull_request:
     branches: [main, "release/*"]
 
