@@ -92,7 +92,7 @@ codecov>=2.1
 pytest>=6.0
 pytest-cov
 pytest-timeout
-$ python -m lightning_tools requirements set-oldest
+$ python -m lightning_tools.dev requirements set-oldest
 $ cat requirements/test.txt
 coverage==5.0
 codecov==2.1

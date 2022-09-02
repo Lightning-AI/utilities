@@ -30,7 +30,7 @@ jobs:
       if: matrix.requires == 'oldest'
       run: |
         pip install -e .
-        python -m lightning_tools requirements set-oldest
+        python -m lightning_tools.dev requirements set-oldest
 
     - uses: ./.github/actions/cache
       with:
