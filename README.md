@@ -79,7 +79,7 @@ pip install lightning_tools
 __Usage:__
 
 ```bash
-python -m lightning_tools [group] [command]
+python -m lightning_tools.dev [group] [command]
 ```
 
 <details>
