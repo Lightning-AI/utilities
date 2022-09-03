@@ -19,5 +19,5 @@
 /.github/CODEOWNERS           @borda
 /setup.py                     @borda
 
-/src/lightning_utilities/core  @borda @carmocca
-/tests/unittests/core          @borda @carmocca
+/src/lightning_utilities/core @borda @carmocca
+/tests/unittests/core         @borda @carmocca
