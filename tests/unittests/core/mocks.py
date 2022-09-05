@@ -35,7 +35,6 @@ else:
         def __eq__(self, other):
             return self.data == other
 
-
     class TorchMock:
         Tensor = TensorMock
 
@@ -50,6 +49,5 @@ else:
         @staticmethod
         def arange(*args):
             return TensorMock(list(range(*args)))
-
 
     torch = TorchMock()
