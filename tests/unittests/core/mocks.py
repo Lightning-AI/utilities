@@ -3,7 +3,7 @@ from typing import Iterable
 from lightning_utilities.core.imports import package_available
 
 if package_available("torch"):
-    import torch  # noqa: F401
+    import torch
 else:
     # minimal torch implementation to avoid installing torch in testing CI
     class TensorMock:
