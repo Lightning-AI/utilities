@@ -70,9 +70,9 @@ def apply_to_collection(
             return elem_type(data.default_factory, OrderedDict(out))
         return elem_type(OrderedDict(out))
 
-    is_namedtuple = is_namedtuple(data)
+    is_namedtuple_ = is_namedtuple(data)
     is_sequence = isinstance(data, Sequence) and not isinstance(data, str)
-    if is_namedtuple or is_sequence:
+    if is_namedtuple_ or is_sequence:
         out = []
         for d in data:
             v = apply_to_collection(
@@ -80,7 +80,7 @@ def apply_to_collection(
             )
             if include_none or v is not None:
                 out.append(v)
-        return elem_type(*out) if is_namedtuple else elem_type(out)
+        return elem_type(*out) if is_namedtuple_ else elem_type(out)
 
     if is_dataclass_instance(data):
         # make a deepcopy of the data,
@@ -169,15 +169,15 @@ def apply_to_collections(
             }
         )
 
-    is_namedtuple = is_namedtuple(data1)
+    is_namedtuple_ = is_namedtuple(data1)
     is_sequence = isinstance(data1, Sequence) and not isinstance(data1, str)
-    if (is_namedtuple or is_sequence) and data2 is not None:
+    if (is_namedtuple_ or is_sequence) and data2 is not None:
         assert len(data1) == len(data2), "Sequence collections have different sizes."
         out = [
             apply_to_collections(v1, v2, dtype, function, *args, wrong_dtype=wrong_dtype, **kwargs)
             for v1, v2 in zip(data1, data2)
         ]
-        return elem_type(*out) if is_namedtuple else elem_type(out)
+        return elem_type(*out) if is_namedtuple_ else elem_type(out)
 
     if is_dataclass_instance(data1) and data2 is not None:
         if not is_dataclass_instance(data2):
