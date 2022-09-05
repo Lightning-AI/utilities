@@ -17,12 +17,12 @@ from copy import deepcopy
 from typing import Any, Callable, List, Mapping, Optional, Sequence, Tuple, Union
 
 
-def _is_namedtuple(obj: object) -> bool:
+def is_namedtuple(obj: object) -> bool:
     # https://github.com/pytorch/pytorch/blob/v1.8.1/torch/nn/parallel/scatter_gather.py#L4-L8
     return isinstance(obj, tuple) and hasattr(obj, "_asdict") and hasattr(obj, "_fields")
 
 
-def _is_dataclass_instance(obj: object) -> bool:
+def is_dataclass_instance(obj: object) -> bool:
     # https://docs.python.org/3/library/dataclasses.html#module-level-decorators-classes-and-functions
     return dataclasses.is_dataclass(obj) and not isinstance(obj, type)
 
@@ -70,7 +70,7 @@ def apply_to_collection(
             return elem_type(data.default_factory, OrderedDict(out))
         return elem_type(OrderedDict(out))
 
-    is_namedtuple = _is_namedtuple(data)
+    is_namedtuple = is_namedtuple(data)
     is_sequence = isinstance(data, Sequence) and not isinstance(data, str)
     if is_namedtuple or is_sequence:
         out = []
@@ -82,7 +82,7 @@ def apply_to_collection(
                 out.append(v)
         return elem_type(*out) if is_namedtuple else elem_type(out)
 
-    if _is_dataclass_instance(data):
+    if is_dataclass_instance(data):
         # make a deepcopy of the data,
         # but do not deepcopy mapped fields since the computation would
         # be wasted on values that likely get immediately overwritten
@@ -169,7 +169,7 @@ def apply_to_collections(
             }
         )
 
-    is_namedtuple = _is_namedtuple(data1)
+    is_namedtuple = is_namedtuple(data1)
     is_sequence = isinstance(data1, Sequence) and not isinstance(data1, str)
     if (is_namedtuple or is_sequence) and data2 is not None:
         assert len(data1) == len(data2), "Sequence collections have different sizes."
@@ -179,8 +179,8 @@ def apply_to_collections(
         ]
         return elem_type(*out) if is_namedtuple else elem_type(out)
 
-    if _is_dataclass_instance(data1) and data2 is not None:
-        if not _is_dataclass_instance(data2):
+    if is_dataclass_instance(data1) and data2 is not None:
+        if not is_dataclass_instance(data2):
             raise TypeError(
                 "Expected inputs to be dataclasses of the same type or to have identical fields"
                 f" but got input 1 of type {type(data1)} and input 2 of type {type(data2)}."
