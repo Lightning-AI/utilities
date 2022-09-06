@@ -10,7 +10,8 @@ __docs__ = "PyTorch Lightning Sample project."
 __long_doc__ = """
 What is it?
 -----------
-This package allows for sharing GH workflows, CI/CD assistance actions, and Python utilities across the Lightning ecosystem.
+This package allows for sharing GH workflows, CI/CD assistance actions, and Python utilities across the Lightning
+ecosystem.
 """
 
 __all__ = [
