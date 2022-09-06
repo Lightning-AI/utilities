@@ -16,4 +16,3 @@ def test_rank_prefixed_message(rank):
     assert message == f"[rank: {rank}] bar"
     # reset
     del rank_zero_only.rank
-
