@@ -1,14 +1,15 @@
+from enum import Enum
+
 from lightning_utilities.core.enums import StrEnum
 
 
-class MyEnum(StrEnum):
-    FOO = "FOO"
-    BAR = "BAR"
-    BAZ = "BAZ"
-    NUM = "32"
-
-
 def test_consistency():
+    class MyEnum(StrEnum):
+        FOO = "FOO"
+        BAR = "BAR"
+        BAZ = "BAZ"
+        NUM = "32"
+
     # normal equality, case invariant
     assert MyEnum.FOO == "FOO"
     assert MyEnum.FOO == "foo"
@@ -28,3 +29,13 @@ def test_consistency():
     # hash cannot be case invariant
     assert MyEnum.BAZ not in {"BAZ", "FOO"}
     assert MyEnum.BAZ in {"baz", "FOO"}
+
+
+def test_comparison_with_other_enum():
+    class MyEnum(StrEnum):
+        FOO = "FOO"
+
+    class OtherEnum(Enum):
+        FOO = 123
+
+    assert not MyEnum.FOO.__eq__(OtherEnum.FOO)
