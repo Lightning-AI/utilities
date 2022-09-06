@@ -14,8 +14,9 @@ class StrEnum(str, Enum):
         return None
 
     def __eq__(self, other: object) -> bool:
-        other = str(other.value) if isinstance(other, Enum) else str(other)
-        return self.value.lower() == other.lower()
+        if isinstance(other, Enum):
+            other = other.value
+        return self.value.lower() == str(other).lower()
 
     def __hash__(self) -> int:
         # re-enable hashtable so it can be used as a dict key or in a set
