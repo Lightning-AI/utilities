@@ -14,7 +14,7 @@ def rank_zero_only(fn: Callable) -> Callable:
     @wraps(fn)
     def wrapped_fn(*args: Any, **kwargs: Any) -> Optional[Any]:
         if not hasattr(rank_zero_only, "rank"):
-            raise RuntimeError("The `rank_zero_only.rank` value needs to be set before use")
+            raise RuntimeError("The `rank_zero_only.rank` needs to be set before use")
 
         if rank_zero_only.rank == 0:
             return fn(*args, **kwargs)
