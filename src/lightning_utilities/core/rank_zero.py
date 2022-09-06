@@ -13,14 +13,14 @@ def rank_zero_only(fn: Callable) -> Callable:
 
     @wraps(fn)
     def wrapped_fn(*args: Any, **kwargs: Any) -> Optional[Any]:
-        if rank_zero_only.rank in (None, 0):
+        if not hasattr(rank_zero_only, "rank"):
+            raise RuntimeError("The `rank_zero_only.rank` value needs to be set before use")
+
+        if rank_zero_only.rank == 0:
             return fn(*args, **kwargs)
         return None
 
     return wrapped_fn
-
-
-rank_zero_only.rank = None
 
 
 def _debug(*args: Any, stacklevel: int = 2, **kwargs: Any) -> None:
@@ -78,7 +78,7 @@ class WarningCache(set):
             self.add(message)
             rank_zero_warn(message, stacklevel=stacklevel, **kwargs)
 
-    def deprecation(self, message: str, stacklevel: int = 5, **kwargs: Any) -> None:
+    def deprecation(self, message: str, stacklevel: int = 6, **kwargs: Any) -> None:
         if message not in self:
             self.add(message)
             rank_zero_deprecation(message, stacklevel=stacklevel, **kwargs)
