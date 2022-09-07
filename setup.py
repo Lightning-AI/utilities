@@ -19,8 +19,6 @@ def _load_py_module(fname, pkg="lightning_utilities"):
 
 
 about = _load_py_module("__about__.py")
-with open(os.path.join(_PATH_REQUIRE, "base.txt")) as fp:
-    requirements = list(map(str, parse_requirements(fp.readline())))
 with open(os.path.join(_PATH_REQUIRE, "dev.txt")) as fp:
     requirements_dev = list(map(str, parse_requirements(fp.readline())))
 with open(os.path.join(_PATH_ROOT, "README.md")) as fp:
@@ -44,7 +42,7 @@ setup(
     keywords=["Utilities", "DevOps", "CI/CD"],
     python_requires=">=3.7",
     setup_requires=[],
-    install_requires=requirements,
+    install_requires=[],
     extras_require={
         "dev": requirements_dev,
     },
