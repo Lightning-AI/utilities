@@ -2,30 +2,35 @@ name: Clear cache flow
 
 on:
   workflow_call:
+    inputs:
+      pattern:
+        description: 'string to grep cache keys with'
+        required: true
+        type: string
 
 jobs:
   clear-cache:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
+      - name: Get the list of cache keys
+        run: |
+          gh api -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches --paginate --jq ".actions_caches[].key" | sort | uniq > cache_keys.txt
+          cat cache_keys.txt
+
+      - name: Filter cache keys
+        run: |
+          grep -E ${{ inputs.pattern }} cache_keys.txt > cache_keys_to_remove.txt
+          cat cache_keys_to_remove.txt
+
       - name: Remove caches
         run: |
-          TOTAL_COUNT=0
-          while true; do
-            LIST_CACHES=$(gh api -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches)
-            REMAINING_COUNT=$(echo $LIST_CACHES | jq .total_count)
-            [[ $REMAINING_COUNT > 0 ]] || break
-            IDS=$(echo $LIST_CACHES | jq .actions_caches[].id)
-            for ID in ${IDS[@]}; do
-              echo "Clearing $ID"
-              gh api --method DELETE -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches/$ID
-              TOTAL_COUNT=$((TOTAL_COUNT + 1))
-            done
+          for key in $(cat cache_keys_to_remove.txt); do
+            gh api --method DELETE -H "Accept: application/vnd.github+json" "/repos/${{ github.repository }}/actions/caches?key=${key}"
           done
-          echo "Cleared $TOTAL_COUNT caches"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: List available caches
+      - name: Show the list of remaining caches
         run: |
-          gh api -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches/$ID
+          gh api -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches
