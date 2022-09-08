@@ -1,0 +1,14 @@
+name: Clear cache weekly
+
+on:
+  push: {}
+  # schedule:
+  #   # on Sundays
+  #   - cron: "0 0 * * 0"
+
+jobs:
+  clear-cache:
+    if: ${{ github.repository_owner == 'Lightning-AI' }}
+    uses: Lightning-AI/devtools/.github/workflows/clear-cache.yml@v0.3.0
+    with:
+      pattern: 'pip'
