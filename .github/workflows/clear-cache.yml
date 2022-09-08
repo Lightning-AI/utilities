@@ -33,6 +33,6 @@ jobs:
 
       - name: Show the list of remaining caches
         run: |
-          gh api -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches
+          gh api -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches --paginate --jq ".actions_caches[].key" | sort | uniq
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
