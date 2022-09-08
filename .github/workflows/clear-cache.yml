@@ -16,6 +16,8 @@ jobs:
       - name: Get the list of cache keys
         run: |
           gh api -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches --paginate --jq ".actions_caches[].key" | sort | uniq > cache_keys.txt && cat cache_keys.txt || echo "no cache keys found with the pattern"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Filter cache keys
         run: |
@@ -32,3 +34,5 @@ jobs:
       - name: Show the list of remaining caches
         run: |
           gh api -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
