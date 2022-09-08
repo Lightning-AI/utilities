@@ -9,6 +9,6 @@ on:
 jobs:
   clear-cache:
     if: ${{ github.repository_owner == 'Lightning-AI' }}
-    uses: Lightning-AI/devtools/.github/workflows/clear-cache.yml@v0.3.0
+    uses: ./.github/workflows/clear-cache.yml
     with:
       pattern: 'pip'
