@@ -25,4 +25,5 @@ runs:
       echo '```' >> $GITHUB_STEP_SUMMARY
       echo '' >> $GITHUB_STEP_SUMMARY
       echo '</details>' >> $GITHUB_STEP_SUMMARY
+      pip list  # also print to stdout
     shell: bash
