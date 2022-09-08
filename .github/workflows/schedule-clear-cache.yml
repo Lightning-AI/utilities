@@ -11,4 +11,4 @@ jobs:
     if: ${{ github.repository_owner == 'Lightning-AI' }}
     uses: ./.github/workflows/clear-cache.yml
     with:
-      pattern: 'pip'
+      pattern: 'pre-commit'
