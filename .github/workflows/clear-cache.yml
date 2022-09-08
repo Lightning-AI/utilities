@@ -15,13 +15,11 @@ jobs:
     steps:
       - name: Get the list of cache keys
         run: |
-          gh api -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches --paginate --jq ".actions_caches[].key" | sort | uniq > cache_keys.txt
-          cat cache_keys.txt
+          gh api -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches --paginate --jq ".actions_caches[].key" | sort | uniq > cache_keys.txt && cat cache_keys.txt || echo "no cache keys found with the pattern"
 
       - name: Filter cache keys
         run: |
-          grep -E ${{ inputs.pattern }} cache_keys.txt > cache_keys_to_remove.txt
-          cat cache_keys_to_remove.txt
+          grep -E ${{ inputs.pattern }} cache_keys.txt > cache_keys_to_remove.txt && cat cache_keys_to_remove.txt || echo "no cache keys found with the pattern"
 
       - name: Remove caches
         run: |
