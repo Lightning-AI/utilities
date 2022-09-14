@@ -1,6 +1,6 @@
 import time
 
-__version__ = "0.3.0"
+__version__ = "0.4.0dev"
 __author__ = "Lightning AI et al."
 __author_email__ = "pytorch@lightning.ai"
 __license__ = "Apache-2.0"
@@ -10,9 +10,8 @@ __docs__ = "PyTorch Lightning Sample project."
 __long_doc__ = """
 What is it?
 -----------
-It enables you share GH workflows and some basic assistance actions...
-
-
+This package allows for sharing GH workflows, CI/CD assistance actions, and Python utilities across the Lightning
+ecosystem.
 """
 
 __all__ = [
