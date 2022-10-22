@@ -12,12 +12,12 @@ from packaging.version import Version
 
 
 @lru_cache()
-def package_available(package_name: str) -> bool:
+def python_package_available(package_name: str) -> bool:
     """Check if a package is available in your environment.
 
-    >>> package_available('os')
+    >>> python_package_available('os')
     True
-    >>> package_available('bla')
+    >>> python_package_available('bla')
     False
     """
     try:
@@ -27,18 +27,18 @@ def package_available(package_name: str) -> bool:
 
 
 @lru_cache()
-def module_available(module_path: str) -> bool:
+def python_module_available(module_path: str) -> bool:
     """Check if a module path is available in your environment.
 
-    >>> module_available('os')
+    >>> python_module_available('os')
     True
-    >>> module_available('os.bla')
+    >>> python_module_available('os.bla')
     False
-    >>> module_available('bla.bla')
+    >>> python_module_available('bla.bla')
     False
     """
     module_names = module_path.split(".")
-    if not package_available(module_names[0]):
+    if not python_package_available(module_names[0]):
         return False
     try:
         importlib.import_module(module_path)

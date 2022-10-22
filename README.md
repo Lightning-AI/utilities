@@ -121,8 +121,8 @@ __Usage:__
 Example for optional imports:
 
 ```python
-from lightning_utilities.core.imports import module_available
+from lightning_utilities.core.imports import python_module_available
 
-if module_available("some_package.something"):
+if python_module_available("some_package.something"):
     from some_package import something
 ```

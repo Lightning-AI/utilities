@@ -1,8 +1,8 @@
 from typing import Iterable
 
-from lightning_utilities.core.imports import package_available
+from lightning_utilities.core.imports import python_package_available
 
-if package_available("torch"):
+if python_package_available("torch"):
     import torch
 else:
     # minimal torch implementation to avoid installing torch in testing CI

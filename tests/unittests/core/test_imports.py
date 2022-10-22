@@ -1,14 +1,14 @@
 import operator
 
-from lightning_utilities.core.imports import compare_version, module_available, RequirementCache
+from lightning_utilities.core.imports import compare_version, python_module_available, RequirementCache
 
 
 def test_module_exists():
-    assert module_available("_pytest")
-    assert module_available("_pytest.mark.structures")
-    assert not module_available("_pytest.mark.asdf")
-    assert not module_available("asdf")
-    assert not module_available("asdf.bla.asdf")
+    assert python_module_available("_pytest")
+    assert python_module_available("_pytest.mark.structures")
+    assert not python_module_available("_pytest.mark.asdf")
+    assert not python_module_available("asdf")
+    assert not python_module_available("asdf.bla.asdf")
 
 
 def testcompare_version(monkeypatch):
