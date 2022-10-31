@@ -42,7 +42,7 @@ setup(
     keywords=["Utilities", "DevOps", "CI/CD"],
     python_requires=">=3.7",
     setup_requires=[],
-    install_requires=[],
+    install_requires=["importlib-metadata>=4.0.0; ; python_version < '3.8'"],
     extras_require={
         "cli": requirements_cli,
     },
