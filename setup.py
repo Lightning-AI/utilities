@@ -19,8 +19,12 @@ def _load_py_module(fname, pkg="lightning_utilities"):
 
 
 about = _load_py_module("__about__.py")
+
+# load basic requirements
 with open(os.path.join(_PATH_REQUIRE, "base.txt")) as fp:
     requirements = list(map(str, parse_requirements(fp.readline())))
+
+# make extras as automated loading
 requirements_extra = {}
 for fpath in glob.glob(os.path.join(_PATH_REQUIRE, "*.txt")):
     if os.path.basename(fpath) == "base.txt":
@@ -28,6 +32,8 @@ for fpath in glob.glob(os.path.join(_PATH_REQUIRE, "*.txt")):
     name, _ = os.path.splitext(os.path.basename(fpath))
     with open(fpath) as fp:
         requirements_extra[name] = list(map(str, parse_requirements(fp.readline())))
+
+# loading readme as description
 with open(os.path.join(_PATH_ROOT, "README.md")) as fp:
     readme = fp.read()
 
