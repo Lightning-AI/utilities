@@ -8,6 +8,7 @@ from lightning_utilities.core.imports import (
     get_dependency_min_version_spec,
     module_available,
     RequirementCache,
+    requires,
 )
 
 try:
@@ -63,3 +64,34 @@ def test_get_dependency_min_version_spec():
 
     with pytest.raises(PackageNotFoundError, match="invalid"):
         get_dependency_min_version_spec("invalid", "invalid")
+
+
+@requires("torch")
+def my_tensor(i: int):
+    from torch import tensor
+
+    return tensor(i)
+
+
+class MyRndTensor:
+    @requires("torch", "random")
+    def __init__(self):
+        from random import randint
+
+        from torch import Tensor
+
+        self._rnd = Tensor(randint(1, 9))
+
+
+def test_my_tensor():
+    with pytest.raises(
+        ModuleNotFoundError, match="Required dependencies not available. Please run `pip install torch`"
+    ):
+        my_tensor(42)
+
+
+def test_my_lit_app():
+    with pytest.raises(
+        ModuleNotFoundError, match="Required dependencies not available. Please run `pip install torch`"
+    ):
+        MyRndTensor()

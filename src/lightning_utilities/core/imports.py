@@ -1,8 +1,11 @@
 # Copyright The PyTorch Lightning team.
 # Licensed under the Apache License, Version 2.0 (the "License");
 #     http://www.apache.org/licenses/LICENSE-2.0
+import functools
 import importlib
 import operator
+import os
+import warnings
 from functools import lru_cache
 from importlib.util import find_spec
 from typing import Callable
@@ -119,7 +122,7 @@ class RequirementCache:
 def get_dependency_min_version_spec(package_name: str, dependency_name: str) -> str:
     """Returns the minimum version specifier of a dependency of a package.
 
-    >>> get_dependency_min_version_spec("pytorch-lightning", "jsonargparse")
+    >>> get_dependency_min_version_spec("pytorch-lightning==1.8.0", "jsonargparse")
     '>=4.12.0'
     """
     dependencies = metadata.requires(package_name) or []
@@ -132,3 +135,41 @@ def get_dependency_min_version_spec(package_name: str, dependency_name: str) -> 
         "This is an internal error. Please file a GitHub issue with the error message. Dependency "
         f"{dependency_name!r} not found in package {package_name!r}."
     )
+
+
+def requires(*module_path: str):
+    """Wrapper for early import failure with some nice exception message.
+
+    Example:
+
+        >>> @requires("libpath")
+        ... def my_cwd():
+        ...     from pathlib import Path
+        ...     return Path(__file__).parent
+
+        >>> class MyRndPower:
+        ...     @requires("math", "random")
+        ...     def __init__(self):
+        ...         from math import pow
+        ...         from random import randint
+        ...         self._rnd = pow(randint(1, 9), 2)
+
+    .. note:: For downgrading exception to warning you export `LIGHTING_TESTING=1` which is handu for testing
+    """
+
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            unavailable_modules = [module for module in module_path if not module_available(module)]
+            if any(unavailable_modules):
+                is_lit_testing = bool(int(os.getenv("LIGHTING_TESTING", "0")))
+                msg = f"Required dependencies not available. Please run `pip install {' '.join(unavailable_modules)}`"
+                if is_lit_testing:
+                    warnings.warn(msg)
+                else:
+                    raise ModuleNotFoundError(msg)
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
