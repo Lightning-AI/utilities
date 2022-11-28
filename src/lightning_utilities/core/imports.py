@@ -8,7 +8,7 @@ import os
 import warnings
 from functools import lru_cache
 from importlib.util import find_spec
-from typing import Callable
+from typing import Any, Callable
 
 import pkg_resources
 from packaging.requirements import Requirement
@@ -137,7 +137,7 @@ def get_dependency_min_version_spec(package_name: str, dependency_name: str) -> 
     )
 
 
-def requires(*module_path: str):
+def requires(*module_path: str) -> Callable:
     """Wrapper for early import failure with some nice exception message.
 
     Example:
@@ -157,9 +157,9 @@ def requires(*module_path: str):
     .. note:: For downgrading exception to warning you export `LIGHTING_TESTING=1` which is handu for testing
     """
 
-    def decorator(func):
+    def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             unavailable_modules = [module for module in module_path if not module_available(module)]
             if any(unavailable_modules):
                 is_lit_testing = bool(int(os.getenv("LIGHTING_TESTING", "0")))
