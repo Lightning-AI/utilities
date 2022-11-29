@@ -137,12 +137,12 @@ def get_dependency_min_version_spec(package_name: str, dependency_name: str) -> 
     )
 
 
-def requires(*module_path: str) -> Callable:
+def requires(*module_path: str, raise_exception: bool = True) -> Callable:
     """Wrapper for early import failure with some nice exception message.
 
     Example:
 
-        >>> @requires("libpath")
+        >>> @requires("libpath", raise_exception=bool(int(os.getenv("LIGHTING_TESTING", "0"))))
         ... def my_cwd():
         ...     from pathlib import Path
         ...     return Path(__file__).parent
@@ -162,12 +162,11 @@ def requires(*module_path: str) -> Callable:
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             unavailable_modules = [module for module in module_path if not module_available(module)]
             if any(unavailable_modules):
-                is_lit_testing = bool(int(os.getenv("LIGHTING_TESTING", "0")))
                 msg = f"Required dependencies not available. Please run `pip install {' '.join(unavailable_modules)}`"
-                if is_lit_testing:
-                    warnings.warn(msg)
-                else:
+                if raise_exception:
                     raise ModuleNotFoundError(msg)
+                else:
+                    warnings.warn(msg)
             return func(*args, **kwargs)
 
         return wrapper
