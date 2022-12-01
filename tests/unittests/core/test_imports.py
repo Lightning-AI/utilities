@@ -8,6 +8,7 @@ from lightning_utilities.core.imports import (
     get_dependency_min_version_spec,
     module_available,
     RequirementCache,
+    lazy_import,
 )
 
 try:
@@ -63,3 +64,17 @@ def test_get_dependency_min_version_spec():
 
     with pytest.raises(PackageNotFoundError, match="invalid"):
         get_dependency_min_version_spec("invalid", "invalid")
+
+def test_lazy_import():
+
+    def callback_fcn():
+        raise ValueError
+
+    with pytest.raises(ValueError):
+        math = lazy_import("math", callback=callback_fcn)
+        math.floor(5.1)
+    with pytest.raises(ModuleNotFoundError):
+        module = lazy_import("asdf")
+        print(module)
+    os = lazy_import("os")
+    assert os.getcwd()
