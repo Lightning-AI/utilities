@@ -6,9 +6,9 @@ import pytest
 from lightning_utilities.core.imports import (
     compare_version,
     get_dependency_min_version_spec,
+    lazy_import,
     module_available,
     RequirementCache,
-    lazy_import,
 )
 
 try:
@@ -65,8 +65,8 @@ def test_get_dependency_min_version_spec():
     with pytest.raises(PackageNotFoundError, match="invalid"):
         get_dependency_min_version_spec("invalid", "invalid")
 
-def test_lazy_import():
 
+def test_lazy_import():
     def callback_fcn():
         raise ValueError
 

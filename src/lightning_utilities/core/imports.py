@@ -1,12 +1,13 @@
 # Copyright The PyTorch Lightning team.
 # Licensed under the Apache License, Version 2.0 (the "License");
 #     http://www.apache.org/licenses/LICENSE-2.0
+
 import importlib
 import operator
 from functools import lru_cache
 from importlib.util import find_spec
-import types
-from typing import Any, Callable, List
+from types import ModuleType
+from typing import Any, Callable, List, Optional
 
 import pkg_resources
 from packaging.requirements import Requirement
@@ -135,16 +136,16 @@ def get_dependency_min_version_spec(package_name: str, dependency_name: str) -> 
     )
 
 
-class LazyModule(types.ModuleType):
-    """Proxy module that lazily imports the underlying module the first time it
-    is actually used.
+class LazyModule(ModuleType):
+    """Proxy module that lazily imports the underlying module the first time it is actually used.
+
     Args:
         module_name: the fully-qualified module name to import
         callback (None): a callback function to call before importing the
             module
     """
 
-    def __init__(self, module_name: str, callback: Callable = None) -> None:
+    def __init__(self, module_name: str, callback: Optional[Callable] = None) -> None:
         super().__init__(module_name)
         self._module = None
         self._callback = callback
@@ -175,10 +176,9 @@ class LazyModule(types.ModuleType):
         self.__dict__.update(module.__dict__)
 
 
-def lazy_import(module_name: str, callback: Callable = None) -> LazyModule:
-    """Returns a proxy module object that will lazily import the given module
-    the first time it is used.
-    Example usage::
+def lazy_import(module_name: str, callback: Optional[Callable] = None) -> LazyModule:
+    """Returns a proxy module object that will lazily import the given module the first time it is used. Example usage::
+
         # Lazy version of `import tensorflow as tf`
         tf = lazy_import("tensorflow")
         # Other commands
