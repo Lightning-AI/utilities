@@ -141,13 +141,12 @@ class LazyModule(ModuleType):
 
     Args:
         module_name: the fully-qualified module name to import
-        callback (None): a callback function to call before importing the
-            module
+        callback: a callback function to call before importing the module
     """
 
     def __init__(self, module_name: str, callback: Optional[Callable] = None) -> None:
         super().__init__(module_name)
-        self._module: module = None
+        self._module: Any = None
         self._callback = callback
 
     def __getattr__(self, item: str) -> Any:
@@ -185,8 +184,7 @@ def lazy_import(module_name: str, callback: Optional[Callable] = None) -> LazyMo
         tf.__version__
     Args:
         module_name: the fully-qualified module name to import
-        callback (None): a callback function to call before importing the
-            module
+        callback: a callback function to call before importing the module
     Returns:
         a proxy module object that will be lazily imported when first used
     """
