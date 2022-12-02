@@ -84,19 +84,9 @@ def test_lazy_import():
 
 @requires("torch")
 def my_torch_func(i: int):
-    import torch
+    import torch  # noqa
 
     return i
-
-
-class MyTorchClass:
-    @requires("torch", "random")
-    def __init__(self):
-        from random import randint
-
-        import torch
-
-        self._rnd = randint(1, 9)
 
 
 def test_torch_func_raised():
@@ -106,14 +96,29 @@ def test_torch_func_raised():
         my_torch_func(42)
 
 
-# TODO
-# @patch("torch", autospec=True)
-# def test_torch_func_passed():
-#     assert my_torch_func(42) == 42
+@patch("torch", autospec=True)
+def test_torch_func_passed():
+    assert my_torch_func(42) == 42
 
 
-def test_my_lit_app_raised():
+class MyTorchClass:
+    @requires("torch", "random")
+    def __init__(self):
+        from random import randint
+
+        import torch  # noqa
+
+        self._rnd = randint(1, 9)
+
+
+def test_torch_class_raised():
     with pytest.raises(
         ModuleNotFoundError, match="Required dependencies not available. Please run `pip install torch`"
     ):
         MyTorchClass()
+
+
+@patch("torch", autospec=True)
+def test_torch_class_passed():
+    cls = MyTorchClass()
+    assert isinstance(cls._rnd, int)
