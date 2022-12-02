@@ -147,7 +147,7 @@ class LazyModule(ModuleType):
 
     def __init__(self, module_name: str, callback: Optional[Callable] = None) -> None:
         super().__init__(module_name)
-        self._module = None
+        self._module: module = None
         self._callback = callback
 
     def __getattr__(self, item: str) -> Any:
@@ -168,12 +168,11 @@ class LazyModule(ModuleType):
             self._callback()
 
         # Actually import the module
-        module = importlib.import_module(self.__name__)
-        self._module = module
+        self._module = importlib.import_module(self.__name__)
 
         # Update this object's dict so that attribute references are efficient
         # (__getattr__ is only called on lookups that fail)
-        self.__dict__.update(module.__dict__)
+        self.__dict__.update(self._module.__dict__)
 
 
 def lazy_import(module_name: str, callback: Optional[Callable] = None) -> LazyModule:
