@@ -1,5 +1,6 @@
 import operator
 import re
+from unittest.mock import patch
 
 import pytest
 
@@ -67,31 +68,37 @@ def test_get_dependency_min_version_spec():
 
 
 @requires("torch")
-def my_tensor(i: int):
-    from torch import tensor
+def my_torch_func(i: int):
+    import torch
 
-    return tensor(i)
+    return i
 
 
-class MyRndTensor:
+class MyTorchClass:
     @requires("torch", "random")
     def __init__(self):
         from random import randint
 
-        from torch import Tensor
+        import torch
 
-        self._rnd = Tensor(randint(1, 9))
+        self._rnd = randint(1, 9)
 
 
-def test_my_tensor():
+def test_torch_func_raised():
     with pytest.raises(
         ModuleNotFoundError, match="Required dependencies not available. Please run `pip install torch`"
     ):
-        my_tensor(42)
+        my_torch_func(42)
 
 
-def test_my_lit_app():
+# TODO
+# @patch("torch", autospec=True)
+# def test_torch_func_passed():
+#     assert my_torch_func(42) == 42
+
+
+def test_my_lit_app_raised():
     with pytest.raises(
         ModuleNotFoundError, match="Required dependencies not available. Please run `pip install torch`"
     ):
-        MyRndTensor()
+        MyTorchClass()
