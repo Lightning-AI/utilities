@@ -1,8 +1,5 @@
 import operator
 import re
-from unittest.mock import patch
-
-import pytest
 
 from lightning_utilities.core.imports import (
     compare_version,
@@ -58,6 +55,8 @@ def test_requirement_cache():
 
 
 def test_get_dependency_min_version_spec():
+    import pytest
+
     attrs_min_version_spec = get_dependency_min_version_spec("pytest", "attrs")
     assert re.match(r"^>=[\d.]+$", attrs_min_version_spec)
 
@@ -69,6 +68,8 @@ def test_get_dependency_min_version_spec():
 
 
 def test_lazy_import():
+    import pytest
+
     def callback_fcn():
         raise ValueError
 
@@ -83,22 +84,30 @@ def test_lazy_import():
 
 
 @requires("torch")
-def my_torch_func(i: int):
+def my_torch_func(i: int) -> int:
     import torch  # noqa
 
     return i
 
 
 def test_torch_func_raised():
+    import pytest
+
     with pytest.raises(
         ModuleNotFoundError, match="Required dependencies not available. Please run `pip install torch`"
     ):
         my_torch_func(42)
 
 
-@patch("torch", autospec=True)
-def test_torch_func_passed():
-    assert my_torch_func(42) == 42
+@requires("random")
+def my_random_func(range: int) -> int:
+    from random import randint
+
+    return randint(0, range)
+
+
+def test_rand_func_passed():
+    assert 0 <= my_random_func(42) < 42
 
 
 class MyTorchClass:
@@ -112,13 +121,22 @@ class MyTorchClass:
 
 
 def test_torch_class_raised():
+    import pytest
+
     with pytest.raises(
         ModuleNotFoundError, match="Required dependencies not available. Please run `pip install torch`"
     ):
         MyTorchClass()
 
 
-@patch("torch", autospec=True)
-def test_torch_class_passed():
-    cls = MyTorchClass()
-    assert isinstance(cls._rnd, int)
+class MyRandClass:
+    @requires("random")
+    def __init__(self, range: int):
+        from random import randint
+
+        self._rnd = randint(1, range)
+
+
+def test_rand_class_passed():
+    cls = MyRandClass(42)
+    assert 0 <= cls._rnd < 42
