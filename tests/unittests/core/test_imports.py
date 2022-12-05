@@ -100,14 +100,14 @@ def test_torch_func_raised():
 
 
 @requires("random")
-def my_random_func(range: int) -> int:
+def my_random_func(nb: int) -> int:
     from random import randint
 
-    return randint(0, range)
+    return randint(0, nb)
 
 
 def test_rand_func_passed():
-    assert 0 <= my_random_func(42) < 42
+    assert 0 <= my_random_func(42) <= 42
 
 
 class MyTorchClass:
@@ -131,12 +131,12 @@ def test_torch_class_raised():
 
 class MyRandClass:
     @requires("random")
-    def __init__(self, range: int):
+    def __init__(self, nb: int):
         from random import randint
 
-        self._rnd = randint(1, range)
+        self._rnd = randint(1, nb)
 
 
 def test_rand_class_passed():
     cls = MyRandClass(42)
-    assert 0 <= cls._rnd < 42
+    assert 0 <= cls._rnd <= 42
