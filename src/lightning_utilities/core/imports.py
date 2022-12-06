@@ -210,9 +210,6 @@ def requires(*module_path: str, raise_exception: bool = True) -> Callable:
         ...         from math import pow
         ...         from random import randint
         ...         self._rnd = pow(randint(1, 9), 2)
-
-    .. note::
-        For downgrading exception to warning you export `LIGHTING_TESTING=1` which is handu for testing
     """
 
     def decorator(func: Callable) -> Callable:
