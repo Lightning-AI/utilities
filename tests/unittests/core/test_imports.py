@@ -1,6 +1,8 @@
 import operator
 import re
 
+import pytest
+
 from lightning_utilities.core.imports import (
     compare_version,
     get_dependency_min_version_spec,
@@ -26,8 +28,6 @@ def test_module_exists():
 
 
 def testcompare_version(monkeypatch):
-    import pytest
-
     monkeypatch.setattr(pytest, "__version__", "1.8.9")
     assert not compare_version("pytest", operator.ge, "1.10.0")
     assert compare_version("pytest", operator.lt, "1.10.0")
@@ -47,16 +47,12 @@ def testcompare_version(monkeypatch):
 
 
 def test_requirement_cache():
-    import pytest
-
     assert RequirementCache(f"pytest>={pytest.__version__}")
     assert not RequirementCache(f"pytest<{pytest.__version__}")
     assert "pip install -U '-'" in str(RequirementCache("-"))
 
 
 def test_get_dependency_min_version_spec():
-    import pytest
-
     attrs_min_version_spec = get_dependency_min_version_spec("pytest", "attrs")
     assert re.match(r"^>=[\d.]+$", attrs_min_version_spec)
 
@@ -68,8 +64,6 @@ def test_get_dependency_min_version_spec():
 
 
 def test_lazy_import():
-    import pytest
-
     def callback_fcn():
         raise ValueError
 
@@ -91,8 +85,6 @@ def my_torch_func(i: int) -> int:
 
 
 def test_torch_func_raised():
-    import pytest
-
     with pytest.raises(
         ModuleNotFoundError, match="Required dependencies not available. Please run `pip install torch`"
     ):
@@ -121,8 +113,6 @@ class MyTorchClass:
 
 
 def test_torch_class_raised():
-    import pytest
-
     with pytest.raises(
         ModuleNotFoundError, match="Required dependencies not available. Please run `pip install torch`"
     ):
