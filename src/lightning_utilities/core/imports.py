@@ -220,8 +220,7 @@ def requires(*module_path: str, raise_exception: bool = True) -> Callable:
                 msg = f"Required dependencies not available. Please run `pip install {' '.join(unavailable_modules)}`"
                 if raise_exception:
                     raise ModuleNotFoundError(msg)
-                else:
-                    warnings.warn(msg)
+                warnings.warn(msg)
             return func(*args, **kwargs)
 
         return wrapper
