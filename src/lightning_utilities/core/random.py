@@ -4,6 +4,7 @@ from lightning_utilities.core.imports import package_available
 
 
 def seed_all(seed):
+    """Seed all available / installed resources (numpy & pytorch)."""
     random.seed(seed)
     if package_available("numpy"):
         import numpy

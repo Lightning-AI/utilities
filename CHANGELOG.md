@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `requires` wrapper ([#70](https://github.com/Lightning-AI/utilities/pull/70))
 
 
+- Added `seed_all` for optional Numpy and PyTorch([#75](https://github.com/Lightning-AI/utilities/pull/75))
+
+
 ### Changed
 
 ### Removed
