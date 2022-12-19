@@ -31,10 +31,10 @@ jobs:
       matrix: ${{ fromJSON(inputs.strategy-matrix) }}
 
     steps:
-      - name: Checkout
+      - name: Checkout 🛎
         uses: actions/checkout@v3
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 🐍 ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}

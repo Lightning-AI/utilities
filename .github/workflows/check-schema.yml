@@ -13,7 +13,7 @@ jobs:
   schema:
     runs-on: ubuntu-20.04
     steps:
-      - name: Checkout
+      - name: Checkout 🛎
         uses: actions/checkout@v3
 
       - name: Install dependencies

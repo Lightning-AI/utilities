@@ -13,13 +13,14 @@ jobs:
         # If you're using actions/checkout@v3 you must set persist-credentials to false in most cases for the deployment to work correctly.
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v4
-        with:
+    - name: Set up Python 🐍
+      uses: actions/setup-python@v4
+      with:
           python-version: 3.7
 
       # Note: This uses an internal pip API and may not always work
       # https://github.com/actions/cache/blob/master/examples.md#multiple-oss-in-a-workflow
-      - name: Cache pip
+      - name: Cache 💽 pip
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
