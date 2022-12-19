@@ -1,0 +1,57 @@
+name: Create and check package
+description: building, checking the package
+
+inputs:
+  artifact-name:
+    description: 'Unique name for collecting artifacts'
+    required: true
+  env-vars:
+    description: 'Define env variables as dictionary/JSON'
+    required: false
+    default: |
+      {
+        "PACKAGE_NAME": ""
+      }
+
+runs:
+  using: "composite"
+  steps:
+
+  - name: Prepare dev. env
+    run: pip install "twine==4.0.1" setuptools wheel
+    shell: bash
+
+  - name: Source check
+    env: ${{ fromJSON(inputs.env-vars) }}
+    run: python setup.py check --metadata --strict
+    shell: bash
+
+  - name: Create package 📦
+    env: ${{ fromJSON(inputs.env-vars) }}
+    run: |
+      python setup.py sdist bdist_wheel
+      # python setup.py clean
+    shell: bash
+
+  - name: Check package 📦
+    working-directory: dist
+    run: |
+      ls -lh .
+      twine check *
+    shell: bash
+
+  - name: Download 📥 previous packages
+    uses: actions/download-artifact@v3
+    with:
+      name: ${{ inputs.artifact-name }}
+      path: pypi
+
+  - name: copy/export pkg
+    run: cp dist/* pypi/
+    shell: bash
+
+  - name: Upload 📤 to the share store
+    uses: actions/upload-artifact@v3
+    with:
+      name: ${{ inputs.artifact-name }}
+      path: pypi
