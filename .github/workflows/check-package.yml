@@ -118,7 +118,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install and uninstall package (wheel)
+      - name: Install package (wheel)
         working-directory: pypi
         run: |
           # TODO: reset env / conside add as conda
@@ -126,7 +126,12 @@ jobs:
           python -c "import ${{ inputs.import-name }} as pkg; print(f'version: {pkg.__version__}')"
           pip list
 
-      - name: Install and uninstall package (archive)
+      - name: Uninstall all
+        run: |
+          pip freeze > _reqs.txt
+          pip uninstall -y -r _reqs.txt
+
+      - name: Install package (archive)
         working-directory: pypi
         run: |
           # TODO: reset env / conside add as conda
