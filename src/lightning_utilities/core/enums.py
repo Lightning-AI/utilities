@@ -21,11 +21,11 @@ class StrEnum(str, Enum):
     """
 
     @classmethod
-    def from_str(cls, value: str, source: Literal["key", "value", "any"] = "any") -> Optional["StrEnum"]:
+    def from_str(cls, value: str, source: Literal["key", "value", "any"] = "key") -> Optional["StrEnum"]:
         for st, val in cls.__members__.items():
             if source in ("key", "any") and st.lower() == value.lower():
                 return cls[st]
-            elif source in ("value", "any") and val.lower() == value.lower():
+            if source in ("value", "any") and val.lower() == value.lower():
                 return cls[st]
         return None
 
