@@ -22,10 +22,10 @@ class StrEnum(str, Enum):
 
     @classmethod
     def from_str(cls, value: str, source: Literal["key", "value", "any"] = "any") -> Optional["StrEnum"]:
-        statuses = cls.__members__.keys()
-        # TODO: compare key | val or any
-        for st in statuses:
-            if st.lower() == value.lower():
+        for st, val in cls.__members__.items():
+            if source in ("key", "any") and st.lower() == value.lower():
+                return cls[st]
+            elif source in ("value", "any") and val.lower() == value.lower():
                 return cls[st]
         return None
 
@@ -35,6 +35,6 @@ class StrEnum(str, Enum):
         return self.value.lower() == str(other).lower()
 
     def __hash__(self) -> int:
-        # re-enable hashtable so it can be used as a dict key or in a set
+        # re-enable hashtable, so it can be used as a dict key or in a set
         # example: set(LightningEnum)
         return hash(self.value.lower())
