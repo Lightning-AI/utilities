@@ -123,15 +123,15 @@ jobs:
         run: |
           # TODO: reset env / conside add as conda
           pip install *.whl ${{ inputs.install-flags }}
+          python -c "import ${{ inputs.import-name }} as pkg; print(f'version: {pkg.__version__}')"
           pip list
-          python -c "import ${{ inputs.import-name }} as pkg; print(pkg.__version__)"
 
       - name: Install and uninstall package (archive)
         working-directory: pypi
         run: |
           # TODO: reset env / conside add as conda
           pip install *.tar.gz ${{ inputs.install-flags }}
+          python -c "import ${{ inputs.import-name }} as pkg; print(f'version: {pkg.__version__}')"
           pip list
-          python -c "import ${{ inputs.import-name }} as pkg; print(pkg.__version__)"
 
       # TODO: add run doctests
