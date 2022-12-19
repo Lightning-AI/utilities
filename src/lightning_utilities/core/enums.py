@@ -5,13 +5,25 @@
 from enum import Enum
 from typing import Optional
 
+from typing_extensions import Literal
+
 
 class StrEnum(str, Enum):
-    """Type of any enumerator with allowed comparison to string invariant to cases."""
+    """Type of any enumerator with allowed comparison to string invariant to cases.
+
+    >>> class MySE(StrEnum):
+    ...     t1 = "T-1"
+    ...     t2 = "T-2"
+    >>> MySE("T-1") == MySE.t1
+    True
+    >>> MySE.from_str("t-2") == MySE.t2
+    True
+    """
 
     @classmethod
-    def from_str(cls, value: str) -> Optional["StrEnum"]:
+    def from_str(cls, value: str, source: Literal["key", "value", "any"] = "any") -> Optional["StrEnum"]:
         statuses = cls.__members__.keys()
+        # TODO: compare key | val or any
         for st in statuses:
             if st.lower() == value.lower():
                 return cls[st]
