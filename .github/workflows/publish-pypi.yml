@@ -46,7 +46,8 @@ jobs:
       with:
         name: pypi-packages-${{ github.sha }}
         path: dist
-    - run: ls -lh dist/
+    - name: local 🗃️ files
+      run: ls -lh dist/
 
     - name: Upload to release
       if: startsWith(github.event.ref, 'refs/tags') || github.event_name == 'release'
@@ -67,7 +68,8 @@ jobs:
       with:
         name: pypi-packages-${{ github.sha }}
         path: dist
-    - run: ls -lh dist/
+    - name: local 🗃️ files
+      run: ls -lh dist/
 
     - name: Delay releasing
       if: startsWith(github.event.ref, 'refs/tags') || github.event_name == 'release'
