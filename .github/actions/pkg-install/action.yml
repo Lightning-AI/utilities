@@ -27,7 +27,7 @@ runs:
     shell: bash
 
   - name: Install package (wheel)
-    working-directory: pypi
+    working-directory: pypi/
     run: |
       # TODO: reset env / conside add as conda
       pip install *.whl ${{ inputs.install-flags }}
@@ -42,18 +42,10 @@ runs:
     shell: bash
 
   - name: Install package (archive)
-    working-directory: pypi
+    working-directory: pypi/
     run: |
       # TODO: reset env / conside add as conda
       pip install *.tar.gz ${{ inputs.install-flags }}
       python -c "import ${{ inputs.import-name }} as pkg; print(f'version: {pkg.__version__}')"
       pip list
-    shell: bash
-
-  - name: Install | Uninstall package - archive
-    working-directory: ./dist
-    run: |
-      pip install *.tar.gz ${{ inputs.pip-flags }}
-      pip list | grep lightning
-      python -c "import ${PKG_NAME} ; print(${PKG_NAME}.__version__)"
     shell: bash
