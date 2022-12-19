@@ -11,10 +11,6 @@ on:
         description: 'Import name to test with after installation'
         required: true
         type: string
-      pypi-name:
-        description: 'PyPI name to install the package with'
-        required: true
-        type: string
       install-flags:
         description: 'Additional pip install flags'
         required: false
@@ -132,3 +128,5 @@ jobs:
           # TODO: reset env / conside add as conda
           pip install *.whl ${{ inputs.install-flags }}
           python -c "import ${{ inputs.import-name }}; print(${{ inputs.import-name }}.__version__)"
+
+      # TODO: add run doctests
