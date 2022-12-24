@@ -64,7 +64,7 @@ jobs:
     needs: build-package
     runs-on: ubuntu-20.04
     steps:
-    - name: Delay releasing
+    - name: Delay ⏰ releasing
       uses: juliangruber/sleep-action@v1
       with:
         time: 5m
