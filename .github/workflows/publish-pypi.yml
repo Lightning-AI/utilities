@@ -3,13 +3,28 @@ name: PyPI Release
 # https://help.github.com/en/actions/reference/events-that-trigger-workflows
 on:  # Trigger the workflow on push or pull request, but only for the master branch
   push:
-    tags:
-      - 'v?[0-9]+.[0-9]+.[0-9]+'
+    branches: [main, "release/*"]
+    tags: ['v?[0-9]+.[0-9]+.[0-9]+']
+  release:
+    types: [published]
 
 jobs:
 
+  init-store:  #  todo: remove this wne download will be fault tolerant
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout 🛎️
+      uses: actions/checkout@v3
+    - run: mkdir dist && touch dist/.placeholder
+    - name: Upload 📤
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: dist
+
   # based on https://github.com/pypa/gh-action-pypi-publish
   build-package:
+    needs: init-store
     runs-on: ubuntu-20.04
     timeout-minutes: 10
     steps:
@@ -26,9 +41,10 @@ jobs:
         artifact-name: pypi-packages-${{ github.sha }}
 
   upload-package:
+    needs: build-package
+    if: github.event_name == 'release'
     timeout-minutes: 5
     runs-on: ubuntu-20.04
-    needs: build-package
     steps:
     - name: Checkout 🛎️
       uses: actions/checkout@v3
@@ -47,10 +63,20 @@ jobs:
         files: 'dist/*'
         repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-  publish-package:
-    runs-on: ubuntu-20.04
-    timeout-minutes: 10
+  delay-publish:
     needs: build-package
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Delay releasing
+      uses: juliangruber/sleep-action@v1
+      with:
+        time: 5m
+
+  publish-package:
+    needs: delay-publish
+    if: startsWith(github.event.ref, 'refs/tags') || github.event_name == 'release'
+    runs-on: ubuntu-20.04
+    timeout-minutes: 5
     steps:
     - name: Checkout 🛎️
       uses: actions/checkout@v3
@@ -61,11 +87,6 @@ jobs:
         path: dist
     - name: local 🗃️ files
       run: ls -lh dist/
-
-    - name: Delay releasing
-      uses: juliangruber/sleep-action@v1
-      with:
-        time: 5m
 
     # We do this, since failures on test.pypi aren't that bad
     - name: Publish to Test PyPI

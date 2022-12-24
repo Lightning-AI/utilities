@@ -6,13 +6,6 @@ inputs:
     description: 'Unique name for collecting artifacts'
     required: false
     default: ""
-  env-vars:
-    description: 'Define env variables as dictionary/JSON'
-    required: false
-    default: |
-      {
-        "PACKAGE_NAME": ""
-      }
 
 runs:
   using: "composite"
@@ -23,12 +16,10 @@ runs:
     shell: bash
 
   - name: Source check
-    env: ${{ fromJSON(inputs.env-vars) }}
     run: python setup.py check --metadata --strict
     shell: bash
 
   - name: Create package 📦
-    env: ${{ fromJSON(inputs.env-vars) }}
     # python setup.py clean
     run: python setup.py sdist bdist_wheel
     shell: bash

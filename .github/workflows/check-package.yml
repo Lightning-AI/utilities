@@ -46,7 +46,7 @@ defaults:
 
 jobs:
 
-  init-store:
+  init-store:  #  todo: remove this wne download will be fault tolerant
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout 🛎️
