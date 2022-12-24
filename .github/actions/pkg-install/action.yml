@@ -4,7 +4,8 @@ description: installing and validationg the package
 inputs:
   artifact-name:
     description: 'Unique name for collecting artifacts'
-    required: true
+    required: false
+    default: ""
   import-name:
     description: 'Import name to test with after installation'
     required: true
@@ -17,6 +18,7 @@ runs:
   using: "composite"
   steps:
   - name: Download 📥 all packages
+    if: ${{ inputs.artifact-name != '' }}
     uses: actions/download-artifact@v3
     with:
       name: ${{ inputs.artifact-name }}
