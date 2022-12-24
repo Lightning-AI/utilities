@@ -58,6 +58,7 @@ jobs:
         name: ${{ inputs.artifact-name }}
         path: dist
 
+
   pkg-build:
     needs: init-store
     runs-on: ${{ matrix.os }}
@@ -84,6 +85,7 @@ jobs:
       uses: ./.cicd/.github/actions/pkg-create
       with:
         artifact-name: ${{ inputs.artifact-name }}
+
 
   pkg-check:
     needs: pkg-build
