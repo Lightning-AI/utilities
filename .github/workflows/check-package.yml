@@ -3,6 +3,10 @@ name: Check package flow
 on:
   workflow_call:
     inputs:
+      actions-ref:
+        description: 'Version of actions, normally the same as workflow'
+        required: true
+        type: string
       artifact-name:
         description: 'Unique name for collecting artifacts'
         required: true
@@ -70,9 +74,14 @@ jobs:
       with:
         python-version: 3.8
 
-    # TODO: this breaks external use
+    - name: Pull re-usable 🤖 actions️
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ inputs.actions-ref }}
+        path: .cicd
+        repository: Lightning-AI/utilities
     - name: Create package 📦
-      uses: ./.github/actions/pkg-create
+      uses: ./.cicd/.github/actions/pkg-create
       with:
         artifact-name: ${{ inputs.artifact-name }}
 
@@ -91,9 +100,14 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    # TODO: this breaks external use
+    - name: Pull re-usable 🤖 actions️
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ inputs.actions-ref }}
+        path: .cicd
+        repository: Lightning-AI/utilities
     - name: Installing package 📦
-      uses: ./.github/actions/pkg-install
+      uses: ./.cicd/.github/actions/pkg-install
       with:
         artifact-name: ${{ inputs.artifact-name }}
         import-name: ${{ inputs.import-name }}

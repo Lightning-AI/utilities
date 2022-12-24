@@ -4,7 +4,8 @@ description: building, checking the package
 inputs:
   artifact-name:
     description: 'Unique name for collecting artifacts'
-    required: true
+    required: false
+    default: ""
   env-vars:
     description: 'Define env variables as dictionary/JSON'
     required: false
@@ -28,9 +29,8 @@ runs:
 
   - name: Create package 📦
     env: ${{ fromJSON(inputs.env-vars) }}
-    run: |
-      python setup.py sdist bdist_wheel
-      # python setup.py clean
+    # python setup.py clean
+    run: python setup.py sdist bdist_wheel
     shell: bash
 
   - name: Check package 📦
@@ -41,16 +41,19 @@ runs:
     shell: bash
 
   - name: Download 📥 previous packages
+    if: ${{ inputs.artifact-name != '' }}
     uses: actions/download-artifact@v3
     with:
       name: ${{ inputs.artifact-name }}
       path: pypi
 
   - name: copy/export pkg
+    if: ${{ inputs.artifact-name != '' }}
     run: cp dist/* pypi/
     shell: bash
 
   - name: Upload 📤 to the share store
+    if: ${{ inputs.artifact-name != '' }}
     uses: actions/upload-artifact@v3
     with:
       name: ${{ inputs.artifact-name }}
