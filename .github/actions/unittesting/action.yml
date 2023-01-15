@@ -5,9 +5,6 @@ inputs:
   python-version:
     description: Python version
     required: true
-  pytorch-version:
-    description: PyTorch version
-    required: true
   pkg-name:
     description: package name for coverage collctions
     required: true
@@ -40,7 +37,7 @@ runs:
     shell: ${{ inputs.shell-type }}
 
   - run: |
-      echo "artifact=test-results-${{ runner.os }}-py${{ inputs.python-version }}-pt{{ inputs.pytorch-version }}-${{ inputs.requires }}" >> $GITHUB_OUTPUT
+      echo "artifact=test-results-${{ runner.os }}-py${{ inputs.python-version }}-${{ inputs.requires }}" >> $GITHUB_OUTPUT
     id: location
     shell: bash
 
