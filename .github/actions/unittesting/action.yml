@@ -55,8 +55,8 @@ runs:
   - name: Upload pytest results
     uses: actions/upload-artifact@v2
     with:
-      name: ${{env.PYTEST_ARTEFACT}}
-      path: "test/${{env.PYTEST_ARTEFACT}}.xml"
+      name: ${{ steps.location.outputs.artifact }}
+      path: "test/${{ steps.location.outputs.artifact }}.xml"
     if: failure()
 
   - name: Statistics
