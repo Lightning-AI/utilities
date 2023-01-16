@@ -14,7 +14,7 @@ on:
 
 jobs:
 
-  crone-clear:
+  cron-clear:
     if: github.event_name == 'schedule'
     uses: ./.github/workflows/clear-cache.yml
     with:
