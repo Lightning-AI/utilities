@@ -20,7 +20,7 @@ defaults:
 jobs:
 
   mypy:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-abcd
     steps:
     - name: Checkout 🛎️
       uses: actions/checkout@v3
