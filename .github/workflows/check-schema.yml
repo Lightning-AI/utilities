@@ -30,7 +30,7 @@ jobs:
 
     - name: Scan repo
       id: folders
-      run: python -c "import os; print('gh_actions=' + str(int(os.path.isdir('.github/actions')))" >> $GITHUB_OUTPUT
+      run: python -c "import os; print('gh_actions=' + str(int(os.path.isdir('.github/actions'))))" >> $GITHUB_OUTPUT
 
     # https://github.com/SchemaStore/schemastore/blob/master/src/schemas/json/github-workflow.json
     - name: GitHub Actions - workflow
