@@ -31,3 +31,6 @@ jobs:
 
   check-docs:
     uses: ./.github/workflows/check-docs.yml
+
+  check-md-links:
+    uses: ./.github/workflows/check-md-links.yml

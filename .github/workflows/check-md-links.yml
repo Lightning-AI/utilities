@@ -2,14 +2,15 @@ name: Check Markdown links
 # https://github.com/gaurav-nelson/github-action-markdown-link-check
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-    types: [opened, reopened, ready_for_review, synchronize]
-    paths:
-      - ".github/workflows/md-check-links.yml"
-      - "**/*.md"
+  workflow_call:
+    push:
+      branches: [main]
+    pull_request:
+      branches: [main]
+      types: [opened, reopened, ready_for_review, synchronize]
+      paths:
+        - ".github/workflows/md-check-links.yml"
+        - "**/*.md"
 
 jobs:
   markdown-link-check:
