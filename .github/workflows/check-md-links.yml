@@ -7,7 +7,7 @@ on:
       config-file:
         description: 'Config file (JSON) used for markdown link checks'
         required: true
-        type: string  
+        type: string
   push:
     branches: [main]
   pull_request:
