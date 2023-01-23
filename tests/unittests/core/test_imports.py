@@ -8,8 +8,9 @@ from lightning_utilities.core.imports import (
     get_dependency_min_version_spec,
     lazy_import,
     module_available,
+    ModuleAvailableCache,
     RequirementCache,
-    requires, ModuleAvailableCache,
+    requires,
 )
 
 try:
