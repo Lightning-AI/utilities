@@ -63,7 +63,4 @@ repos:
     rev: v0.0.238
     hooks:
       - id: ruff
-        args:
-          - "--fix"
-          # Respect `exclude` and `extend-exclude` settings.
-          - "--force-exclude"
+        args: ["--fix"]
