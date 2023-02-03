@@ -34,7 +34,7 @@ repos:
         args: [--in-place, --wrap-summaries=120, --wrap-descriptions=120]
 
   - repo: https://github.com/PyCQA/isort
-    rev: 5.11.4
+    rev: 5.12.0
     hooks:
       - id: isort
 
@@ -59,7 +59,8 @@ repos:
     hooks:
       - id: yesqa
 
-  - repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.0.238
     hooks:
-      - id: flake8
+      - id: ruff
+        args: ["--fix"]
