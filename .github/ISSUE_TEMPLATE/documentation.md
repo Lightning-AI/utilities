@@ -8,7 +8,7 @@ assignees: ''
 
 ## 📚 Documentation
 
-For typos and fixes please go ahead and: 
+For typos and fixes please go ahead and:
 
 - for a typo or fix, please send directly a PR (no need to create an issue)
 - if you are not sure about the proper solution, please describe here your finding...
