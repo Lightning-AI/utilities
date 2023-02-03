@@ -8,9 +8,7 @@ assignees: ''
 
 ## 📚 Documentation
 
-For typos and fixes please go ahead and:
-
-- for a typo or fix, please send directly a PR (no need to create an issue)
-- if you are not sure about the proper solution, please describe here your finding...
+For typos or docs fixes, please go ahead and submit a PR (no need to open an issue).
+If you are not sure about the proper solution, please describe the issue here...
 
 Thanks!
