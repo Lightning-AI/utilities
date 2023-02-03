@@ -83,6 +83,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI: Checking schem in both yaml & yml + verbose ([#84](https://github.com/Lightning-AI/utilities/pull/84))
 
 
+## [UnReleased] - 2023-MM-DD
+
+### Added
+
+-
+
+
+### Changed
+
+- CI/docs: allow passing env. variables ([#96](https://github.com/Lightning-AI/utilities/pull/96))
+
+
+### Fixed
+
+-
+
+
 ## [0.5.0] - 2022-12-21
 
 ### Added
