@@ -22,7 +22,9 @@ class StrEnum(str, Enum):
     """
 
     @classmethod
-    def from_str(cls, value: str, source: Literal["key", "value", "any"] = "key", strict: bool = False) -> Optional["StrEnum"]:
+    def from_str(
+        cls, value: str, source: Literal["key", "value", "any"] = "key", strict: bool = False
+    ) -> Optional["StrEnum"]:
         """Create StrEnum from a sting matching the key or value.
 
         Args:
@@ -52,7 +54,6 @@ class StrEnum(str, Enum):
             Traceback (most recent call last):
               ...
             ValueError: Invalid match: expected one of ['t1', 't2', 'T-1', 'T-2'], but got t-3.
-
         """
         allowed = cls._allowed_matches(source)
         if strict and not any(enum_.lower() == value.lower() for enum_ in allowed):
