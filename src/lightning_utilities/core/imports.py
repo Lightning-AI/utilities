@@ -236,7 +236,7 @@ def requires(*module_path: str, raise_exception: bool = True) -> Callable:
     """Wrapper for early import failure with some nice exception message.
 
     Example:
-    -------
+
         >>> @requires("libpath", raise_exception=bool(int(os.getenv("LIGHTING_TESTING", "0"))))
         ... def my_cwd():
         ...     from pathlib import Path
