@@ -3,7 +3,7 @@
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 from enum import Enum
-from typing import List
+from typing import List, Optional
 
 from typing_extensions import Literal
 
@@ -50,6 +50,13 @@ class StrEnum(str, Enum):
                 if enum_val == value:
                     return cls[enum_key]
         raise ValueError(f"Invalid match: expected one of {cls._allowed_matches(source)}, but got {value}.")
+
+    @classmethod
+    def maybe_from_str(cls, value: str, source: Literal["key", "value", "any"] = "key") -> Optional["StrEnum"]:
+        try:
+            return cls.from_str(value, source)
+        except ValueError:
+            return
 
     @classmethod
     def _allowed_matches(cls, source: str) -> List[str]:
