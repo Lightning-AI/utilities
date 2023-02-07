@@ -28,7 +28,7 @@ class StrEnum(str, Enum):
 
     @classmethod
     def from_str(cls, value: str, source: Literal["key", "value", "any"] = "key") -> "StrEnum":
-        """Create StrEnum from a string matching the key or value.
+        """Create ``StrEnum`` from a string matching the key or value.
 
         Args:
             value: matching string
