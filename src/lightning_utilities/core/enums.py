@@ -56,7 +56,7 @@ class StrEnum(str, Enum):
         try:
             return cls.from_str(value, source)
         except ValueError:
-            return
+            return None
 
     @classmethod
     def _allowed_matches(cls, source: str) -> List[str]:
