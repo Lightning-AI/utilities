@@ -69,9 +69,10 @@ class StrEnum(str, Enum):
                     return cls[enum_key]
 
         warnings.warn(UserWarning(f"Invalid string: expected one of {allowed}, but got {value}."))
+        return None
 
     @classmethod
-    def _allowed_matches(cls, source) -> list:
+    def _allowed_matches(cls, source: str) -> list:
         keys, vals = [], []
         for enum_key, enum_val in cls.__members__.items():
             keys.append(enum_key)
