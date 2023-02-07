@@ -2,6 +2,7 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
+import warnings
 from enum import Enum
 from typing import Optional
 
@@ -45,9 +46,6 @@ class StrEnum(str, Enum):
             ...     t1 = "T-1"
             ...     t2 = "T-2"
             >>> MySE.from_str("t-1", source="key")
-            Traceback (most recent call last):
-              ...
-            UserWarning: Invalid string: expected one of ['t1', 't2'], but got t-1.
             >>> MySE.from_str("t-2", source="value")
             <MySE.t2: 'T-2'>
             >>> MySE.from_str("t-3", source="any", strict=True)
@@ -69,7 +67,7 @@ class StrEnum(str, Enum):
                 if enum_val == value:
                     return cls[enum_key]
 
-        raise UserWarning(f"Invalid string: expected one of {allowed}, but got {value}.")
+        warnings.warn(UserWarning(f"Invalid string: expected one of {allowed}, but got {value}."))
 
     @classmethod
     def _allowed_matches(cls, source) -> list:
