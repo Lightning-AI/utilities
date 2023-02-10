@@ -33,6 +33,7 @@ class StrEnum(str, Enum):
         Args:
             value: matching string
             source: compare with:
+
                 - ``"key"``: validates only from the enum keys, typical alphanumeric with "_"
                 - ``"value"``: validates only from the values, could be any string
                 - ``"any"``: validates with any key or value, but key has priority
