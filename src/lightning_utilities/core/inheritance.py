@@ -17,5 +17,5 @@ def get_all_subclasses_iterator(cls: Type) -> Iterator[Type]:
 
 
 def get_all_subclasses(cls: Type) -> Set[Type]:
-    """Get listed all subclasses."""
+    """List all subclasses of a class."""
     return set(get_all_subclasses_iterator(cls))

@@ -68,13 +68,13 @@ rank_zero_deprecation_category = DeprecationWarning
 
 
 def rank_zero_deprecation(message: Union[str, Warning], stacklevel: int = 5, **kwargs: Any) -> None:
-    """Raise deprecation warning only for rank zero calls."""
+    """Emit a deprecation warning only on global rank 0."""
     category = kwargs.pop("category", rank_zero_deprecation_category)
     rank_zero_warn(message, stacklevel=stacklevel, category=category, **kwargs)
 
 
 def rank_prefixed_message(message: str, rank: Optional[int]) -> str:
-    """Wrap a rant type message."""
+    """Add a prefix with the rank to a message."""
     if rank is not None:
         # specify the rank of the process being logged
         return f"[rank: {rank}] {message}"
@@ -85,19 +85,19 @@ class WarningCache(set):
     """Cache for warnings."""
 
     def warn(self, message: str, stacklevel: int = 5, **kwargs: Any) -> None:
-        """Proceed warning message."""
+        """Trigger warning message."""
         if message not in self:
             self.add(message)
             rank_zero_warn(message, stacklevel=stacklevel, **kwargs)
 
     def deprecation(self, message: str, stacklevel: int = 6, **kwargs: Any) -> None:
-        """Proceed deprecation message."""
+        """Trigger deprecation message."""
         if message not in self:
             self.add(message)
             rank_zero_deprecation(message, stacklevel=stacklevel, **kwargs)
 
     def info(self, message: str, stacklevel: int = 5, **kwargs: Any) -> None:
-        """Proceed info message."""
+        """Trigger info message."""
         if message not in self:
             self.add(message)
             rank_zero_info(message, stacklevel=stacklevel, **kwargs)
