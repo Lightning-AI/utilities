@@ -61,6 +61,7 @@ class StrEnum(str, Enum):
             warnings.warn(
                 UserWarning(f"Invalid string: expected one of {cls._allowed_matches(source)}, but got {value}.")
             )
+        return None
 
     @classmethod
     def _allowed_matches(cls, source: str) -> List[str]:
