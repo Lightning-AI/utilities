@@ -12,7 +12,7 @@ runs:
   steps:
 
   - name: Prepare dev. env
-    run: pip install "twine==4.0.2" setuptools wheel
+    run: pip install "twine==4.0.2" setuptools wheel build
     shell: bash
 
   - name: Create package 📦
