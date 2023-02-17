@@ -48,7 +48,7 @@ class _RequirementWithComment(Requirement):
                 if operator in ("<", "<="):
                     major = LooseVersion(version).version[0]
                     # replace upper bound with major version increased by one
-                    return out.replace(f"{operator}{version}", f"<{major + 1}.0")
+                    return out.replace(f"{operator}{version}", f"<{int(major) + 1}.0")
         elif unfreeze == "all":
             for operator, version in self.specs:
                 if operator in ("<", "<="):
