@@ -10,9 +10,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+-
+
+
+### Changed
+
+-
+
+
+### Fixed
+
+-
+
+
+## [0.7.0] - 2023-02-20
+
+### Added
+
 - Allow frozen dataclasses in `apply_to_collection` ([#98](https://github.com/Lightning-AI/utilities/pull/98))
-
-
 - Extended `StrEnum.from_str` with optional raising ValueError ([#99](https://github.com/Lightning-AI/utilities/pull/99))
 
 
@@ -22,8 +37,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - CI/docs: allow passing env. variables ([#96](https://github.com/Lightning-AI/utilities/pull/96))
-
-
 - CI: build package ([#104](https://github.com/Lightning-AI/utilities/pull/104))
 
 
