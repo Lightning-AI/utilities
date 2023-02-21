@@ -4,8 +4,8 @@
 
 import functools
 import importlib
-import warnings
 import re
+import warnings
 from functools import lru_cache
 from importlib.util import find_spec
 from types import ModuleType
@@ -76,7 +76,7 @@ def compare_version(package: str, op: Callable, version: str, use_base_version: 
         else:
             # try pkg_resources to infer version
             pkg_version_str = pkg_resources.get_distribution(package).version
-        match = re.search('(\d+\.\d+\.\d+)(.*)', pkg_version_str)
+        match = re.search(r"(\d+\.\d+\.\d+)(.*)", pkg_version_str)
         if match is None:
             raise RuntimeError(f'{package} version "{pkg_version_str}" doesn\'t seem to be a valid one.')
         else:
