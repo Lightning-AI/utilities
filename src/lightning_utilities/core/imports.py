@@ -6,7 +6,6 @@ import functools
 import importlib
 import warnings
 from functools import lru_cache
-from importlib import metadata
 from importlib.util import find_spec
 from types import ModuleType
 from typing import Any, Callable, List, Optional
@@ -14,6 +13,12 @@ from typing import Any, Callable, List, Optional
 import pkg_resources
 from packaging.requirements import Requirement
 from packaging.version import Version
+
+try:
+    from importlib import metadata
+except ImportError:
+    # Python < 3.8
+    import importlib_metadata as metadata  # type: ignore
 
 
 @lru_cache()
