@@ -10,12 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--
+- CI: guardian as parametrization closure ([#111](https://github.com/Lightning-AI/utilities/pull/111))
 
 
 ### Changed
 
--
+- CI: allow specify typing extra ([#110](https://github.com/Lightning-AI/utilities/pull/110))
 
 
 ### Fixed
