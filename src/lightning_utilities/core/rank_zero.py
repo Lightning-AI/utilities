@@ -4,11 +4,12 @@
 #
 """Utilities that can be used for calling functions on a particular rank."""
 from __future__ import annotations
+
 import logging
 import warnings
 from functools import wraps
 from platform import python_version
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable
 
 log = logging.getLogger(__name__)
 
@@ -20,7 +21,7 @@ def rank_zero_only(fn: Callable) -> Callable:
     """
 
     @wraps(fn)
-    def wrapped_fn(*args: Any, **kwargs: Any) -> Optional[Any]:
+    def wrapped_fn(*args: Any, **kwargs: Any) -> Any | None:
         rank = getattr(rank_zero_only, "rank", None)
         if rank is None:
             raise RuntimeError("The `rank_zero_only.rank` needs to be set before use")
@@ -55,12 +56,12 @@ def rank_zero_info(*args: Any, stacklevel: int = 4, **kwargs: Any) -> None:
     _info(*args, stacklevel=stacklevel, **kwargs)
 
 
-def _warn(message: Union[str, Warning], stacklevel: int = 2, **kwargs: Any) -> None:
+def _warn(message: str | Warning, stacklevel: int = 2, **kwargs: Any) -> None:
     warnings.warn(message, stacklevel=stacklevel, **kwargs)
 
 
 @rank_zero_only
-def rank_zero_warn(message: Union[str, Warning], stacklevel: int = 4, **kwargs: Any) -> None:
+def rank_zero_warn(message: str | Warning, stacklevel: int = 4, **kwargs: Any) -> None:
     """Emit warn-level messages only on global rank 0."""
     _warn(message, stacklevel=stacklevel, **kwargs)
 
@@ -68,13 +69,13 @@ def rank_zero_warn(message: Union[str, Warning], stacklevel: int = 4, **kwargs: 
 rank_zero_deprecation_category = DeprecationWarning
 
 
-def rank_zero_deprecation(message: Union[str, Warning], stacklevel: int = 5, **kwargs: Any) -> None:
+def rank_zero_deprecation(message: str | Warning, stacklevel: int = 5, **kwargs: Any) -> None:
     """Emit a deprecation warning only on global rank 0."""
     category = kwargs.pop("category", rank_zero_deprecation_category)
     rank_zero_warn(message, stacklevel=stacklevel, category=category, **kwargs)
 
 
-def rank_prefixed_message(message: str, rank: Optional[int]) -> str:
+def rank_prefixed_message(message: str, rank: int | None) -> str:
     """Add a prefix with the rank to a message."""
     if rank is not None:
         # specify the rank of the process being logged

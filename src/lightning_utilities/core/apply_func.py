@@ -3,10 +3,11 @@
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 from __future__ import annotations
+
 import dataclasses
 from collections import defaultdict, OrderedDict
 from copy import deepcopy
-from typing import Any, Callable, List, Mapping, Optional, Sequence, Tuple, Union
+from typing import Any, Callable, Mapping, Sequence
 
 
 def is_namedtuple(obj: object) -> bool:
@@ -23,10 +24,10 @@ def is_dataclass_instance(obj: object) -> bool:
 
 def apply_to_collection(
     data: Any,
-    dtype: Union[type, Any, Tuple[Union[type, Any]]],
+    dtype: type | Any | tuple[type | Any],
     function: Callable,
     *args: Any,
-    wrong_dtype: Optional[Union[type, Tuple[type, ...]]] = None,
+    wrong_dtype: type | tuple[type, ...] | None = None,
     include_none: bool = True,
     allow_frozen: bool = False,
     **kwargs: Any,
@@ -135,12 +136,12 @@ def apply_to_collection(
 
 
 def apply_to_collections(
-    data1: Optional[Any],
-    data2: Optional[Any],
-    dtype: Union[type, Any, Tuple[Union[type, Any]]],
+    data1: Any | None,
+    data2: Any | None,
+    dtype: type | Any | tuple[type | Any],
     function: Callable,
     *args: Any,
-    wrong_dtype: Optional[Union[type, Tuple[type]]] = None,
+    wrong_dtype: type | tuple[type] | None = None,
     **kwargs: Any,
 ) -> Any:
     """Zips two collections and applies a function to their items of a certain dtype.
@@ -208,7 +209,7 @@ def apply_to_collections(
         # but do not deepcopy mapped fields since the computation would
         # be wasted on values that likely get immediately overwritten
         data = [data1, data2]
-        fields: List[dict] = [{}, {}]
+        fields: list[dict] = [{}, {}]
         memo: dict = {}
         for i in range(len(data)):
             for field in dataclasses.fields(data[i]):

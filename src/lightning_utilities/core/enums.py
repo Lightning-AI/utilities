@@ -3,9 +3,9 @@
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 from __future__ import annotations
+
 import warnings
 from enum import Enum
-from typing import List, Optional
 
 from typing_extensions import Literal
 
@@ -55,7 +55,7 @@ class StrEnum(str, Enum):
         raise ValueError(f"Invalid match: expected one of {cls._allowed_matches(source)}, but got {value}.")
 
     @classmethod
-    def try_from_str(cls, value: str, source: Literal["key", "value", "any"] = "key") -> Optional["StrEnum"]:
+    def try_from_str(cls, value: str, source: Literal["key", "value", "any"] = "key") -> StrEnum | None:
         """Try to create emun and if it does not match any, return `None`."""
         try:
             return cls.from_str(value, source)
@@ -66,7 +66,7 @@ class StrEnum(str, Enum):
         return None
 
     @classmethod
-    def _allowed_matches(cls, source: str) -> List[str]:
+    def _allowed_matches(cls, source: str) -> list[str]:
         keys, vals = [], []
         for enum_key, enum_val in cls.__members__.items():
             keys.append(enum_key)

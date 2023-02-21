@@ -2,13 +2,14 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 #     http://www.apache.org/licenses/LICENSE-2.0
 from __future__ import annotations
+
 import functools
 import importlib
 import warnings
 from functools import lru_cache
 from importlib.util import find_spec
 from types import ModuleType
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable
 
 import pkg_resources
 from packaging.requirements import Requirement
@@ -187,7 +188,7 @@ class LazyModule(ModuleType):
         callback: a callback function to call before importing the module
     """
 
-    def __init__(self, module_name: str, callback: Optional[Callable] = None) -> None:
+    def __init__(self, module_name: str, callback: Callable | None = None) -> None:
         super().__init__(module_name)
         self._module: Any = None
         self._callback = callback
@@ -199,7 +200,7 @@ class LazyModule(ModuleType):
 
         return getattr(self._module, item)
 
-    def __dir__(self) -> List[str]:
+    def __dir__(self) -> list[str]:
         """Overwrite attribute access for dictionary."""
         if self._module is None:
             self._import_module()
@@ -219,7 +220,7 @@ class LazyModule(ModuleType):
         self.__dict__.update(self._module.__dict__)
 
 
-def lazy_import(module_name: str, callback: Optional[Callable] = None) -> LazyModule:
+def lazy_import(module_name: str, callback: Callable | None = None) -> LazyModule:
     """Return a proxy module object that will lazily import the given module the first time it is used.
 
     Example usage:

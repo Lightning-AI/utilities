@@ -1,12 +1,13 @@
 from __future__ import annotations
+
 import re
 import warnings
 from contextlib import contextmanager
-from typing import Generator, Optional, Type
+from typing import Generator
 
 
 @contextmanager
-def no_warning_call(expected_warning: Type[Warning] = Warning, match: Optional[str] = None) -> Generator:
+def no_warning_call(expected_warning: type[Warning] = Warning, match: str | None = None) -> Generator:
     """Check that no warning was raised/emitted under this context manager."""
     with warnings.catch_warnings(record=True) as record:
         yield
