@@ -5,6 +5,7 @@
 import functools
 import importlib
 import warnings
+import re
 from functools import lru_cache
 from importlib.util import find_spec
 from types import ModuleType
@@ -71,10 +72,15 @@ def compare_version(package: str, op: Callable, version: str, use_base_version: 
         return False
     try:
         if hasattr(pkg, "__version__"):
-            pkg_version = Version(pkg.__version__)
+            pkg_version_str = pkg.__version__
         else:
             # try pkg_resources to infer version
-            pkg_version = Version(pkg_resources.get_distribution(package).version)
+            pkg_version_str = pkg_resources.get_distribution(package).version
+        match = re.search('(\d+\.\d+\.\d+)(.*)', pkg_version_str)
+        if match is None:
+            raise RuntimeError(f'{package} version "{pkg_version_str}" doesn\'t seem to be a valid one.')
+        else:
+            pkg_version = Version(match.group(1))
     except TypeError:
         # this is mocked by Sphinx, so it should return True to generate all summaries
         return True
