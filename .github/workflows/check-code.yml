@@ -40,7 +40,7 @@ jobs:
     - name: Install dependencies
       run: |
         # don't use --upgrade to respect the version installed via setup.py
-        pip install -e '.[${{ inputs.extra-typing }}]' mypy types-setuptools \
+        pip install -e '.[${{ inputs.extra-typing }}]' mypy \
           --extra-index-url https://download.pytorch.org/whl/cpu/torch_stable.html
         pip list
 
