@@ -1,5 +1,6 @@
 import operator
 import re
+from importlib.metadata import PackageNotFoundError
 
 import pytest
 
@@ -8,16 +9,9 @@ from lightning_utilities.core.imports import (
     get_dependency_min_version_spec,
     lazy_import,
     module_available,
-    ModuleAvailableCache,
     RequirementCache,
     requires,
 )
-
-try:
-    from importlib.metadata import PackageNotFoundError
-except ImportError:
-    # Python < 3.8
-    from importlib_metadata import PackageNotFoundError
 
 
 def test_module_exists():
@@ -54,9 +48,9 @@ def test_requirement_cache():
 
 
 def test_module_available_cache():
-    assert ModuleAvailableCache("pytest")
-    assert not ModuleAvailableCache("this_module_is_not_installed")
-    assert "pip install -U this_module_is_not_installed" in str(ModuleAvailableCache("this_module_is_not_installed"))
+    assert RequirementCache("pytest")
+    assert not RequirementCache("this_module_is_not_installed")
+    assert "pip install -U 'this_module_is_not_installed" in str(RequirementCache("this_module_is_not_installed"))
 
 
 def test_get_dependency_min_version_spec():

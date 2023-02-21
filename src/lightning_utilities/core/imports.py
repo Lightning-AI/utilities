@@ -6,6 +6,7 @@ import functools
 import importlib
 import warnings
 from functools import lru_cache
+from importlib import metadata
 from importlib.util import find_spec
 from types import ModuleType
 from typing import Any, Callable, List, Optional
@@ -13,12 +14,6 @@ from typing import Any, Callable, List, Optional
 import pkg_resources
 from packaging.requirements import Requirement
 from packaging.version import Version
-
-try:
-    from importlib import metadata
-except ImportError:
-    # Python < 3.8
-    import importlib_metadata as metadata  # type: ignore
 
 
 @lru_cache()
@@ -84,7 +79,11 @@ def compare_version(package: str, op: Callable, version: str, use_base_version: 
 
 
 class RequirementCache:
-    """Boolean-like class for check of requirement with extras and version specifiers.
+    """Boolean-like class to check for requirement and module availability.
+
+    Args:
+        requirement: The requirement to check, version specifiers are allowed.
+        module: The optional module to try to import if the requirement check fails.
 
     >>> RequirementCache("torch>=0.1")
     Requirement 'torch>=0.1' met
@@ -92,59 +91,35 @@ class RequirementCache:
     True
     >>> bool(RequirementCache("torch>100.0"))
     False
-    """
-
-    def __init__(self, requirement: str) -> None:
-        self.requirement = requirement
-
-    def _check_requirement(self) -> None:
-        if not hasattr(self, "available"):
-            try:
-                pkg_resources.require(self.requirement)
-                self.available = True
-                self.message = f"Requirement {self.requirement!r} met"
-            except Exception as ex:
-                self.available = False
-                self.message = f"{ex.__class__.__name__}: {ex}. HINT: Try running `pip install -U {self.requirement!r}`"
-
-    def __bool__(self) -> bool:
-        """Format as bool."""
-        self._check_requirement()
-        return self.available
-
-    def __str__(self) -> str:
-        """Format as string."""
-        self._check_requirement()
-        return self.message
-
-    def __repr__(self) -> str:
-        """Format as string."""
-        return self.__str__()
-
-
-class ModuleAvailableCache:
-    """Boolean-like class for check of module availability.
-
-    >>> ModuleAvailableCache("torch")
-    Module 'torch' available
-    >>> bool(ModuleAvailableCache("torch"))
+    >>> RequirementCache("torch")
+    Requirement 'torch' met
+    >>> bool(RequirementCache("torch"))
     True
-    >>> bool(ModuleAvailableCache("unknown_package"))
+    >>> bool(RequirementCache("unknown_package"))
     False
     """
 
-    def __init__(self, module: str) -> None:
+    def __init__(self, requirement: str, module: Optional[str] = None) -> None:
+        self.requirement = requirement
         self.module = module
 
     def _check_requirement(self) -> None:
         if hasattr(self, "available"):
             return
-
-        self.available = module_available(self.module)
-        if self.available:
-            self.message = f"Module {self.module!r} available"
-        else:
-            self.message = f"Module not found: {self.module!r}. HINT: Try running `pip install -U {self.module}`"
+        try:
+            # first try the pkg_resources requirement
+            pkg_resources.require(self.requirement)
+            self.available = True
+            self.message = f"Requirement {self.requirement!r} met"
+        except Exception as ex:
+            # assume they match if module is not passed
+            module = self.requirement if self.module is None else self.module
+            # if it fails, try to import it: sometimes `pkg_resources.require()` fails but the module is importable
+            self.available = module_available(module)
+            if self.available:
+                self.message = f"Module {module!r} available"
+            else:
+                self.message = f"{ex.__class__.__name__}: {ex}. HINT: Try running `pip install -U {self.requirement!r}`"
 
     def __bool__(self) -> bool:
         """Format as bool."""
