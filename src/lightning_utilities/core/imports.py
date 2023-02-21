@@ -112,14 +112,15 @@ class RequirementCache:
             self.available = True
             self.message = f"Requirement {self.requirement!r} met"
         except Exception as ex:
-            # assume they match if module is not passed
-            module = self.requirement if self.module is None else self.module
-            # if it fails, try to import it: sometimes `pkg_resources.require()` fails but the module is importable
-            self.available = module_available(module)
-            if self.available:
-                self.message = f"Module {module!r} available"
-            else:
-                self.message = f"{ex.__class__.__name__}: {ex}. HINT: Try running `pip install -U {self.requirement!r}`"
+            self.available = False
+            self.message = f"{ex.__class__.__name__}: {ex}. HINT: Try running `pip install -U {self.requirement!r}`"
+            requirement_contains_version_specifier = "~=<>" in self.requirement
+            if not requirement_contains_version_specifier or self.module is not None:
+                module = self.requirement if self.module is None else self.module
+                # sometimes `pkg_resources.require()` fails but the module is importable
+                self.available = module_available(module)
+                if self.available:
+                    self.message = f"Module {module!r} available"
 
     def __bool__(self) -> bool:
         """Format as bool."""
