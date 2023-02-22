@@ -6,21 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [UnReleased] - 2023-MM-DD
+## [0.7.1] - 2023-02-23
 
 ### Added
 
 - CI: guardian as parametrization closure ([#111](https://github.com/Lightning-AI/utilities/pull/111))
 
-
 ### Changed
 
 - CI: allow specify typing extra ([#110](https://github.com/Lightning-AI/utilities/pull/110))
 
-
 ### Fixed
 
-- More resilient RequirementCache that checks for module import-ability ([#112](https://github.com/Lightning-AI/utilities/pull/112))
+- More resilient `RequirementCache` that checks for module import-ability ([#112](https://github.com/Lightning-AI/utilities/pull/112))
 
 
 ## [0.7.0] - 2023-02-20
