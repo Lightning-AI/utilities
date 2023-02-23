@@ -12,6 +12,11 @@ on:
         default: '3.9'
         required: false
         type: string
+      source-dir:
+        description: 'Folder with source code'
+        default: 'src/'
+        required: false
+        type: string
       extra-typing:
         description: 'Package extra to be installed for type checks + include mypy'
         default: 'test'
@@ -67,17 +72,17 @@ jobs:
       # 5. ~/.config/mypy/config
       # 6. ~/.mypy.ini
       # https://mypy.readthedocs.io/en/stable/config_file.html
-      run: mypy
+      run: mypy ${{ inputs.source-dir }}
 
     - name: suggest ignores
       if: failure()
       run: |
-        mypy --no-error-summary 2>&1 \
+        mypy ${{ inputs.source-dir }} --no-error-summary 2>&1 \
           | tr ':' ' ' \
           | awk '{print $1}' \
           | sort \
           | uniq \
-          | sed 's/\.py//g;  s|src/||g;  s|\/__init__||g;  s|\/|\.|g' \
+          | sed 's/\.py//g;  s|${{ inputs.source-dir }}||g;  s|\/__init__||g;  s|\/|\.|g' \
           | xargs -I {} echo '"{}",' \
         || true
 
