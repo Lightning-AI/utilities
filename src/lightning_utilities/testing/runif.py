@@ -6,11 +6,14 @@ import operator
 import os
 import platform
 import sys
-from typing import Any, Optional
+from typing import Any, Optional, TYPE_CHECKING
 
 from packaging.version import Version
 
-from lightning_utilities.core.imports import compare_version
+from lightning_utilities.core.imports import compare_version, module_available
+
+if module_available("_pytest") and TYPE_CHECKING:
+    from _pytest.mark import MarkDecorator
 
 
 class RunIf:
@@ -23,7 +26,7 @@ class RunIf:
             assert arg1 > 0.0
     """
 
-    def __new__(
+    def __new__(  # type: ignore[misc]
         cls,
         *args: Any,
         min_torch: Optional[str] = None,
@@ -34,7 +37,7 @@ class RunIf:
         min_cuda_gpus: int = 0,
         is_mps_gpu: Optional[bool] = None,
         **kwargs: Any,
-    ):
+    ) -> MarkDecorator:
         """Configure the wrapper.
 
         Args:
@@ -109,6 +112,6 @@ class RunIf:
                 reasons.append("not Apple MPS graphic card")
 
         reasons = [rs for cond, rs in zip(conditions, reasons) if cond]
-        return pytest.mark.skipif(
+        return pytest.mark.skipif(  # type: ignore[misc]
             *args, condition=any(conditions), reason=f"Requires: [{' + '.join(reasons)}]", **kwargs
         )
