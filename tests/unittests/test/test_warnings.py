@@ -3,7 +3,7 @@ from re import escape
 
 import pytest
 
-from lightning_utilities.test.warning import no_warning_call
+from lightning_utilities.testing.warning import no_warning_call
 
 
 def test_no_warning_call():
