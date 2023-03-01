@@ -95,18 +95,18 @@ def test_lazy_import():
     assert os.getcwd()
 
 
-@requires("torch")
-def my_torch_func(i: int) -> int:
-    import torch  # noqa
+@requires("tensorflow")
+def my_tf_func(i: int) -> int:
+    import tensorflow  # noqa
 
     return i
 
 
-def test_torch_func_raised():
+def test_tf_func_raised():
     with pytest.raises(
-        ModuleNotFoundError, match="Required dependencies not available. Please run `pip install torch`"
+        ModuleNotFoundError, match="Required dependencies not available. Please run `pip install tensorflow`"
     ):
-        my_torch_func(42)
+        my_tf_func(42)
 
 
 @requires("random")
@@ -120,8 +120,8 @@ def test_rand_func_passed():
     assert 0 <= my_random_func(42) <= 42
 
 
-class MyTorchClass:
-    @requires("torch", "random")
+class MyTFClass:
+    @requires("tensorflow", "random")
     def __init__(self):
         from random import randint
 
@@ -130,11 +130,11 @@ class MyTorchClass:
         self._rnd = randint(1, 9)
 
 
-def test_torch_class_raised():
+def test_tf_class_raised():
     with pytest.raises(
-        ModuleNotFoundError, match="Required dependencies not available. Please run `pip install torch`"
+        ModuleNotFoundError, match="Required dependencies not available. Please run `pip install tensorflow`"
     ):
-        MyTorchClass()
+        MyTFClass()
 
 
 class MyRandClass:
