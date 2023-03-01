@@ -1,6 +1,7 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
+import re
 from distutils.version import LooseVersion
 from pathlib import Path
 from typing import Any, Iterable, Iterator, List, Optional, Union
@@ -91,6 +92,9 @@ def _parse_requirements(strs: Union[str, Iterable[str]]) -> Iterator[_Requiremen
             continue
         if line.startswith("-r "):
             # linked requirement files are unsupported
+            continue
+        if "@" in line or re.search("https?://", line):
+            # skip lines with links like `pesq @ git+https://github.com/ludlows/python-pesq`
             continue
         yield _RequirementWithComment(line, comment=comment, pip_argument=pip_argument)
         pip_argument = None
