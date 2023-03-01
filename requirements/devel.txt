@@ -3,3 +3,6 @@ codecov>=2.1
 pytest==7.2.0
 pytest-cov==4.0.0
 pytest-timeout==2.1.0
+
+#needed for development/testing
+torch

@@ -20,6 +20,8 @@ jobs:
         os: [ubuntu-22.04, macos-12, windows-2022]
         python-version: ["3.7", "3.10"]
         requires: ['oldest', 'latest']
+    env:
+      TORCH_URL: "https://download.pytorch.org/whl/cpu/torch_stable.html"
     timeout-minutes: 35
     steps:
     - name: Checkout 🛎
@@ -45,16 +47,16 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install -e . -U --find-links https://download.pytorch.org/whl/cpu/torch_stable.html
-        pip install -q -r requirements/test.txt
-        python --version
         pip --version
+        pip install -e . -U \
+          -r requirements/devel.txt \
+          --find-links $TORCH_URL
         pip list
 
     - name: Print 🖨️ dependencies
       uses: ./.github/actions/pip-list
 
-    - name: Unittesting and coverage
+    - name: Unit-testing and coverage
       uses: ./.github/actions/unittesting
       with:
         python-version: ${{ matrix.python-version }}
