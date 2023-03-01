@@ -53,7 +53,7 @@ class RunIf:
             min_cuda_gpus: Require this number of gpus and that the ``PL_RUN_CUDA_TESTS=1`` environment variable is set.
             is_mps_gpu: If True: Require that MPS (Apple Silicon) is available,
             if False: Explicitly Require that MPS is not available
-            **kwargs: Any :class:`pytest.mark.skipif` keyword arguments.
+            **kwargs: Any :class:`pytest.mark.skipif` keyword arguments except `condition` and `reason`.
         """
         import pytest
 
