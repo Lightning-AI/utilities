@@ -6,14 +6,16 @@ import operator
 import os
 import platform
 import sys
-from typing import Any, Optional, TYPE_CHECKING
+from typing import Any, Optional
 
 from packaging.version import Version
 
 from lightning_utilities.core.imports import compare_version, module_available
 
-if module_available("_pytest") and TYPE_CHECKING:
+if module_available("_pytest"):
     from _pytest.mark import MarkDecorator
+else:
+    MarkDecorator = None
 
 
 class RunIf:
