@@ -8,14 +8,6 @@ on:
         description: 'Config file (JSON) used for markdown link checks'
         required: true
         type: string
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-    types: [opened, reopened, ready_for_review, synchronize]
-    paths:
-      - ".github/workflows/md-check-links.yml"
-      - "**/*.md"
 
 jobs:
   markdown-link-check:
