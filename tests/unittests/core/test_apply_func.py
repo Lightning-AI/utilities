@@ -224,6 +224,7 @@ def test_apply_to_collection_include_none():
     def fn(x):
         if isinstance(x, float):
             return x
+        return None
 
     reduced = apply_to_collection(to_reduce, (int, float), fn)
     assert reduced == [None, None, 3.4, 5.6, None, (None, 9.1, {10: None})]
