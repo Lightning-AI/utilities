@@ -34,5 +34,5 @@ jobs:
 
   check-md-links:
     uses: ./.github/workflows/check-md-links.yml
-    with:
-      config-file: ".github/workflows/markdown.links.config.json"
+    #with:
+    #  config-file: ".github/markdown.links.config.json"
