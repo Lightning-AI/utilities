@@ -23,7 +23,7 @@ def rank_zero_only(fn: Callable[P, T]) -> Callable[P, Optional[T]]:
     """
 
     @wraps(fn)
-    def wrapped_fn(*args: P.args, **kwargs: P.kwargs) -> Optional[Any]:
+    def wrapped_fn(*args: P.args, **kwargs: P.kwargs) -> Optional[T]:
         rank = getattr(rank_zero_only, "rank", None)
         if rank is None:
             raise RuntimeError("The `rank_zero_only.rank` needs to be set before use")
