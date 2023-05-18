@@ -7,7 +7,8 @@ import logging
 import warnings
 from functools import wraps
 from platform import python_version
-from typing import Any, Callable, Optional, Union, TypeVar
+from typing import Any, Callable, Optional, TypeVar, Union
+
 from typing_extensions import ParamSpec
 
 log = logging.getLogger(__name__)
