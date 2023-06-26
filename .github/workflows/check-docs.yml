@@ -49,7 +49,7 @@ jobs:
   docs-test:
     runs-on: ubuntu-20.04
     env: ${{ fromJSON(inputs.env-vars) }}
-    if: inputs.doctests == 'true'
+    if: ! inputs.doctests
     steps:
     - name: Checkout 🛎
       uses: actions/checkout@v3
