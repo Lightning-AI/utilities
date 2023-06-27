@@ -28,10 +28,10 @@ class ModelExample:
     label: torch.Tensor
     some_constant: int = dataclasses.field(init=False)
 
-    def __post_init__(self):  # noqa: D105
+    def __post_init__(self):
         self.some_constant = 7
 
-    def __eq__(self, o: object) -> bool:  # noqa: D105
+    def __eq__(self, o: object) -> bool:
         if not isinstance(o, ModelExample):
             return NotImplemented
 
@@ -63,11 +63,11 @@ class WithInitVar:
     dummy: Any
     override: InitVar[Optional[Any]] = None
 
-    def __post_init__(self, override: Optional[Any]):  # noqa: D105
+    def __post_init__(self, override: Optional[Any]):
         if override is not None:
             self.dummy = override
 
-    def __eq__(self, o: object) -> bool:  # noqa: D105
+    def __eq__(self, o: object) -> bool:
         if not isinstance(o, WithInitVar):
             return NotImplemented
         if isinstance(self.dummy, torch.Tensor):
@@ -82,11 +82,12 @@ class WithClassAndInitVar:
     dummy: Any
     override: InitVar[Optional[Any]] = torch.tensor(1)
 
-    def __post_init__(self, override: Optional[Any]):  # noqa: D105
+    def __post_init__(self, override: Optional[Any]):
         if override is not None:
             self.dummy = override
 
-    def __eq__(self, o: object) -> bool:  # noqa: D105
+    def __eq__(self, o: object) -> bool:
+        """Equal."""
         if not isinstance(o, WithClassAndInitVar):
             return NotImplemented
         if isinstance(self.dummy, torch.Tensor):
@@ -322,7 +323,7 @@ def test_apply_to_collections_dataclass():
 def test_apply_to_collection_frozen_dataclass():
     @dataclasses.dataclass(frozen=True)
     class Foo:
-        input: int
+        var: int
 
     foo = Foo(0)
     with pytest.raises(ValueError, match="frozen dataclass was passed"):
@@ -332,7 +333,7 @@ def test_apply_to_collection_frozen_dataclass():
 def test_apply_to_collection_allow_frozen_dataclass():
     @dataclasses.dataclass(frozen=True)
     class Foo:
-        input: int
+        var: int
 
     foo = Foo(0)
     result = apply_to_collection(foo, int, lambda x: x + 1, allow_frozen=True)

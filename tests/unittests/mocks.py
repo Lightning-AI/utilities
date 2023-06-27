@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Any, Iterable
 
 from lightning_utilities.core.imports import package_available
 
@@ -44,15 +44,15 @@ else:
         Tensor = TensorMock
 
         @staticmethod
-        def tensor(data):
+        def tensor(data: Any) -> TensorMock:
             return TensorMock(data)
 
         @staticmethod
-        def equal(a, b):
+        def equal(a: Any, b: Any) -> bool:
             return a == b
 
         @staticmethod
-        def arange(*args):
+        def arange(*args: Any) -> TensorMock:
             return TensorMock(list(range(*args)))
 
     torch = TorchMock()

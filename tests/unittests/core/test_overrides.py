@@ -1,4 +1,5 @@
 from functools import partial, wraps
+from typing import Any
 from unittest.mock import Mock
 
 import pytest
@@ -35,7 +36,7 @@ def test_is_overridden():
     assert is_overridden("training_step", LightningModule(), parent=BoringModel)
 
     class WrappedModel(TestModel):
-        def __new__(cls, *args, **kwargs):
+        def __new__(cls, *args: Any, **kwargs: Any):
             obj = super().__new__(cls)
             obj.foo = cls.wrap(obj.foo)
             obj.bar = cls.wrap(obj.bar)
