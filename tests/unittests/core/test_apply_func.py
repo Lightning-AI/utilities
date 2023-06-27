@@ -265,7 +265,7 @@ def test_apply_to_collections():
     assert reduced == [1, 2, 3, 4]
 
     # different sizes
-    with pytest.raises(AssertionError, match="Sequence collections have different sizes"):
+    with pytest.raises(ValueError, match="Sequence collections have different sizes"):
         apply_to_collections([[1, 2], [3]], [4], int, fn)
 
     def fn(a, b):
