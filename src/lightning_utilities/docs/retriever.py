@@ -64,7 +64,7 @@ def fetch_external_assets(
     docs_folder: str = "docs/source",
     assets_folder: str = "_fetched_assets",
     file_pattern: str = "*.rst",
-    retrieve_pattern: str = r"http[s]?://.*\.s3\..*",
+    retrieve_pattern: str = r"https?://[_-a-zA-Z0-9]+\.s3\.[-a-zA-Z0-9()_\\+.\\/=]+",
 ) -> None:
     """Search all URL in docs, download these files locally and replace online with local version.
 
