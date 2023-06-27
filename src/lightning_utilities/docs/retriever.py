@@ -46,7 +46,7 @@ def fetch_external_assets(
     assets_folder: str = "_static/fetched_assets",
     file_pattern: str = "*.rst",
     retrieve_pattern: str = r"http[s]?://.*\.s3\..*",
-):
+) -> None:
     list_files = glob.glob(os.path.join(docs_folder, "**", file_pattern), recursive=True)
 
     urls = _search_all_occurrences(list_files, pattern=retrieve_pattern)
