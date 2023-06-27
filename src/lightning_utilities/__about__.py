@@ -8,8 +8,6 @@ __copyright__ = f"Copyright (c) 2022-{time.strftime('%Y')}, {__author__}."
 __homepage__ = "https://github.com/Lightning-AI/utilities"
 __docs__ = "PyTorch Lightning Sample project."
 __long_doc__ = """
-What is it?
------------
 This package allows for sharing GH workflows, CI/CD assistance actions, and Python utilities across the Lightning
 ecosystem.
 """
