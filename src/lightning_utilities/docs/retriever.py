@@ -75,6 +75,9 @@ def fetch_external_assets(
         retrieve_pattern: patter for reg. expression to search URL/S3 resources
     """
     list_files = glob.glob(os.path.join(docs_folder, "**", file_pattern), recursive=True)
+    if not list_files:
+        logging.warning(f'no files were listed in folder "{docs_folder}" and pattern "{file_pattern}"')
+        return
 
     urls = _search_all_occurrences(list_files, pattern=retrieve_pattern)
     if not urls:
