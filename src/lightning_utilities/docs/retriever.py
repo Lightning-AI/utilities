@@ -77,6 +77,9 @@ def fetch_external_assets(
     list_files = glob.glob(os.path.join(docs_folder, "**", file_pattern), recursive=True)
 
     urls = _search_all_occurrences(list_files, pattern=retrieve_pattern)
+    if not urls:
+        logging.info(f"no resources/assets were match in {docs_folder} for {retrieve_pattern}")
+        return
     target_folder = os.path.join(docs_folder, assets_folder)
     os.makedirs(target_folder, exist_ok=True)
     pairs_url_file = []
