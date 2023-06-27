@@ -10,6 +10,7 @@ from typing import List, Tuple
 
 
 def _download_file(file_url: str, folder: str) -> str:
+    """Download a file from URL to a particular folder."""
     fname = os.path.basename(file_url)
     file_path = os.path.join(folder, fname)
     if os.path.isfile(file_path):
@@ -19,6 +20,12 @@ def _download_file(file_url: str, folder: str) -> str:
 
 
 def _search_all_occurrences(list_files: List[str], pattern: str) -> List[str]:
+    """Search for all occurrences of specific patter in a collection of files.
+
+    Args:
+        list_files: list of files to be scanned
+        pattern: pattern for search, reg. expression
+    """
     collected = []
     for file_path in list_files:
         with open(file_path, encoding="UTF-8") as fo:
@@ -29,6 +36,13 @@ def _search_all_occurrences(list_files: List[str], pattern: str) -> List[str]:
 
 
 def _replace_remote_with_local(file_path: str, pairs_url_path: List[Tuple[str, str]], base_depth: int = 2) -> None:
+    """Replace all URL with local files in a given file.
+
+    Args:
+        file_path: file for replacement
+        pairs_url_path: pairs of URL and local file path to be swapped
+        base_depth: how deep is the dos in the project tree, so for example `docs/source` is 2
+    """
     depth = len(file_path.split(os.path.sep)) - base_depth - 1
     with open(file_path, encoding="UTF-8") as fo:
         body = fo.read()
@@ -47,6 +61,14 @@ def fetch_external_assets(
     file_pattern: str = "*.rst",
     retrieve_pattern: str = r"http[s]?://.*\.s3\..*",
 ) -> None:
+    """Search all URL in docs, download these files locally and replace online with local version.
+
+    Args:
+        docs_folder: the location of docs related to the project root
+        assets_folder: a folder inside ``docs_folder`` to be created and saving online assets
+        file_pattern: what kind of files shall be scanned
+        retrieve_pattern: patter for reg. expression to search URL/S3 resources
+    """
     list_files = glob.glob(os.path.join(docs_folder, "**", file_pattern), recursive=True)
 
     urls = _search_all_occurrences(list_files, pattern=retrieve_pattern)

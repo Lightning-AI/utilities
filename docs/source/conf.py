@@ -4,6 +4,16 @@
 # This file does only contain a selection of the most common options. For a
 # full list see the documentation:
 # http://www.sphinx-doc.org/en/master/config
+import glob
+import inspect
+import os
+import re
+import sys
+
+import pt_lightning_sphinx_theme
+
+import lightning_utilities
+from lightning_utilities.docs import fetch_external_assets
 
 # -- Path setup --------------------------------------------------------------
 
@@ -11,15 +21,6 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 
-import inspect
-import os
-import sys
-
-import pt_lightning_sphinx_theme
-
-import lightning_utilities
-from lightning_utilities.docs import fetch_external_assets
-from lightning_utilities.docs.formatting import _convert_markdown
 
 _PATH_HERE = os.path.abspath(os.path.dirname(__file__))
 _PATH_ROOT = os.path.realpath(os.path.join(_PATH_HERE, "..", ".."))
@@ -46,7 +47,21 @@ github_repo = project
 
 fetch_external_assets()
 
+
 # export the READme
+def _convert_markdown(path_in: str, path_out: str, path_root: str) -> None:
+    with open(path_in) as fp:
+        readme = fp.read()
+    # TODO: temp fix removing SVG badges and GIF, because PDF cannot show them
+    readme = re.sub(r"(\[!\[.*\))", "", readme)
+    readme = re.sub(r"(!\[.*.gif\))", "", readme)
+    folder_names = (os.path.basename(p) for p in glob.glob(os.path.join(path_root, "*")) if os.path.isdir(p))
+    for dir_name in folder_names:
+        readme = readme.replace("](%s/" % dir_name, "](%s/" % os.path.join(path_root, dir_name))
+    with open(path_out, "w") as fp:
+        fp.write(readme)
+
+
 _convert_markdown(os.path.join(_PATH_ROOT, "README.md"), "readme.md", _PATH_ROOT)
 
 # -- General configuration ---------------------------------------------------
