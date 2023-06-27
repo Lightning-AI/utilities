@@ -5,8 +5,9 @@ import glob
 import logging
 import os
 import re
-import urllib.request
 from typing import List, Tuple
+
+import requests
 
 
 def _download_file(file_url: str, folder: str) -> str:
@@ -15,7 +16,10 @@ def _download_file(file_url: str, folder: str) -> str:
     file_path = os.path.join(folder, fname)
     if os.path.isfile(file_path):
         logging.warning(f'given file "{file_path}" already exists and will be overwritten with {file_url}')
-    urllib.request.urlretrieve(file_url, file_path)
+    # see: https://stackoverflow.com/a/34957875
+    rq = requests.get(file_url)
+    with open(file_path, "wb") as outfile:
+        outfile.write(rq.content)
     return fname
 
 
