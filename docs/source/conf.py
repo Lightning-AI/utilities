@@ -10,15 +10,16 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-import glob
+
 import inspect
 import os
-import re
 import sys
 
 import pt_lightning_sphinx_theme
 
 import lightning_utilities
+from lightning_utilities.docs import fetch_external_assets
+from lightning_utilities.docs.formatting import _convert_markdown
 
 _PATH_HERE = os.path.abspath(os.path.dirname(__file__))
 _PATH_ROOT = os.path.realpath(os.path.join(_PATH_HERE, "..", ".."))
@@ -43,43 +44,16 @@ github_repo = project
 
 # -- Project documents -------------------------------------------------------
 
-
-def _transform_changelog(path_in: str, path_out: str) -> None:
-    with open(path_in) as fp:
-        chlog_lines = fp.readlines()
-    # enrich short subsub-titles to be unique
-    chlog_ver = ""
-    for i, ln in enumerate(chlog_lines):
-        if ln.startswith("## "):
-            chlog_ver = ln[2:].split("-")[0].strip()
-        elif ln.startswith("### "):
-            ln = ln.replace("###", f"### {chlog_ver} -")
-            chlog_lines[i] = ln
-    with open(path_out, "w") as fp:
-        fp.writelines(chlog_lines)
-
-
-def _convert_markdown(path_in: str, path_out: str) -> None:
-    with open(path_in) as fp:
-        readme = fp.read()
-    # TODO: temp fix removing SVG badges and GIF, because PDF cannot show them
-    readme = re.sub(r"(\[!\[.*\))", "", readme)
-    readme = re.sub(r"(!\[.*.gif\))", "", readme)
-    folder_names = (os.path.basename(p) for p in glob.glob(os.path.join(_PATH_ROOT, "*")) if os.path.isdir(p))
-    for dir_name in folder_names:
-        readme = readme.replace("](%s/" % dir_name, "](%s/" % os.path.join(_PATH_ROOT, dir_name))
-    with open(path_out, "w") as fp:
-        fp.write(readme)
-
+fetch_external_assets()
 
 # export the READme
-_convert_markdown(os.path.join(_PATH_ROOT, "README.md"), "readme.md")
+_convert_markdown(os.path.join(_PATH_ROOT, "README.md"), "readme.md", _PATH_ROOT)
 
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
 
-needs_sphinx = "4.0"
+needs_sphinx = "6.2"
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
