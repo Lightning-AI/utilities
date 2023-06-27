@@ -121,6 +121,7 @@ extend-select = [
     "ANN101",  # Missing type annotation for `self` in method
     "ANN102",  # Missing type annotation for `cls` in classmethod
     "ANN401",  # Dynamically typed expressions (typing.Any)
+    "B905",  # `zip()` without an explicit `strict=` parameter
     "D100",  # Missing docstring in public module
     "D107",  # Missing docstring in `__init__`
 ]

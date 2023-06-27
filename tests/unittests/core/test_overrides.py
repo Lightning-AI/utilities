@@ -1,5 +1,5 @@
 from functools import partial, wraps
-from typing import Any
+from typing import Any, Callable
 from unittest.mock import Mock
 
 import pytest
@@ -43,7 +43,7 @@ def test_is_overridden():
             return obj
 
         @staticmethod
-        def wrap(fn):
+        def wrap(fn) -> Callable:
             @wraps(fn)
             def wrapper():
                 fn()

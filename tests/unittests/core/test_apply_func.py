@@ -8,6 +8,9 @@ import pytest
 from lightning_utilities.core.apply_func import apply_to_collection, apply_to_collections
 from unittests.mocks import torch
 
+_TENSOR_0 = torch.tensor(0)
+_TENSOR_1 = torch.tensor(1)
+
 
 @dataclasses.dataclass
 class Feature:
@@ -78,9 +81,9 @@ class WithInitVar:
 
 @dataclasses.dataclass
 class WithClassAndInitVar:
-    class_var: ClassVar[torch.Tensor] = torch.tensor(0)
+    class_var: ClassVar[torch.Tensor] = _TENSOR_0
     dummy: Any
-    override: InitVar[Optional[Any]] = torch.tensor(1)
+    override: InitVar[Optional[Any]] = _TENSOR_1
 
     def __post_init__(self, override: Optional[Any]):
         if override is not None:

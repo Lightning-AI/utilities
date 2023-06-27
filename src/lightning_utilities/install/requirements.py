@@ -15,7 +15,8 @@ class _RequirementWithComment(Requirement):
     def __init__(self, *args: Any, comment: str = "", pip_argument: Optional[str] = None, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.comment = comment
-        assert pip_argument is None or pip_argument  # sanity check that it's not an empty str
+        if not (pip_argument is None or pip_argument):  # sanity check that it's not an empty str
+            raise RuntimeError(f"wrong pip argument: {pip_argument}")
         self.pip_argument = pip_argument
         self.strict = self.strict_string in comment.lower()
 
