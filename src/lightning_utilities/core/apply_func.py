@@ -3,7 +3,7 @@
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 import dataclasses
-from collections import defaultdict, OrderedDict
+from collections import OrderedDict, defaultdict
 from copy import deepcopy
 from typing import Any, Callable, List, Mapping, Optional, Sequence, Tuple, Union
 

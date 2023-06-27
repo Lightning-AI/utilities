@@ -1,13 +1,12 @@
 import dataclasses
 import numbers
-from collections import defaultdict, namedtuple, OrderedDict
+from collections import OrderedDict, defaultdict, namedtuple
 from dataclasses import InitVar
 from typing import Any, ClassVar, List, Optional
 
 import pytest
-from unittests.mocks import torch
-
 from lightning_utilities.core.apply_func import apply_to_collection, apply_to_collections
+from unittests.mocks import torch
 
 
 @dataclasses.dataclass
@@ -206,7 +205,7 @@ def test_recursive_application_to_collection():
 
     # custom mappings
     class _CustomCollection(dict):
-        def __init__(self, initial_dict):
+        def __init__(self, initial_dict) -> None:
             super().__init__(initial_dict)
 
     to_reduce = _CustomCollection({"a": 1, "b": 2, "c": 3})

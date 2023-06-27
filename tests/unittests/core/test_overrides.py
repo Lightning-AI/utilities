@@ -2,7 +2,6 @@ from functools import partial, wraps
 from unittest.mock import Mock
 
 import pytest
-
 from lightning_utilities.core.overrides import is_overridden
 
 

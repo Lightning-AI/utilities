@@ -7,7 +7,7 @@ if package_available("torch"):
 else:
     # minimal torch implementation to avoid installing torch in testing CI
     class TensorMock:
-        def __init__(self, data):
+        def __init__(self, data) -> None:
             self.data = data
 
         def __add__(self, other):
@@ -32,7 +32,7 @@ else:
             """Iterate."""
             return iter(self.data)
 
-        def __repr__(self):
+        def __repr__(self) -> str:
             """Return object representation."""
             return repr(self.data)
 
