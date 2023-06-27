@@ -35,15 +35,20 @@ def _search_all_occurrences(list_files: List[str], pattern: str) -> List[str]:
     return collected
 
 
-def _replace_remote_with_local(file_path: str, pairs_url_path: List[Tuple[str, str]], base_depth: int = 2) -> None:
+def _replace_remote_with_local(
+    file_path: str, docs_folder: str, pairs_url_path: List[Tuple[str, str]], base_depth: int = 2
+) -> None:
     """Replace all URL with local files in a given file.
 
     Args:
         file_path: file for replacement
+        docs_folder: the location of docs related to the project root
         pairs_url_path: pairs of URL and local file path to be swapped
-        base_depth: how deep is the dos in the project tree, so for example `docs/source` is 2
     """
-    depth = len(file_path.split(os.path.sep)) - base_depth - 1
+    # drop the default/global path to the docs
+    relt_path = os.path.dirname(file_path).replace(docs_folder, "")
+    # filter the path starting with / as not empty folder names
+    depth = len([p for p in relt_path.split(os.path.sep) if p])
     with open(file_path, encoding="UTF-8") as fo:
         body = fo.read()
     for url, fpath in pairs_url_path:
@@ -81,4 +86,4 @@ def fetch_external_assets(
         pairs_url_file.append((url, os.path.join(assets_folder, fname)))
 
     for fpath in list_files:
-        _replace_remote_with_local(fpath, pairs_url_file)
+        _replace_remote_with_local(fpath, docs_folder, pairs_url_file)
