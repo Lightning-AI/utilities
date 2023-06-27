@@ -28,7 +28,7 @@ def _search_all_occurrences(list_files: List[str], pattern: str) -> List[str]:
     return collected
 
 
-def _replace_remote_with_local(file_path: str, pairs_url_path: List[Tuple[str, str]], base_depth: int  = 2) -> None:
+def _replace_remote_with_local(file_path: str, pairs_url_path: List[Tuple[str, str]], base_depth: int = 2) -> None:
     depth = len(file_path.split(os.path.sep)) - base_depth - 1
     with open(file_path, encoding="UTF-8") as fo:
         body = fo.read()
@@ -41,8 +41,12 @@ def _replace_remote_with_local(file_path: str, pairs_url_path: List[Tuple[str, s
         fw.write(body)
 
 
-
-def fetch_external_assets(docs_folder: str = "docs/source", assets_folder: str = "_static/fetched_assets", file_pattern: str = "*.rst", retrieve_pattern: str = r"http[s]?://.*\.s3\..*"):
+def fetch_external_assets(
+    docs_folder: str = "docs/source",
+    assets_folder: str = "_static/fetched_assets",
+    file_pattern: str = "*.rst",
+    retrieve_pattern: str = r"http[s]?://.*\.s3\..*",
+):
     list_files = glob.glob(os.path.join(docs_folder, "**", file_pattern), recursive=True)
 
     urls = _search_all_occurrences(list_files, pattern=retrieve_pattern)
