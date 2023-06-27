@@ -22,7 +22,9 @@ def test_retriever_s3():
     # but it is not sourced from S3
     assert ".s3." not in body
 
-    with open(path_index, encoding="UTF-8") as fo:
+    with open(path_page, encoding="UTF-8") as fo:
         body = fo.read()
+    # that the image exists~
+    assert "Lightning.gif" in body
     # check the proper depth
     assert os.path.sep.join(["..", ".."]) in body
