@@ -12,6 +12,10 @@ Lightning-DevToolbox documentation
 
    readme
 
+.. figure:: https://pl-public-data.s3.amazonaws.com/assets_lightning/Lightning.gif
+    :alt: What is Lightning gif.
+    :width: 100 %
+
 
 Indices and tables
 ==================
