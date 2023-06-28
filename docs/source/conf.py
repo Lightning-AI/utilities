@@ -45,7 +45,7 @@ github_repo = project
 
 # -- Project documents -------------------------------------------------------
 
-fetch_external_assets()
+fetch_external_assets(docs_folder=_PATH_HERE)
 
 
 # export the READme

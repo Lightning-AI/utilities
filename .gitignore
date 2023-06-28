@@ -56,7 +56,7 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
-docs/source/_static/fetched_assets/
+docs/source/fetched-s3-assets
 docs/source/api/
 docs/source/*.md
 
