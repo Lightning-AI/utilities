@@ -12,8 +12,8 @@ Lightning-DevToolbox documentation
 
 .. toctree::
    :maxdepth: 1
-   :name: start
-   :caption: Start here
+   :name: content
+   :caption: Overview
 
    Utilities readme <readme>
 
