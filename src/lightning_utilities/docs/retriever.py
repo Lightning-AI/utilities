@@ -66,7 +66,7 @@ def _replace_remote_with_local(
 
 def fetch_external_assets(
     docs_folder: str = "docs/source",
-    assets_folder: str = "_fetched_assets",
+    assets_folder: str = "fetched-s3-assets",
     file_pattern: str = "*.rst",
     retrieve_pattern: str = r"https?://[-a-zA-Z0-9_]+\.s3\.[-a-zA-Z0-9()_\\+.\\/=]+",
 ) -> None:
