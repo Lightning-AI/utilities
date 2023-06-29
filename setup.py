@@ -11,7 +11,7 @@ _PATH_SOURCE = os.path.join(_PATH_ROOT, "src")
 _PATH_REQUIRE = os.path.join(_PATH_ROOT, "requirements")
 
 
-def _load_py_module(fname, pkg="lightning_utilities"):
+def _load_py_module(fname: str, pkg: str = "lightning_utilities"):
     spec = spec_from_file_location(os.path.join(pkg, fname), os.path.join(_PATH_SOURCE, pkg, fname))
     py = module_from_spec(spec)
     spec.loader.exec_module(py)
@@ -27,7 +27,7 @@ with open(os.path.join(_PATH_REQUIRE, "base.txt")) as fp:
 # make extras as automated loading
 requirements_extra = {}
 for fpath in glob.glob(os.path.join(_PATH_REQUIRE, "*.txt")):
-    if os.path.basename(fpath) == "base.txt":
+    if os.path.basename(fpath) in ("base.txt", "dev-docs.txt", "dev-tests.txt"):
         continue
     name, _ = os.path.splitext(os.path.basename(fpath))
     with open(fpath) as fp:
