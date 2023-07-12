@@ -121,6 +121,7 @@ class RequirementCache:
         self.module = module
 
     def _check_requirement(self) -> None:
+        assert self.requirement  # noqa: S101; needed for typing
         try:
             # first try the pkg_resources requirement
             pkg_resources.require(self.requirement)
@@ -138,6 +139,7 @@ class RequirementCache:
                     self.message = f"Module {module!r} available"
 
     def _check_module(self) -> None:
+        assert self.module  # noqa: S101; needed for typing
         self.available = module_available(self.module)
         if self.available:
             self.message = f"Module {self.module!r} available"
