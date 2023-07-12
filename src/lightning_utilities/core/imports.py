@@ -289,7 +289,6 @@ def requires(*module_path_version: str, raise_exception: bool = True) -> Callabl
     """
 
     def decorator(func: Callable[P, T]) -> Callable[P, T]:
-
         reqs = []
         for mod_ver in module_path_version:
             reqs.append(ModuleAvailableCache(mod_ver) if "." in mod_ver else RequirementCache(mod_ver))
