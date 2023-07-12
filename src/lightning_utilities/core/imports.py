@@ -306,6 +306,4 @@ def requires(*module_path_version: str, raise_exception: bool = True) -> Callabl
             return wrapper
         return func
 
-        return wrapper
-
     return decorator
