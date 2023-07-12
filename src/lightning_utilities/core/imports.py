@@ -181,8 +181,11 @@ class ModuleAvailableCache(RequirementCache):
     """
 
     def __init__(self, module: str) -> None:
-        warnings.warn("`ModuleAvailableCache` is a special case of `RequirementCache`."
-                      " Please use `RequirementCache(module=...)` instead.", DeprecationWarning)
+        warnings.warn(
+            "`ModuleAvailableCache` is a special case of `RequirementCache`."
+            " Please use `RequirementCache(module=...)` instead.",
+            DeprecationWarning,
+        )
         super().__init__(module=module)
 
 
