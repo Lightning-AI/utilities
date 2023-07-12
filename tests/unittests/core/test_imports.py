@@ -105,7 +105,8 @@ def my_torch_func(i: int) -> int:
 
 def test_torch_func_raised():
     with pytest.raises(
-        ModuleNotFoundError, match="Required dependencies not available: \nModule not found: 'torch.unknown.subpackage'. "
+        ModuleNotFoundError,
+        match="Required dependencies not available: \nModule not found: 'torch.unknown.subpackage'. ",
     ):
         my_torch_func(42)
 
