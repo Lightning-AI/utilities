@@ -121,8 +121,6 @@ class RequirementCache:
         self.module = module
 
     def _check_requirement(self) -> None:
-        if hasattr(self, "available"):
-            return
         try:
             # first try the pkg_resources requirement
             pkg_resources.require(self.requirement)
@@ -131,22 +129,37 @@ class RequirementCache:
         except Exception as ex:
             self.available = False
             self.message = f"{ex.__class__.__name__}: {ex}. HINT: Try running `pip install -U {self.requirement!r}`"
-            requirement_contains_version_specifier = any(c in self.requirement for c in "=<>")
-            if not requirement_contains_version_specifier or self.module is not None:
+            req_include_version = any(c in self.requirement for c in "=<>")
+            if not req_include_version or self.module is not None:
                 module = self.requirement if self.module is None else self.module
                 # sometimes `pkg_resources.require()` fails but the module is importable
                 self.available = module_available(module)
                 if self.available:
                     self.message = f"Module {module!r} available"
 
+    def _check_module(self) -> None:
+        self.available = module_available(self.module)
+        if self.available:
+            self.message = f"Module {self.module!r} available"
+        else:
+            self.message = f"Module not found: {self.module!r}. HINT: Try running `pip install -U {self.module}`"
+
+    def _check_available(self) -> None:
+        if hasattr(self, "available"):
+            return
+        if self.requirement:
+            self._check_requirement()
+        if getattr(self, "available", True) and self.module:
+            self._check_module()
+
     def __bool__(self) -> bool:
         """Format as bool."""
-        self._check_requirement()
+        self._check_available()
         return self.available
 
     def __str__(self) -> str:
         """Format as string."""
-        self._check_requirement()
+        self._check_available()
         return self.message
 
     def __repr__(self) -> str:
@@ -169,7 +182,7 @@ class ModuleAvailableCache(RequirementCache):
 
     def __init__(self, module: str) -> None:
         warnings.warn("`ModuleAvailableCache` is a special case of `RequirementCache`."
-                      " Please use `RequirementCache(module=...) instead.`", DeprecationWarning)
+                      " Please use `RequirementCache(module=...)` instead.", DeprecationWarning)
         super().__init__(module=module)
 
 
