@@ -106,6 +106,12 @@ class RequirementCache:
     True
     >>> bool(RequirementCache("unknown_package"))
     False
+    >>> bool(RequirementCache(module="torch.utils"))
+    True
+    >>> bool(RequirementCache(module="unknown_package"))
+    False
+    >>> bool(RequirementCache(module="unknown.module.path"))
+    False
     """
 
     def __init__(self, requirement: Optional[str] = None, module: Optional[str] = None) -> None:
