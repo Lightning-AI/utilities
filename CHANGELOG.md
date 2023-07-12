@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+### Deprecated
+
+- Deprecated `ModuleAvailableCache` in favor of `RequirementCache` ([#147](https://github.com/Lightning-AI/utilities/pull/147))
+
+
 ### Fixed
 
 -
