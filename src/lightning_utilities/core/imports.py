@@ -289,21 +289,19 @@ def requires(*module_path_version: str, raise_exception: bool = True) -> Callabl
     """
 
     def decorator(func: Callable[P, T]) -> Callable[P, T]:
-        reqs = []
-        for mod_ver in module_path_version:
-            reqs.append(ModuleAvailableCache(mod_ver) if "." in mod_ver else RequirementCache(mod_ver))
+        reqs = [ModuleAvailableCache(mod_ver) if "." in mod_ver else RequirementCache(mod_ver) for mod_ver in module_path_version]
         available = all(map(bool, reqs))
-        if not available:
 
-            @functools.wraps(func)
-            def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+        @functools.wraps(func)
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+            if not available:
                 missing = os.linesep.join([repr(r) for r in reqs if not bool(r)])
                 msg = f"Required dependencies not available: \n{missing}"
                 if raise_exception:
                     raise ModuleNotFoundError(msg)
                 warnings.warn(msg, stacklevel=2)
+            return func(*args, **kwargs)
 
-            return wrapper
-        return func
+        return wrapper
 
     return decorator
