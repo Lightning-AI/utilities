@@ -185,6 +185,7 @@ class ModuleAvailableCache(RequirementCache):
             "`ModuleAvailableCache` is a special case of `RequirementCache`."
             " Please use `RequirementCache(module=...)` instead.",
             DeprecationWarning,
+            stacklevel=4,
         )
         super().__init__(module=module)
 
