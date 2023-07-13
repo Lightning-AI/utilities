@@ -24,9 +24,7 @@ jobs:
         submodules: recursive
 
     - name: Install dependencies
-      run: |
-        pip install check-jsonschema -q
-        pip list | grep "check-jsonschema"
+      run: pip install -r requirements/gha-schema.txt
 
     - name: Scan repo
       id: folders
