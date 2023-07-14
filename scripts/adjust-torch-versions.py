@@ -9,7 +9,7 @@ import sys
 from typing import Dict, Optional
 
 VERSIONS = [
-    {"torch": "2.1.0", "torchvision": "0.16.0", "torchtext": "0.16.0", "torchaudio": "2.1.0"},  # stable
+    {"torch": "2.1.0", "torchvision": "0.16.0", "torchtext": "0.16.0", "torchaudio": "2.1.0"},  # nightly
     {"torch": "2.0.1", "torchvision": "0.15.2", "torchtext": "0.15.2", "torchaudio": "2.0.1"},  # stable
     {"torch": "2.0.0", "torchvision": "0.15.1", "torchtext": "0.15.1", "torchaudio": "2.0.0"},
     {"torch": "1.13.1", "torchvision": "0.14.1", "torchtext": "0.14.1", "torchaudio": "0.13.1"},
