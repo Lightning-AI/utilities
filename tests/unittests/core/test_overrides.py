@@ -1,6 +1,7 @@
 from functools import partial, wraps
 from typing import Any, Callable
 from unittest.mock import Mock
+from contextlib import contextmanager
 
 import pytest
 from lightning_utilities.core.overrides import is_overridden
@@ -14,6 +15,16 @@ class LightningModule:
 class BoringModel(LightningModule):
     def training_step(self):
         ...
+
+
+class Strategy:
+    @contextmanager
+    def model_sharded_context():
+        ...
+
+
+class SingleDeviceStrategy(Strategy):
+    ...
 
 
 def test_is_overridden():
@@ -65,3 +76,6 @@ def test_is_overridden():
     model = BoringModel()
     model.training_step = partial(model.training_step)
     assert is_overridden("training_step", model, parent=LightningModule)
+
+    # `@contextmanager` support
+    assert not is_overridden("model_sharded_context", SingleDeviceStrategy(), Strategy)
