@@ -1,7 +1,7 @@
+from contextlib import contextmanager
 from functools import partial, wraps
 from typing import Any, Callable
 from unittest.mock import Mock
-from contextlib import contextmanager
 
 import pytest
 from lightning_utilities.core.overrides import is_overridden
