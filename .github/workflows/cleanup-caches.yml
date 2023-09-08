@@ -1,0 +1,57 @@
+name: Cleaning caches
+
+on:
+  workflow_call:
+    inputs:
+      pattern:
+        description: 'string to grep cache keys with'
+        required: true
+        type: string
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  clear-cache:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.GRID_AI_GITHUB_TOKEN }}
+      - name: install requirements
+        run: pip install -U fire requests pandas
+      - name: List and Filer caches
+        run: |
+          python .github/scripts/find-unused-caches.py \
+            --repository="gridai/grid" --token=${{ secrets.GRID_AI_GITHUB_TOKEN }} --dalay_days=2
+          cat unused-cashes.txt
+      - name: Delete caches
+        if: github.event_name != 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Use a while loop to read each line from the file
+          while IFS= read -r line; do
+              echo "$line"
+              # delete each cache based on file...
+              gh api --method DELETE  -H "Accept: application/vnd.github+json" /repos/gridai/grid/actions/caches/ $line
+          done < "unused-cashes.txt"
+
+#      - name: List And Delete Caches
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GRID_BOT_PAT }}
+#        run: |
+#          set -euxo pipefail
+#          num_caches=$(gh api  -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches?per_page=50 | jq '.total_count')
+#          while [[ $num_caches -gt 0 ]]
+#          do
+#            gh api -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches?per_page=50 \
+#              | jq '.actions_caches | .[].id' \
+#              | awk '{print "api --method DELETE  -H \"Accept: application/vnd.github+json\" /repos/${{ github.repository }}/actions/caches/" $0}' \
+#              | xargs -L 1 -t gh
+#            num_caches=$(gh api  -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches?per_page=50 | jq '.total_count')
+#          done
