@@ -35,10 +35,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           # Use a while loop to read each line from the file
-          while IFS= read -r line; do
-              echo "$line"
+          while read -r line || [ -n "$line" ]; do
+              echo "$line";
               # delete each cache based on file...
-              gh api --method DELETE  -H "Accept: application/vnd.github+json" /repos/gridai/grid/actions/caches/ $line
+              gh api --method DELETE  -H "Accept: application/vnd.github+json" /repos/gridai/grid/actions/caches/ $line;
           done < "unused-cashes.txt"
 
 #      - name: List And Delete Caches
