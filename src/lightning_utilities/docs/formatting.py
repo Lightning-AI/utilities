@@ -6,6 +6,7 @@ import inspect
 import os
 import re
 import sys
+from typing import Tuple
 
 
 def _transform_changelog(path_in: str, path_out: str) -> None:
@@ -29,8 +30,8 @@ def _transform_changelog(path_in: str, path_out: str) -> None:
         fp.writelines(chlog_lines)
 
 
-def _linkcode_resolve(domain: str, info: dict) -> str:
-    def find_source():
+def _linkcode_resolve(domain: str, github_user: str, github_repo: str, info: dict) -> str:
+    def find_source() -> Tuple[str, int, int]:
         # try to find the file and line number, based on code from numpy:
         # https://github.com/numpy/numpy/blob/master/doc/source/conf.py#L286
         obj = sys.modules[info["module"]]
@@ -46,11 +47,11 @@ def _linkcode_resolve(domain: str, info: dict) -> str:
         else:
             # Local build, imitate master
             fname = "master/" + os.path.relpath(fname, start=os.path.abspath(".."))
-        source, lineno = inspect.getsourcelines(obj)
-        return fname, lineno, lineno + len(source) - 1
+        source, line_start = inspect.getsourcelines(obj)
+        return fname, line_start, line_start + len(source) - 1
 
     if domain != "py" or not info["module"]:
-        return None
+        return ""
     try:
         filename = "%s#L%d-L%d" % find_source()
     except Exception:
