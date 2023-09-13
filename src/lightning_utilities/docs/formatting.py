@@ -37,16 +37,16 @@ def _linkcode_resolve(domain: str, github_user: str, github_repo: str, info: dic
         obj = sys.modules[info["module"]]
         for part in info["fullname"].split("."):
             obj = getattr(obj, part)
-        fname = inspect.getsourcefile(obj)
+        fname = str(inspect.getsourcefile(obj))
         # https://github.com/rtfd/readthedocs.org/issues/5735
         if any(s in fname for s in ("readthedocs", "rtfd", "checkouts")):
             # /home/docs/checkouts/readthedocs.org/user_builds/pytorch_lightning/checkouts/
             #  devel/pytorch_lightning/utilities/cls_experiment.py#L26-L176
             path_top = os.path.abspath(os.path.join("..", "..", ".."))
-            fname = os.path.relpath(fname, start=path_top)
+            fname = str(os.path.relpath(fname, start=path_top))
         else:
             # Local build, imitate master
-            fname = "master/" + os.path.relpath(fname, start=os.path.abspath(".."))
+            fname = f'master/{os.path.relpath(fname, start=os.path.abspath(".."))}'
         source, line_start = inspect.getsourcelines(obj)
         return fname, line_start, line_start + len(source) - 1
 
