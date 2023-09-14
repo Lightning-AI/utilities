@@ -1,3 +1,5 @@
+"""Script for filtering unused caches."""
+
 import os
 from datetime import timedelta
 from typing import List
@@ -8,6 +10,14 @@ import requests
 
 
 def fetch_all_caches(repository: str, token: str, per_page: int = 100, max_pages: int = 100) -> List[dict]:
+    """Fetch list of al caches from a given repository.
+
+    Args:
+        repository: user / repo-name
+        token: authentication token for GH API calls
+        per_page: number of items per listing page
+        max_pages: max number of listing pages
+    """
     # Initialize variables for pagination
     all_caches = []
 
@@ -15,7 +25,7 @@ def fetch_all_caches(repository: str, token: str, per_page: int = 100, max_pages
         # Get a page of caches for the repository
         url = f"https://api.github.com/repos/{repository}/actions/caches?page={page + 1}&per_page={per_page}"
         headers = {"Authorization": f"token {token}"}
-        response = requests.get(url, headers=headers).json()
+        response = requests.get(url, headers=headers, timeout=10).json()
         print(f"fetching page... {page} with {per_page} items of expected {response.get('total_count')}")
         caches = response.get("actions_caches", [])
 
@@ -47,7 +57,8 @@ def fetch_all_caches(repository: str, token: str, per_page: int = 100, max_pages
     return all_caches
 
 
-def main(repository: str, token: str, dalay_days: float = 7, output_file: str = "unused-cashes.txt"):
+def main(repository: str, token: str, dalay_days: float = 7, output_file: str = "unused-cashes.txt") -> None:
+    """Entry point."""
     caches = fetch_all_caches(repository, token)
 
     delta_days = timedelta(days=dalay_days)
