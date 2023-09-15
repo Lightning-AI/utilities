@@ -7,6 +7,7 @@ on:
   pull_request:
     paths:
       - ".github/scripts/find-unused-caches.py"
+      - ".github/scripts/find-unused-caches.txt"
       - ".github/workflows/cleanup-caches.yml"
       - ".github/workflows/cron-clear-cache.yml"
   workflow_dispatch:
@@ -18,7 +19,6 @@ on:
         type: string
 
 jobs:
-
   drop-unused-caches:
     uses: ./.github/workflows/cleanup-caches.yml
     with:
@@ -26,4 +26,4 @@ jobs:
       dry-run: ${{ github.event_name == 'pull_request' }}
       # ise input if set of default...
       pattern: ${{ inputs.pattern || 'pip|conda' }}
-      age-days: 7
+      age-days: 2
