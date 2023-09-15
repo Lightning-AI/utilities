@@ -49,7 +49,8 @@ def fetch_all_caches(repository: str, token: str, per_page: int = 100, max_pages
             print(
                 f"- Cache Key: {cache_key} |"
                 f" Created At: {created_at.strftime('%Y-%m-%d %H:%M')} |"
-                f" Used At: {last_used_at.strftime('%Y-%m-%d %H:%M')} [{cache['last_used_days']}] |"
+                f" Used At: {last_used_at.strftime('%Y-%m-%d %H:%M')}"
+                f" [{cache['last_used_days'].isoformat(sep='T', timespec='minutes')}] |"
                 f" Size: {size:.2f} MB"
             )
     else:
