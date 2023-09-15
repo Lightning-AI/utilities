@@ -58,7 +58,7 @@ def fetch_all_caches(repository: str, token: str, per_page: int = 100, max_pages
 
 
 def main(repository: str, token: str, age_days: float = 7, output_file: str = "unused-cashes.txt") -> None:
-    """Entry point for CLI
+    """Entry point for CLI.
 
     Args:
         repository: GitHub repository name in form `<user>/<repo>`
