@@ -26,3 +26,4 @@ jobs:
       dry-run: ${{ github.event_name == 'pull_request' }}
       # ise input if set of default...
       pattern: ${{ inputs.pattern || 'pip|conda' }}
+      age-days: 7
