@@ -45,12 +45,13 @@ def fetch_all_caches(repository: str, token: str, per_page: int = 100, max_pages
             created_at = pandas.to_datetime(cache["created_at"])
             last_used_at = pandas.to_datetime(cache["last_accessed_at"])
             cache["last_used_days"] = current_date - last_used_at
+            age_used = timedelta(cache["last_used_days"])
             size = cache["size_in_bytes"] / (1024 * 1024)
             print(
                 f"- Cache Key: {cache_key} |"
                 f" Created At: {created_at.strftime('%Y-%m-%d %H:%M')} |"
                 f" Used At: {last_used_at.strftime('%Y-%m-%d %H:%M')}"
-                f" [{cache['last_used_days'].isoformat(sep='T', timespec='minutes')}] |"
+                f" [{age_used.isoformat(sep='T', timespec='minutes')}] |"
                 f" Size: {size:.2f} MB"
             )
     else:
