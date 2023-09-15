@@ -49,15 +49,15 @@ def apply_to_collection(
     if include_none is False or wrong_dtype is not None or allow_frozen is True:
         # not worth implementing these on the fast path: go with the slower option
         return _apply_to_collection_slow(
-                data,
-                dtype,
-                function,
-                *args,
-                wrong_dtype=wrong_dtype,
-                include_none=include_none,
-                allow_frozen=allow_frozen,
-                **kwargs,
-            )
+            data,
+            dtype,
+            function,
+            *args,
+            wrong_dtype=wrong_dtype,
+            include_none=include_none,
+            allow_frozen=allow_frozen,
+            **kwargs,
+        )
     # fast path for the most common cases:
     if isinstance(data, dtype):  # single element
         print(function, args, kwargs)
@@ -70,26 +70,26 @@ def apply_to_collection(
         return {k: function(v, *args, **kwargs) for k, v in data.items()}
     # slow path for everything else
     return _apply_to_collection_slow(
-                data,
-                dtype,
-                function,
-                *args,
-                wrong_dtype=wrong_dtype,
-                include_none=include_none,
-                allow_frozen=allow_frozen,
-                **kwargs,
-            )
+        data,
+        dtype,
+        function,
+        *args,
+        wrong_dtype=wrong_dtype,
+        include_none=include_none,
+        allow_frozen=allow_frozen,
+        **kwargs,
+    )
 
 
 def _apply_to_collection_slow(
-        data: Any,
-        dtype: Union[type, Any, Tuple[Union[type, Any]]],
-        function: Callable,
-        *args: Any,
-        wrong_dtype: Optional[Union[type, Tuple[type, ...]]] = None,
-        include_none: bool = True,
-        allow_frozen: bool = False,
-        **kwargs: Any,
+    data: Any,
+    dtype: Union[type, Any, Tuple[Union[type, Any]]],
+    function: Callable,
+    *args: Any,
+    wrong_dtype: Optional[Union[type, Tuple[type, ...]]] = None,
+    include_none: bool = True,
+    allow_frozen: bool = False,
+    **kwargs: Any,
 ) -> Any:
     # Breaking condition
     if isinstance(data, dtype) and (wrong_dtype is None or not isinstance(data, wrong_dtype)):
