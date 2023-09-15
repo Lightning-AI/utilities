@@ -32,6 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     # just aggregation of the previous two jobs
     needs: ["check-schema-latest", "check-schema-fixed"]
+    steps:
+      - run: echo "done"
 
   check-package:
     uses: ./.github/workflows/check-package.yml
