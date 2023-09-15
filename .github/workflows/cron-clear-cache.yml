@@ -2,8 +2,8 @@ name: Clear cache weekly
 
 on:
   schedule:
-    # on Sundays
-    - cron: "0 0 * * 0"
+    # on Sunday's night 2am
+    - cron: "0 2 * * 7"
   pull_request:
     paths:
       - ".github/scripts/find-unused-caches.py"
@@ -20,14 +20,8 @@ on:
 
 jobs:
 
-  cron-clear:
-    if: github.event_name == 'schedule'
+  drop-unused-caches:
     uses: ./.github/workflows/cleanup-caches.yml
     with:
-      pattern: 'pip|conda'
-
-  direct-clear:
-    if: github.event_name == 'workflow_dispatch'
-    uses: ./.github/workflows/cleanup-caches.yml
-    with:
-      pattern: ${{ inputs.pattern }}
+      # ise input if set of default...
+      pattern: ${{ inputs.pattern || 'pip|conda' }}
