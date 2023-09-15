@@ -3,10 +3,27 @@ name: Cleaning caches
 on:
   workflow_call:
     inputs:
+      scripts-ref:
+        description: 'Version of script, normally the same as workflow'
+        required: true
+        type: string
       pattern:
         description: 'string to grep cache keys with'
         required: true
         type: string
+      age-days:
+        description: 'setting the age of caches in days to be dropped'
+        required: true
+        type: string
+      #gh-token:
+      #  description: 'PAT which is authorize to delete caches for given repo'
+      #  required: true
+      #  type: string
+      dry-run:
+        description: 'allow just listing and not delete any, options yes|no'
+        required: true
+        type: string
+
 
 defaults:
   run:
@@ -19,18 +36,27 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+
+      - name: Pull re-usable 🤖 actions️
+        uses: actions/checkout@v4
         with:
-          submodules: recursive
-          token: ${{ secrets.GRID_AI_GITHUB_TOKEN }}
+          ref: ${{ inputs.scripts-ref }}
+          path: .cicd
+          repository: Lightning-AI/utilities
       - name: install requirements
-        run: pip install -U fire requests pandas
-      - name: List and Filer caches
+        run: pip install -U -r ./.cicd/.github/scripts/find-unused-caches.txt
+
+      - name: List and Filer 🔍 caches
+        env:
+          GH_TOKEN: ${{ github.token }}
+          AGE_DAYS: ${{ inputs.age-days }}
         run: |
-          python .github/scripts/find-unused-caches.py \
-            --repository="${{ github.repository }}" --token=${{ secrets.GRID_AI_GITHUB_TOKEN }} --dalay_days=2
+          python ./.cicd/.github/scripts/find-unused-caches.py \
+            --repository="${{ github.repository }}" --token=${GH_TOKEN} --age_days=${AGE_DAYS}
           cat unused-cashes.txt
-      - name: Delete caches
-        if: github.event_name != 'pull_request'
+
+      - name: Delete 🗑️ caches
+        if: inputs.event_name == 'yes'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

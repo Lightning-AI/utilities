@@ -57,11 +57,18 @@ def fetch_all_caches(repository: str, token: str, per_page: int = 100, max_pages
     return all_caches
 
 
-def main(repository: str, token: str, dalay_days: float = 7, output_file: str = "unused-cashes.txt") -> None:
-    """Entry point."""
+def main(repository: str, token: str, age_days: float = 7, output_file: str = "unused-cashes.txt") -> None:
+    """Entry point for CLI
+
+    Args:
+        repository: GitHub repository name in form `<user>/<repo>`
+        token: authentication token for making API calls
+        age_days: filter all caches older than this age set in days
+        output_file: path to a file for dumping list of cache's Id
+    """
     caches = fetch_all_caches(repository, token)
 
-    delta_days = timedelta(days=dalay_days)
+    delta_days = timedelta(days=age_days)
     old_caches = [cache["id"] for cache in caches if cache["last_used_days"] > delta_days]
     print(f"found {len(old_caches)} old caches:\n {old_caches}")
 
