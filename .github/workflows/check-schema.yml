@@ -29,20 +29,20 @@ jobs:
         submodules: recursive
 
     # if actions version is given install defined versions
-    - name: [optional] Pull re-usable 🤖 actions️
+    - name: "[optional] Pull re-usable 🤖 actions"
       if: inputs.actions-ref != ''
       uses: actions/checkout@v4
       with:
         ref: ${{ inputs.actions-ref }}
         path: .cicd
         repository: Lightning-AI/utilities
-    - name: [optional] Install recommended dependencies
+    - name: "[optional] Install recommended dependencies"
       if: inputs.actions-ref != ''
       run: |
         pip install -r ./.cicd/requirements/gha-schema.txt
         pip list | grep "check-jsonschema"
     # otherwise fall back to using the latest
-    - name: [default] Install recommended dependencies
+    - name: "[default] Install recommended dependencies"
       if: inputs.actions-ref == ''
       run: |
         pip install -q check-jsonschema
