@@ -4,9 +4,9 @@ import os
 from datetime import timedelta
 from typing import List
 
-import fire
-import pandas
 import requests
+from fire import Fire
+from pandas import Timestamp, to_datetime
 
 
 def fetch_all_caches(repository: str, token: str, per_page: int = 100, max_pages: int = 100) -> List[dict]:
@@ -40,12 +40,12 @@ def fetch_all_caches(repository: str, token: str, per_page: int = 100, max_pages
 
     # Iterate through all caches and list them
     if all_caches:
-        current_date = pandas.Timestamp.now(tz="UTC")
+        current_date = Timestamp.now(tz="UTC")
         print(f"Caches {len(all_caches)} for {repository}:")
         for cache in all_caches:
             cache_key = cache["id"]
-            created_at = pandas.to_datetime(cache["created_at"])
-            last_used_at = pandas.to_datetime(cache["last_accessed_at"])
+            created_at = to_datetime(cache["created_at"])
+            last_used_at = to_datetime(cache["last_accessed_at"])
             cache["last_used_days"] = current_date - last_used_at
             age_used = cache["last_used_days"].round(freq="min")
             size = cache["size_in_bytes"] / (1024 * 1024)
@@ -80,4 +80,4 @@ def main(repository: str, token: str, age_days: float = 7, output_file: str = "u
 
 
 if __name__ == "__main__":
-    fire.Fire(main)
+    Fire(main)
