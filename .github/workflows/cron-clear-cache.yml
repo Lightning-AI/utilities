@@ -9,7 +9,6 @@ on:
       - ".github/scripts/find-unused-caches.py"
       - ".github/workflows/cleanup-caches.yml"
       - ".github/workflows/cron-clear-cache.yml"
-
   workflow_dispatch:
     inputs:
       pattern:
@@ -24,5 +23,6 @@ jobs:
     uses: ./.github/workflows/cleanup-caches.yml
     with:
       scripts-ref: ${{ github.sha }}  # use local version
+      dry-run: ${{ github.event_name == 'pull_request' }}
       # ise input if set of default...
       pattern: ${{ inputs.pattern || 'pip|conda' }}
