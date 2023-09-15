@@ -26,6 +26,8 @@ def fetch_all_caches(repository: str, token: str, per_page: int = 100, max_pages
         url = f"https://api.github.com/repos/{repository}/actions/caches?page={page + 1}&per_page={per_page}"
         headers = {"Authorization": f"token {token}"}
         response = requests.get(url, headers=headers, timeout=10).json()
+        if 'total_count' not in response:
+            raise RuntimeError(response.get("message"))
         print(f"fetching page... {page} with {per_page} items of expected {response.get('total_count')}")
         caches = response.get("actions_caches", [])
 
@@ -45,13 +47,12 @@ def fetch_all_caches(repository: str, token: str, per_page: int = 100, max_pages
             created_at = pandas.to_datetime(cache["created_at"])
             last_used_at = pandas.to_datetime(cache["last_accessed_at"])
             cache["last_used_days"] = current_date - last_used_at
-            age_used = timedelta(cache["last_used_days"])
+            age_used = cache["last_used_days"].round(freq='min')
             size = cache["size_in_bytes"] / (1024 * 1024)
             print(
                 f"- Cache Key: {cache_key} |"
                 f" Created At: {created_at.strftime('%Y-%m-%d %H:%M')} |"
-                f" Used At: {last_used_at.strftime('%Y-%m-%d %H:%M')}"
-                f" [{age_used.isoformat(sep='T', timespec='minutes')}] |"
+                f" Used At: {last_used_at.strftime('%Y-%m-%d %H:%M')} [{age_used}] |"
                 f" Size: {size:.2f} MB"
             )
     else:
