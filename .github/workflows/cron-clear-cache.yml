@@ -23,5 +23,6 @@ jobs:
   drop-unused-caches:
     uses: ./.github/workflows/cleanup-caches.yml
     with:
+      scripts-ref: ${{ github.sha }}  # use local version
       # ise input if set of default...
       pattern: ${{ inputs.pattern || 'pip|conda' }}

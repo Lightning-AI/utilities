@@ -7,22 +7,24 @@ on:
         description: 'Version of script, normally the same as workflow'
         required: true
         type: string
-      pattern:
-        description: 'string to grep cache keys with'
-        required: true
-        type: string
-      age-days:
-        description: 'setting the age of caches in days to be dropped'
-        required: true
-        type: string
       #gh-token:
-      #  description: 'PAT which is authorize to delete caches for given repo'
+      #  description: 'PAT which is authorized to delete caches for given repo'
       #  required: true
       #  type: string
       dry-run:
         description: 'allow just listing and not delete any, options yes|no'
         required: true
         type: string
+      age-days:
+        description: 'setting the age of caches in days to be dropped'
+        required: true
+        type: number
+        default: 7
+      pattern:
+        description: 'string to grep cache keys with'
+        required: false
+        type: string
+        default: ""
 
 
 defaults:
