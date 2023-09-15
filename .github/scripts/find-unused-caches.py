@@ -4,10 +4,6 @@ import os
 from datetime import timedelta
 from typing import List
 
-import requests
-from fire import Fire
-from pandas import Timestamp, to_datetime
-
 
 def fetch_all_caches(repository: str, token: str, per_page: int = 100, max_pages: int = 100) -> List[dict]:
     """Fetch list of al caches from a given repository.
@@ -18,6 +14,9 @@ def fetch_all_caches(repository: str, token: str, per_page: int = 100, max_pages
         per_page: number of items per listing page
         max_pages: max number of listing pages
     """
+    import requests
+    from pandas import Timestamp, to_datetime
+
     # Initialize variables for pagination
     all_caches = []
 
@@ -80,4 +79,6 @@ def main(repository: str, token: str, age_days: float = 7, output_file: str = "u
 
 
 if __name__ == "__main__":
+    from fire import Fire
+
     Fire(main)
