@@ -3,7 +3,7 @@ name: Clear cache weekly
 on:
   schedule:
     # on Sunday's night 2am
-    - cron: "0 2 * * 7"
+    - cron: "0 2 * * 0"
   pull_request:
     paths:
       - ".github/scripts/find-unused-caches.py"
