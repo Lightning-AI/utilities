@@ -17,9 +17,15 @@ jobs:
       actions-ref: ${{ github.sha }}  # use local version
       extra-typing: 'typing'
 
-  check-schema:
+  check-schema-latest:
     uses: ./.github/workflows/check-schema.yml
     with:
+      azure-dir: ""
+
+  check-schema-fixed:
+    uses: ./.github/workflows/check-schema.yml
+    with:
+      actions-ref: ${{ github.sha }}  # use local version
       azure-dir: ""
 
   check-package:
