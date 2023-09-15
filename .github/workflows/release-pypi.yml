@@ -20,7 +20,7 @@ jobs:
     timeout-minutes: 10
     steps:
     - name: Checkout 🛎️
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: recursive
     - name: Set up Python 🐍
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout 🛎️
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: recursive
     - name: Download 📥 artifact
@@ -79,7 +79,7 @@ jobs:
     timeout-minutes: 5
     steps:
     - name: Checkout 🛎️
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: recursive
     - name: Download 📥 artifact
@@ -92,7 +92,7 @@ jobs:
 
     # We do this, since failures on test.pypi aren't that bad
     - name: Publish to Test PyPI
-      uses: pypa/gh-action-pypi-publish@v1.8.7
+      uses: pypa/gh-action-pypi-publish@v1.8.10
       with:
         user: __token__
         password: ${{ secrets.test_pypi_password }}
@@ -100,7 +100,7 @@ jobs:
         verbose: true
 
     - name: Publish distribution 📦 to PyPI
-      uses: pypa/gh-action-pypi-publish@v1.8.7
+      uses: pypa/gh-action-pypi-publish@v1.8.10
       with:
         user: __token__
         password: ${{ secrets.pypi_password }}

@@ -14,11 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--
+- Updated/Extended the `requires` wrapper ([#146](https://github.com/Lightning-AI/utilities/pull/146))
 
 ### Fixed
 
--
+- Fixed issue with `is_overridden` falsely returning True when the parent method is wrapped ([#149](https://github.com/Lightning-AI/utilities/pull/149))
 
 
 ## [0.9.0] - 2023-06-29
