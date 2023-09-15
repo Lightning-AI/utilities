@@ -28,6 +28,11 @@ jobs:
       actions-ref: ${{ github.sha }}  # use local version
       azure-dir: ""
 
+  check-schema:
+    runs-on: ubuntu-latest
+    # just aggregation of the previous two jobs
+    needs: ["check-schema-latest", "check-schema-fixed"]
+
   check-package:
     uses: ./.github/workflows/check-package.yml
     with:
