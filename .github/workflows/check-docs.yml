@@ -37,6 +37,11 @@ on:
         type: string
         default: |
           ["html", "doctest", "linkcheck"]
+      install-tex:
+        description: 'optional installing Texlive support'
+        required: false
+        type: boolean
+        default: false
 
 defaults:
   run:
@@ -65,11 +70,12 @@ jobs:
       with:
         python-version: ${{ inputs.python-version }}
 
-    # todo: consider adding cache with separate restore/dave
     - name: Install pandoc & texlive
+      if: inputs.install-tex == 'true'
       run: |
-        sudo apt-get update
+        sudo apt-get update --fix-missing
         sudo apt-get install -y pandoc texlive-latex-extra dvipng texlive-pictures
+    # todo: consider adding cache with separate restore/dave
     - name: Install dependencies
       run: |
         pip --version
