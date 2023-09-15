@@ -60,7 +60,6 @@ def apply_to_collection(
         )
     # fast path for the most common cases:
     if isinstance(data, dtype):  # single element
-        print(function, args, kwargs)
         return function(data, *args, **kwargs)
     if isinstance(data, list) and all(isinstance(x, dtype) for x in data):  # 1d homogeneous list
         return [function(x, *args, **kwargs) for x in data]
