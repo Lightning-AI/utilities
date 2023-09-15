@@ -72,7 +72,7 @@ def main(repository: str, token: str, age_days: float = 7, output_file: str = "u
     caches = fetch_all_caches(repository, token)
 
     delta_days = timedelta(days=age_days)
-    old_caches = [cache["id"] for cache in caches if cache["last_used_days"] > delta_days]
+    old_caches = [str(cache["id"]) for cache in caches if cache["last_used_days"] > delta_days]
     print(f"found {len(old_caches)} old caches:\n {old_caches}")
 
     with open(output_file, "w", encoding="utf8") as fw:
