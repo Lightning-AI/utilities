@@ -31,7 +31,7 @@ on:
           {
             "SPHINX_MOCK_REQUIREMENTS": 0,
           }
-      make-targets:
+      make-target:
         description: 'what test configs to run in json format'
         required: false
         type: string
@@ -58,7 +58,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        check: ${{ fromJSON(inputs.make-targets) }}
+        check: ${{ fromJSON(inputs.make-target) }}
     steps:
     - name: Checkout 🛎
       uses: actions/checkout@v4
