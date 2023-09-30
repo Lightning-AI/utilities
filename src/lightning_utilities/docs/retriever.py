@@ -24,7 +24,7 @@ def _download_file(file_url: str, folder: str) -> str:
 
 
 def _search_all_occurrences(list_files: List[str], pattern: str) -> List[str]:
-    """Search for all occurrences of specific patter in a collection of files.
+    """Search for all occurrences of specific pattern in a collection of files.
 
     Args:
         list_files: list of files to be scanned
@@ -76,7 +76,7 @@ def fetch_external_assets(
         docs_folder: the location of docs related to the project root
         assets_folder: a folder inside ``docs_folder`` to be created and saving online assets
         file_pattern: what kind of files shall be scanned
-        retrieve_pattern: patter for reg. expression to search URL/S3 resources
+        retrieve_pattern: pattern for reg. expression to search URL/S3 resources
     """
     list_files = glob.glob(os.path.join(docs_folder, "**", file_pattern), recursive=True)
     if not list_files:
