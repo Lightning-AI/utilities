@@ -46,30 +46,38 @@ def find_latest(ver: str) -> Dict[str, str]:
     raise ValueError(f"Missing {ver} in {VERSIONS}")
 
 
-def adjust(requires: str, torch_version: Optional[str] = None) -> str:
+def adjust(requires: list, pytorch_version: Optional[str] = None) -> list:
     """Adjust the versions to be paired within pytorch ecosystem."""
-    if not torch_version:
+    if not pytorch_version:
         import torch
 
-        torch_version = torch.__version__
-    if not torch_version:
-        raise ValueError(f"invalid torch: {torch_version}")
+        pytorch_version = torch.__version__
+    if not pytorch_version:
+        raise ValueError(f"invalid torch: {pytorch_version}")
 
-    # remove comments and strip whitespace
-    requires = re.sub(rf"\s*#.*{os.linesep}", os.linesep, requires).strip()
-
-    options = find_latest(torch_version)
+    requires_ = []
+    options = find_latest(pytorch_version)
     logging.debug(f"determined ecosystem alignment: {options}")
-    for lib, version in options.items():
-        replace = f"{lib}=={version}" if version else ""
-        requires = re.sub(rf"\b{lib}(?![-_\w]).*", replace, requires)
+    for req in requires:
+        req_split = req.strip().split("#", maxsplit=1)
+        # anything before fst # shall be requirements
+        req = req_split[0].strip()
+        # anything after # in the line is comment
+        comment = "" if len(req_split) < 2 else "  #" + req_split[1]
+        if not req:
+            # if only comment make it short
+            requires_.append(comment.strip())
+            continue
+        for lib, version in options.items():
+            replace = f"{lib}=={version}" if version else ""
+            req = re.sub(rf"\b{lib}(?![-_\w]).*", replace, req)
+        requires_.append(req + comment)
 
-    return requires
+    return requires_
 
 
-def _offset_print(req: str, offset: str = "\t|\t") -> str:
+def _offset_print(reqs: list, offset: str = "\t|\t") -> str:
     """Adding offset to each line for the printing requirements."""
-    reqs = req.split(os.linesep)
     reqs = [offset + r for r in reqs]
     return os.linesep.join(reqs)
 
@@ -82,12 +90,12 @@ if __name__ == "__main__":
     else:
         requirements_path, torch_version = sys.argv[1], None
 
-    with open(requirements_path) as fp:
-        requirements = fp.read()
+    with open(requirements_path) as fopen:
+        requirements = fopen.readlines()
     requirements = adjust(requirements, torch_version)
     logging.info(
         f"requirements_path='{requirements_path}' with arg torch_version='{torch_version}' >>\n"
         f"{_offset_print(requirements)}"
     )
-    with open(requirements_path, "w") as fp:
-        fp.write(requirements)
+    with open(requirements_path, "w") as fopen:
+        fopen.writelines([r + os.linesep for r in requirements])
