@@ -60,7 +60,7 @@ def adjust(requires: List[str], pytorch_version: Optional[str] = None) -> List[s
     logging.debug(f"determined ecosystem alignment: {options}")
     for req in requires:
         print(f"==={req}===")
-        req_split = req.replace("\n", "").strip().split("#", maxsplit=1)
+        req_split = req.replace("\r\n", "").strip().split("#", maxsplit=1)
         print(req_split)
         # anything before fst # shall be requirements
         req = req_split[0].strip()
