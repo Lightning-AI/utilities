@@ -71,7 +71,7 @@ def adjust(requires: List[str], pytorch_version: Optional[str] = None) -> List[s
         for lib, version in options.items():
             replace = f"{lib}=={version}" if version else ""
             req = re.sub(rf"\b{lib}(?![-_\w]).*", replace, req)
-        requires_.append(req + comment)
+        requires_.append(req + comment.lstrip())
 
     return requires_
 
@@ -92,7 +92,7 @@ def main(requirements_path: str, torch_version: Optional[str] = None) -> None:
         f"{_offset_print(requirements)}"
     )
     with open(requirements_path, "w", encoding="utf8") as fopen:
-        fopen.writelines([r + os.linesep for r in requirements])
+        fopen.writelines([r + "\n" for r in requirements])
 
 
 if __name__ == "__main__":
