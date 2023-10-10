@@ -38,9 +38,9 @@ on:
         default: |
           ["html", "doctest", "linkcheck"]
       install-tex:
-        description: "optional installing Texlive support"
+        description: "optional installing Texlive support - true|false"
         required: false
-        type: boolean
+        type: string
         default: false
 
 defaults:
