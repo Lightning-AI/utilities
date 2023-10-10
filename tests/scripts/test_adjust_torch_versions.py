@@ -31,12 +31,13 @@ lightning-utilities >=0.8.0, <0.10.0
 
 def test_adjust_torch_versions_call(tmp_path) -> None:
     path_script = os.path.join(_PATH_SCRIPTS, "adjust-torch-versions.py")
-    path_req_file = tmp_path / "requirements.txt"
+    path_req_file = str(tmp_path / "requirements.txt")
     with open(path_req_file, "w", encoding="utf8") as fopen:
         fopen.write(REQUIREMENTS_SAMPLE)
 
     return_code = subprocess.call([sys.executable, path_script, path_req_file, "1.10.0"])  # noqa: S603
     assert return_code == 0
+
     with open(path_req_file, encoding="utf8") as fopen:
         req_result = fopen.read()
     # ToDO: no idea why parsing lines on windows leave extra line after each line
