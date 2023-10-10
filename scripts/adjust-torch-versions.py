@@ -6,7 +6,7 @@ import logging
 import os
 import re
 import sys
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 VERSIONS = [
     {"torch": "2.2.0", "torchvision": "0.17.0", "torchtext": "0.17.0", "torchaudio": "2.2.0"},  # nightly
@@ -46,7 +46,7 @@ def find_latest(ver: str) -> Dict[str, str]:
     raise ValueError(f"Missing {ver} in {VERSIONS}")
 
 
-def adjust(requires: list, pytorch_version: Optional[str] = None) -> list:
+def adjust(requires: List[str], pytorch_version: Optional[str] = None) -> List[str]:
     """Adjust the versions to be paired within pytorch ecosystem."""
     if not pytorch_version:
         import torch
@@ -76,20 +76,14 @@ def adjust(requires: list, pytorch_version: Optional[str] = None) -> list:
     return requires_
 
 
-def _offset_print(reqs: list, offset: str = "\t|\t") -> str:
+def _offset_print(reqs: List[str], offset: str = "\t|\t") -> str:
     """Adding offset to each line for the printing requirements."""
     reqs = [offset + r for r in reqs]
     return os.linesep.join(reqs)
 
 
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-
-    if len(sys.argv) == 3:
-        requirements_path, torch_version = sys.argv[1:]
-    else:
-        requirements_path, torch_version = sys.argv[1], None
-
+def main(requirements_path: str, torch_version: Optional[str] = None) -> None:
+    """the main entry point with mapping to the CLI for positional arguments only"""
     with open(requirements_path) as fopen:
         requirements = fopen.readlines()
     requirements = adjust(requirements, torch_version)
@@ -99,3 +93,13 @@ if __name__ == "__main__":
     )
     with open(requirements_path, "w") as fopen:
         fopen.writelines([r + os.linesep for r in requirements])
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
+    try:
+        from fire import Fire
+
+        Fire(main)
+    except (ModuleNotFoundError, ImportError):
+        main(*sys.argv[1:])
