@@ -73,7 +73,7 @@ jobs:
           python-version: ${{ inputs.python-version }}
 
       - name: Install pandoc & texlive
-        if: inputs.install-tex == 'true'
+        if: ${{ inputs.install-tex == 'true' }}
         timeout-minutes: 10
         run: |
           sudo apt-get update --fix-missing
