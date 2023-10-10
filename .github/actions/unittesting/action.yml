@@ -1,4 +1,4 @@
-name: Unittesting and coverage
+name: Unittest and coverage
 description: pull data samples -> unittests
 
 inputs:
@@ -6,7 +6,7 @@ inputs:
     description: Python version
     required: true
   pkg-name:
-    description: package name for coverage collctions
+    description: package name for coverage collections
     required: true
   requires:
     description: define oldest or latest
