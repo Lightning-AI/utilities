@@ -59,7 +59,7 @@ def adjust(requires: List[str], pytorch_version: Optional[str] = None) -> List[s
     options = find_latest(pytorch_version)
     logging.debug(f"determined ecosystem alignment: {options}")
     for req in requires:
-        req_split = req.strip().split("#", maxsplit=1)
+        req_split = req.strip().replace("\n", "").split("#", maxsplit=1)
         # anything before fst # shall be requirements
         req = req_split[0].strip()
         # anything after # in the line is comment
