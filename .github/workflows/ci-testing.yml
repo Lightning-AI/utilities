@@ -20,7 +20,7 @@ jobs:
         python-version: ["3.7", "3.10", "3.12"]
         requires: ["oldest", "latest"]
         exclude:
-          - {requires: "oldest", python-version: "3.12"}
+          - { requires: "oldest", python-version: "3.12" }
     timeout-minutes: 35
     steps:
       - name: Checkout 🛎
