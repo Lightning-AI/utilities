@@ -29,7 +29,7 @@ def test_adjust_torch_versions_call(_backup_req_file):  # noqa: PT019
     return_code = subprocess.call([sys.executable, path_script, path_req_file, "1.10.0"])  # noqa: S603
     assert return_code == 0
     with open(path_req_file, encoding="utf8") as fopen:
-        req_result = fopen.read()
+        req_result = fopen.readlines()
     with open(path_expectation, encoding="utf8") as fopen:
-        req_expected = fopen.read()
+        req_expected = fopen.readlines()
     assert req_result == req_expected
