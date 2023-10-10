@@ -99,7 +99,7 @@ jobs:
         run: make  linkcheck SPHINXOPTS="--keep-going"
 
       - name: Build documentation
-        if: ${{ matrix.check != 'linkcheck' }} && ${{ matrix.check != 'doctest' }}
+        if: ${{ matrix.check != 'linkcheck' &&  matrix.check != 'doctest' }}
         working-directory: ${{ inputs.docs-dir }}
         run: make html --debug SPHINXOPTS="-W --keep-going"
 
@@ -107,7 +107,7 @@ jobs:
         id: keep-artifact
         run: python -c "print('DAYS=' + str(7 if '${{ github.event_name }}'.startswith('pull_request') else 0))" >> $GITHUB_OUTPUT
       - name: Upload built docs
-        if: ${{ matrix.check != 'linkcheck' }} && ${{ matrix.check != 'doctest' }}
+        if: ${{ matrix.check != 'linkcheck' && matrix.check != 'doctest' }}
         uses: actions/upload-artifact@v3
         with:
           name: docs-${{ github.sha }}
