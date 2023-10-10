@@ -52,6 +52,7 @@ jobs:
     with:
       requirements-file: "requirements/dev-docs.txt"
       make-target: "['html', 'doctest', 'linkcheck', 'latexpdf']"
+      install-tex: true
 
   check-md-links:
     uses: ./.github/workflows/check-md-links.yml
