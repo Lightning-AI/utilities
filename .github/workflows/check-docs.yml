@@ -77,7 +77,7 @@ jobs:
         timeout-minutes: 10
         run: |
           sudo apt-get update --fix-missing
-          sudo apt-get install -y pandoc texlive-latex-extra dvipng texlive-pictures
+          sudo apt-get install -y pandoc texlive-latex-extra dvipng texlive-pictures latexmk
       # todo: consider adding cache with separate restore/save
       - name: Install dependencies
         timeout-minutes: 20
