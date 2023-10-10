@@ -78,8 +78,8 @@ jobs:
         run: |
           sudo apt-get update --fix-missing
           sudo apt-get install -y \
-            pandoc 
-            texlive-latex-extra
+            pandoc \
+            texlive-latex-extra \
             dvipng \
             texlive-pictures \
             latexmk
