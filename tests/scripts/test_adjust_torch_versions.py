@@ -11,7 +11,7 @@ from scripts import _PATH_DATA, _PATH_SCRIPTS
 
 @pytest.fixture()
 def backup_req_sample(tmp_path):
-    """Fixture restore input file after test ends"""
+    """Fixture restore input file after test ends."""
     req_file = "requirements_sample.txt"
     # save the input, so it can be restored in test end
     shutil.copy(Path(_PATH_DATA) / req_file, Path(tmp_path) / req_file)
