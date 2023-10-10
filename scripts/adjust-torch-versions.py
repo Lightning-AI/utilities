@@ -83,7 +83,7 @@ def _offset_print(reqs: List[str], offset: str = "\t|\t") -> str:
 
 
 def main(requirements_path: str, torch_version: Optional[str] = None) -> None:
-    """the main entry point with mapping to the CLI for positional arguments only"""
+    """The main entry point with mapping to the CLI for positional arguments only."""
     with open(requirements_path) as fopen:
         requirements = fopen.readlines()
     requirements = adjust(requirements, torch_version)
