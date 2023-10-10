@@ -10,10 +10,10 @@ REQUIREMENTS_SAMPLE = """
 #  with multi line comments
 
 torchvision >=0.13.0, <0.16.0  # sample # comment
-gym[classic_control] >=0.17.0, <0.27.0
+gym[classic,control] >=0.17.0, <0.27.0
 ipython[all] <8.15.0  # strict
 torchmetrics >=0.10.0, <1.3.0
-lightning-utilities >=0.8.0, <0.10.0
+deepspeed >=0.8.2, <=0.9.3; platform_system != "Windows"  # strict
 
 """
 REQUIREMENTS_EXPECTED = """
@@ -21,10 +21,10 @@ REQUIREMENTS_EXPECTED = """
 #  with multi line comments
 
 torchvision==0.11.1  # sample # comment
-gym[classic_control] >=0.17.0, <0.27.0
+gym[classic,control] >=0.17.0, <0.27.0
 ipython[all] <8.15.0  # strict
 torchmetrics >=0.10.0, <1.3.0
-lightning-utilities >=0.8.0, <0.10.0
+deepspeed >=0.8.2, <=0.9.3; platform_system != "Windows"  # strict
 
 """
 
