@@ -13,7 +13,7 @@ inputs:
     required: false
     default: ""
   dirs:
-    description: Testing folders per domains
+    description: Testing folders per domains, space separated string
     required: false
     default: "."
   pytest-args:
