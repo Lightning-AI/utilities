@@ -85,7 +85,7 @@ def _offset_print(reqs: List[str], offset: str = "\t|\t") -> str:
 def main(requirements_path: str, torch_version: Optional[str] = None) -> None:
     """The main entry point with mapping to the CLI for positional arguments only."""
     # rU - universal line ending - https://stackoverflow.com/a/2717154/4521646
-    with open(requirements_path, "rt", newline=os.linesep) as fopen:
+    with open(requirements_path, newline=os.linesep) as fopen:
         requirements = fopen.readlines()
     requirements = adjust(requirements, torch_version)
     logging.info(
