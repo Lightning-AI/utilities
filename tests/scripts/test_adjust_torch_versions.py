@@ -10,7 +10,7 @@ from scripts import _PATH_DATA, _PATH_SCRIPTS
 
 
 @pytest.fixture()
-def backup_req_sample(tmp_path):
+def _backup_req_file(tmp_path) -> None:
     """Fixture restore input file after test ends."""
     req_file = "requirements_sample.txt"
     # save the input, so it can be restored in test end
@@ -21,7 +21,7 @@ def backup_req_sample(tmp_path):
     shutil.copy(Path(tmp_path) / req_file, Path(_PATH_DATA) / req_file)
 
 
-def test_adjust_torch_versions_call(backup_req_sample):
+def test_adjust_torch_versions_call(_backup_req_file):  # noqa: PT019
     path_script = os.path.join(_PATH_SCRIPTS, "adjust-torch-versions.py")
     path_req_file = os.path.join(_PATH_DATA, "requirements_sample.txt")
     path_expectation = os.path.join(_PATH_DATA, "requirements_expected.txt")
