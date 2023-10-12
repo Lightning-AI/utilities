@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI: allow Other targets for building docs ([#179](https://github.com/Lightning-AI/utilities/pull/179))
 
 
+- CI: narrow scope for md links check ([#183](https://github.com/Lightning-AI/utilities/pull/183))
+
+
 ### Deprecated
 
 - Deprecated `ModuleAvailableCache` in favor of `RequirementCache` ([#147](https://github.com/Lightning-AI/utilities/pull/147))
