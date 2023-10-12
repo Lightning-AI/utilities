@@ -4,6 +4,11 @@ name: Check Markdown links
 on:
   workflow_call:
     inputs:
+      base-branch:
+        description: "Default branch name"
+        required: true
+        type: string
+        default: "master"
       config-file:
         description: "Config file (JSON) used for markdown link checks"
         required: false
@@ -48,6 +53,7 @@ jobs:
       - name: Checking markdown link
         uses: gaurav-nelson/github-action-markdown-link-check@v1
         with:
+          base-branch: ${{ inputs.base-branch }}
           use-quiet-mode: "yes"
           check-modified-files-only: ${{ env.MODIFIED_ONLY }}
           config-file: ${{ env.CONFIG_FILE }}
