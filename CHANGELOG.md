@@ -48,6 +48,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI: resolve latex dependency for docs builds ([181](https://github.com/Lightning-AI/utilities/pull/181))
 
 
+- CI: fixed branch for md links check ([#183](https://github.com/Lightning-AI/utilities/pull/183))
+
+
 ## [0.9.0] - 2023-06-29
 
 ### Added
