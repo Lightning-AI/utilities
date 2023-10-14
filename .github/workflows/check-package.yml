@@ -18,6 +18,7 @@ on:
       install-extras:
         description: "optional extras which are needed to include also []"
         required: false
+        type: string
         default: ""
       install-flags:
         description: "Additional pip install flags"
