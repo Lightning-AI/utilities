@@ -37,6 +37,7 @@ runs:
         ls -lh
         echo "PKG_WHEEL=$(ls *.whl | head -n1)" >> $GITHUB_ENV
         echo "PKG_SOURCE=$(ls *.tar.gz | head -n1)" >> $GITHUB_ENV
+        pip list
       shell: bash
 
     - name: Install package (wheel)
