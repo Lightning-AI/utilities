@@ -6,3 +6,21 @@ ci/cd:
   - .github/actions/**/*
   - .github/scripts/*
   - .github/workflows/*
+  - .pre-commit-config.yaml
+
+package:
+  - src/**/*
+  - MANIFEST.in
+  - pyproject.toml
+  - setup.py
+
+documentation:
+  - docs/**/*
+  - requirements/_docs.txt
+
+tests:
+  - tests/**/*
+  - requirements/_tests.txt
+
+dependencies:
+  - requirements/*
