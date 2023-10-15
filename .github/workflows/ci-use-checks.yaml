@@ -53,7 +53,7 @@ jobs:
       actions-ref: ${{ github.sha }} # use local version
       artifact-name: dist-packages-${{ github.sha }}
       import-name: "lightning_utilities"
-      install-extras: "[anything]"
+      install-extras: "[cli]"
       testing-matrix: |
         {
           "os": ["ubuntu-22.04", "macos-12", "windows-2022"],
