@@ -54,9 +54,7 @@ jobs:
       artifact-name: dist-packages-${{ github.sha }}
       import-name: "lightning_utilities"
       install-extras: "[cli]"
-      # todo: when we have a module with depence on extra, replace it
-      #  tried to import `lightning_utilities.cli.__main__` but told me it does not exits
-      import-extras: "import fire"
+      import-extras: "import lightning_utilities.cli.__main__"
       testing-matrix: |
         {
           "os": ["ubuntu-22.04", "macos-12", "windows-2022"],
