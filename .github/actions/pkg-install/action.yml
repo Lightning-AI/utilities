@@ -39,30 +39,39 @@ runs:
         echo "PKG_SOURCE=$(ls *.tar.gz | head -n1)" >> $GITHUB_ENV
       shell: bash
 
-    - name: Install package (wheel) & check
+    - name: Install package (wheel)
       working-directory: pypi/
-      # TODO: reset env / consider add as conda
       run: |
         set -ex
         pip install "${{ env.PKG_WHEEL }}${{ inputs.pkg-extras }}" ${{ inputs.pip-flags }}
         pip list
+      shell: bash
+
+    - name: package check
+      run: |
+        set -ex
         python -c "import ${{ inputs.import-name }} as pkg; print(f'version: {pkg.__version__}')"
         python -c '${{ inputs.import-extras }}'
       shell: bash
 
     - name: Uninstall all
+      # TODO: reset env / consider add as conda
       run: |
         pip freeze > _reqs.txt
         pip uninstall -y -r _reqs.txt
       shell: bash
 
-    - name: Install package (archive) & check
+    - name: Install package (archive)
       working-directory: pypi/
-      # TODO: reset env / consider add as conda
       run: |
         set -ex
         pip install "${{ env.PKG_SOURCE }}${{ inputs.pkg-extras }}" ${{ inputs.pip-flags }}
         pip list
+      shell: bash
+
+    - name: package check
+      run: |
+        set -ex
         python -c "import ${{ inputs.import-name }} as pkg; print(f'version: {pkg.__version__}')"
         python -c '${{ inputs.import-extras }}'
       shell: bash
