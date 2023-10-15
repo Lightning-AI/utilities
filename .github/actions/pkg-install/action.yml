@@ -43,7 +43,7 @@ runs:
       working-directory: pypi/
       run: |
         set -ex
-        pip install "${{ env.PKG_WHEEL }}${{ inputs.pkg-extras }}" ${{ inputs.pip-flags }}
+        pip install ${{ env.PKG_WHEEL }}${{ inputs.pkg-extras }} ${{ inputs.pip-flags }}
         pip list
       shell: bash
 
@@ -65,7 +65,7 @@ runs:
       working-directory: pypi/
       run: |
         set -ex
-        pip install "${{ env.PKG_SOURCE }}${{ inputs.pkg-extras }}" ${{ inputs.pip-flags }}
+        pip install ${{ env.PKG_SOURCE }}${{ inputs.pkg-extras }} ${{ inputs.pip-flags }}
         pip list
       shell: bash
 
