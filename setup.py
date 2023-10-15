@@ -24,20 +24,22 @@ about = _load_py_module("__about__.py")
 with open(os.path.join(_PATH_REQUIRE, "base.txt")) as fp:
     requirements = list(map(str, parse_requirements(fp.readlines())))
 
+
 # make extras as automated loading
 def _requirement_extras(path_req: str = _PATH_REQUIRE) -> dict:
     extras = {}
     for fpath in glob.glob(os.path.join(path_req, "*.txt")):
         fname = os.path.basename(fpath)
-        if fname.startswith("_") or fname.startswith("gha-"):
+        if fname.startswith(("_", "gha-")):
             continue
-        if fname in ("base.txt", ):
+        if fname in ("base.txt",):
             continue
         name, _ = os.path.splitext(fname)
         with open(fpath) as fp:
             reqs = parse_requirements(fp.readlines())
             extras[name] = list(map(str, reqs))
     return extras
+
 
 # loading readme as description
 with open(os.path.join(_PATH_ROOT, "README.md")) as fp:
@@ -52,7 +54,7 @@ setup(
     url=about.__homepage__,
     download_url="https://github.com/Lightning-AI/utilities",
     license=about.__license__,
-    # fixme: somhow the `.cli` is missing in created package
+    # fixme: somehow the `.cli` is missing in created package
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     long_description=readme,
