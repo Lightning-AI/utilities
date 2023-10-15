@@ -126,9 +126,10 @@ jobs:
         uses: ./.cicd/.github/actions/pkg-install
         with:
           artifact-name: ${{ inputs.artifact-name }}
-          import-name: ${{ inputs.import-name }}
           pkg-extras: ${{ inputs.install-extras }}
           pip-flags: ${{ inputs.install-flags }}
+          import-name: ${{ inputs.import-name }}
+          import-extras: ${{ inputs.import-extras }}
 
     # TODO: add run doctests
 
