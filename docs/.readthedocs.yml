@@ -19,6 +19,6 @@ formats:
 python:
   version: 3.8
   install:
-    - requirements: requirements/docs.txt
+    - requirements: requirements/_docs.txt
     - method: pip
       path: .
