@@ -19,7 +19,6 @@ defaults:
     shell: bash
 
 jobs:
-
   pre-commit:
     runs-on: ubuntu-20.04
     steps:
