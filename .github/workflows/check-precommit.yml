@@ -43,7 +43,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.cache/pre-commit
-          key: pre-commit|${{ hashFiles('.pre-commit-config.yaml') }}
+          key: pre-commit|py${{ inputs.python-version }}|${{ hashFiles('.pre-commit-config.yaml') }}
 
       - name: Run pre-commit 🤖
         id: precommit
