@@ -56,7 +56,7 @@ jobs:
           pre-commit run --all-files
 
       - name: Fixing Pull Request ↩️
-        if: always() && inputs.push-fixes == 'true' && steps.precommit.outcome == 'failure'
+        if: always() && inputs.push-fixes == true && steps.precommit.outcome == 'failure'
         uses: actions-js/push@v1.4
         with:
           github_token: ${{ secrets.github-token }}
