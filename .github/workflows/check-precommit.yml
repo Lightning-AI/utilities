@@ -14,9 +14,14 @@ on:
         type: string
       use-cache:
         description: "enable using GH caching for performance boost"
-        default: true
-        required: false
         type: boolean
+        required: false
+        default: true
+      push-fixes:
+        description: "if provided an user GH's token, it will push update; requires `push` event"
+        type: boolean
+        required: false
+        default: false
 
 defaults:
   run:
@@ -51,7 +56,7 @@ jobs:
           pre-commit run --all-files
 
       - name: Fixing Pull Request ↩️
-        if: always() && secrets.github-token != '' && steps.precommit.outcome == 'failure'
+        if: always() && inputs.push-fixes == 'true' && steps.precommit.outcome == 'failure'
         uses: actions-js/push@v1.4
         with:
           github_token: ${{ secrets.github-token }}
