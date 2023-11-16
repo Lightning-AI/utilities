@@ -13,6 +13,11 @@ on:
         default: ""
         required: false
         type: string
+      use_cache:
+        description: "enable using GH caching for performance boost"
+        default: true
+        required: false
+        type: boolean
 
 defaults:
   run:
@@ -20,7 +25,7 @@ defaults:
 
 jobs:
   pre-commit:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
@@ -33,14 +38,12 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
 
-      - name: Determine cache hash
-        run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
-
       - name: Cache 💽 pre-commit
+      	if: inputs.use_cache == true
         uses: actions/cache@v3
         with:
           path: ~/.cache/pre-commit
-          key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
+          key: pre-commit|${{ hashFiles('.pre-commit-config.yaml') }}
 
       - name: Run pre-commit 🤖
         id: precommit
