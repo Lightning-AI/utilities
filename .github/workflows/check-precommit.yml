@@ -39,7 +39,7 @@ jobs:
           python-version: ${{ inputs.python-version }}
 
       - name: Cache 💽 pre-commit
-      	if: inputs.use_cache == true
+        if: ${{ inputs.use_cache == true }}
         uses: actions/cache@v3
         with:
           path: ~/.cache/pre-commit
