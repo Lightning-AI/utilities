@@ -54,7 +54,7 @@ jobs:
     uses: ./.github/workflows/check-package.yml
     with:
       actions-ref: ${{ github.sha }} # use local version
-      artifact-name: dist-packages-${{ github.sha }}
+      artifact-name: dist-packages-ex-${{ github.sha }}
       import-name: "lightning_utilities"
       install-extras: "[cli]"
       # todo: when we have a module with depence on extra, replace it
