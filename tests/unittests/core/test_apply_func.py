@@ -99,6 +99,11 @@ class WithClassAndInitVar:
         return self.dummy == o.dummy
 
 
+class _CustomCollection(dict):
+    def __init__(self, initial_dict) -> None:
+        super().__init__(initial_dict)
+
+
 def test_recursive_application_to_collection():
     ntc = namedtuple("Foo", ["bar"])
 
@@ -201,25 +206,37 @@ def test_recursive_application_to_collection():
         WithClassAndInitVar.class_var, torch.tensor(0)
     ), f"Reduction of a {dataclass_type} dataclass should not change the class var"
 
-    # mapping support
-    reduced = apply_to_collection({"a": 1, "b": 2}, int, lambda x: str(x))
-    assert reduced == {"a": "1", "b": "2"}
-    reduced = apply_to_collection(OrderedDict([("b", 2), ("a", 1)]), int, lambda x: str(x))
-    assert reduced == OrderedDict([("b", "2"), ("a", "1")])
 
-    # custom mappings
-    class _CustomCollection(dict):
-        def __init__(self, initial_dict) -> None:
-            super().__init__(initial_dict)
-
-    to_reduce = _CustomCollection({"a": 1, "b": 2, "c": 3})
-    reduced = apply_to_collection(to_reduce, int, lambda x: str(x))
-    assert reduced == _CustomCollection({"a": "1", "b": "2", "c": "3"})
-
-    # defaultdict
-    to_reduce = defaultdict(int, {"a": 1, "b": 2, "c": 3})
-    reduced = apply_to_collection(to_reduce, int, lambda x: str(x))
-    assert reduced == defaultdict(int, {"a": "1", "b": "2", "c": "3"})
+@pytest.mark.parametrize(
+    ("ori", "target"),
+    [
+        (
+            {"a": 1, "b": 2},
+            {"a": "1", "b": "2"},
+        ),
+        (
+            OrderedDict([("b", 2), ("a", 1)]),
+            OrderedDict([("b", "2"), ("a", "1")]),
+        ),
+        (
+            _CustomCollection({"a": 1, "b": 2, "c": 3}),
+            _CustomCollection({"a": "1", "b": "2", "c": "3"}),
+        ),
+        (
+            defaultdict(int, {"a": 1, "b": 2, "c": 3}),
+            defaultdict(int, {"a": "1", "b": "2", "c": "3"}),
+        ),
+        (
+            WithClassVar(torch.arange(3)),
+            WithClassVar(torch.arange(3)),
+        ),
+    ],
+)
+def test_application_to_collection_return_type(ori, target):
+    # custom mapping support
+    reduced = apply_to_collection(ori, int, lambda x: str(x))
+    assert reduced == target
+    assert type(reduced) is type(target)
 
 
 def test_apply_to_collection_include_none():
