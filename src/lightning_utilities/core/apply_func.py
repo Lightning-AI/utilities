@@ -62,20 +62,12 @@ def apply_to_collection(
     # fast path for the most common cases:
     if isinstance(data, dtype):  # single element
         return function(data, *args, **kwargs)
-    ori_cls = type(data)
-    try:
-        if isinstance(data, list) and all(isinstance(x, dtype) for x in data):  # 1d homogeneous list
-            return ori_cls(function(x, *args, **kwargs) for x in data)
-        if isinstance(data, tuple) and all(isinstance(x, dtype) for x in data):  # 1d homogeneous tuple
-            if is_namedtuple(data):
-                return ori_cls(*(function(x, *args, **kwargs) for x in data))
-            return ori_cls(function(x, *args, **kwargs) for x in data)
-        if isinstance(data, dict) and all(isinstance(x, dtype) for x in data.values()):  # 1d homogeneous dict
-            if isinstance(data, defaultdict):
-                return ori_cls(data.default_factory, {k: function(v, *args, **kwargs) for k, v in data.items()})
-            return ori_cls({k: function(v, *args, **kwargs) for k, v in data.items()})
-    except (TypeError, ValueError):
-        pass
+    if data.__class__ is list and all(isinstance(x, dtype) for x in data):  # 1d homogeneous list
+        return [function(x, *args, **kwargs) for x in data]
+    if data.__class__ is tuple and all(isinstance(x, dtype) for x in data):  # 1d homogeneous tuple
+        return tuple(function(x, *args, **kwargs) for x in data)
+    if data.__class__ is dict and all(isinstance(x, dtype) for x in data.values()):  # 1d homogeneous dict
+        return {k: function(v, *args, **kwargs) for k, v in data.items()}
     # slow path for everything else
     return _apply_to_collection_slow(
         data,
