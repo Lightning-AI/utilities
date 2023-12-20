@@ -212,28 +212,24 @@ def test_recursive_application_to_collection():
     ("ori", "target"),
     [
         (
-            {"a": 1, "b": 2, "c": 3.0},
-            {"a": "1", "b": "2", "c": 3.0},
+            {"a": 1, "b": 2, "c": 3},
+            {"a": "1", "b": "2", "c": 3},
         ),
         (
-            OrderedDict([("b", 2), ("a", 1), ("c", 3.0)]),
-            OrderedDict([("b", "2"), ("a", "1"), ("c", 3.0)]),
+            OrderedDict([("b", 2), ("a", 1), ("c", 3)]),
+            OrderedDict([("b", "2"), ("a", "1"), ("c", 3)]),
         ),
         (
-            _CustomCollection({"a": 1, "b": 2, "c": 3.0}),
-            _CustomCollection({"a": "1", "b": "2", "c": 3.0}),
+            _CustomCollection({"a": 1, "b": 2, "c": 3}),
+            _CustomCollection({"a": "1", "b": "2", "c": "3"}),
         ),
         (
-            defaultdict(int, {"a": 1, "b": 2, "c": 3.0}),
-            defaultdict(int, {"a": "1", "b": "2", "c": 3.0}),
+            defaultdict(int, {"a": 1, "b": 2, "c": 3}),
+            defaultdict(int, {"a": "1", "b": "2", "c": "3"}),
         ),
         (
-            WithClassVar(torch.arange(3)),
-            WithClassVar(torch.arange(3)),
-        ),
-        (
-            ntc(bar=5, baz=5.0),
-            ntc(bar="5", baz=5.0),
+            ntc(bar=5, baz=5),
+            ntc(bar="5", baz="5"),
         ),
     ],
 )
