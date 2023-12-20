@@ -104,9 +104,10 @@ class _CustomCollection(dict):
         super().__init__(initial_dict)
 
 
-def test_recursive_application_to_collection():
-    ntc = namedtuple("Foo", ["bar"])
+ntc = namedtuple("Foo", ["bar", "baz"])
 
+
+def test_recursive_application_to_collection():
     model_example = ModelExample(
         example_ids=["i-1", "i-2", "i-3"],
         feature=Feature(input_ids=torch.tensor([1.0, 2.0, 3.0]), segment_ids=torch.tensor([4.0, 5.0, 6.0])),
@@ -117,7 +118,7 @@ def test_recursive_application_to_collection():
         "a": torch.tensor([1.0]),  # Tensor
         "b": [torch.tensor([2.0])],  # list
         "c": (torch.tensor([100.0]),),  # tuple
-        "d": ntc(bar=5.0),  # named tuple
+        "d": ntc(bar=5.0, baz=10.0),  # named tuple
         "f": "this_is_a_dummy_str",  # string
         "g": 12.0,  # number
         "h": Feature(input_ids=torch.tensor([1.0, 2.0, 3.0]), segment_ids=torch.tensor([4.0, 5.0, 6.0])),  # dataclass
@@ -137,7 +138,7 @@ def test_recursive_application_to_collection():
         "a": torch.tensor([2.0]),
         "b": [torch.tensor([4.0])],
         "c": (torch.tensor([200.0]),),
-        "d": ntc(bar=10),
+        "d": ntc(bar=10, baz=20),
         "f": "this_is_a_dummy_str",
         "g": 24.0,
         "h": Feature(input_ids=torch.tensor([2.0, 4.0, 6.0]), segment_ids=torch.tensor([8.0, 10.0, 12.0])),
@@ -211,24 +212,28 @@ def test_recursive_application_to_collection():
     ("ori", "target"),
     [
         (
-            {"a": 1, "b": 2},
-            {"a": "1", "b": "2"},
+            {"a": 1, "b": 2, "c": 3.0},
+            {"a": "1", "b": "2", "c": 3.0},
         ),
         (
-            OrderedDict([("b", 2), ("a", 1)]),
-            OrderedDict([("b", "2"), ("a", "1")]),
+            OrderedDict([("b", 2), ("a", 1), ("c", 3.0)]),
+            OrderedDict([("b", "2"), ("a", "1"), ("c", 3.0)]),
         ),
         (
-            _CustomCollection({"a": 1, "b": 2, "c": 3}),
-            _CustomCollection({"a": "1", "b": "2", "c": "3"}),
+            _CustomCollection({"a": 1, "b": 2, "c": 3.0}),
+            _CustomCollection({"a": "1", "b": "2", "c": 3.0}),
         ),
         (
-            defaultdict(int, {"a": 1, "b": 2, "c": 3}),
-            defaultdict(int, {"a": "1", "b": "2", "c": "3"}),
+            defaultdict(int, {"a": 1, "b": 2, "c": 3.0}),
+            defaultdict(int, {"a": "1", "b": "2", "c": 3.0}),
         ),
         (
             WithClassVar(torch.arange(3)),
             WithClassVar(torch.arange(3)),
+        ),
+        (
+            ntc(bar=5, baz=5.0),
+            ntc(bar="5", baz=5.0),
         ),
     ],
 )
