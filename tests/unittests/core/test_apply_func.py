@@ -213,11 +213,11 @@ def test_recursive_application_to_collection():
     [
         (
             {"a": 1, "b": 2, "c": 3},
-            {"a": "1", "b": "2", "c": 3},
+            {"a": "1", "b": "2", "c": "3"},
         ),
         (
             OrderedDict([("b", 2), ("a", 1), ("c", 3)]),
-            OrderedDict([("b", "2"), ("a", "1"), ("c", 3)]),
+            OrderedDict([("b", "2"), ("a", "1"), ("c", "3")]),
         ),
         (
             _CustomCollection({"a": 1, "b": 2, "c": 3}),
