@@ -61,7 +61,7 @@ jobs:
           unfold: true
 
       # see: https://github.com/python/mypy/issues/10600#issuecomment-857351152
-      - run: yes | mypy ${{ inputs.source-dir }} --install-types || true
+      - run: yes | mypy . --install-types || true
 
       - name: Check typing
         # mypy uses the config file found in the following order:
