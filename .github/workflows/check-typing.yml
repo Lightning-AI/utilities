@@ -14,7 +14,7 @@ on:
         type: string
       source-dir:
         description: "Source directory to check"
-        default: "src"
+        default: "src/"
         required: false
         type: string
       extra-typing:
@@ -84,6 +84,6 @@ jobs:
             | awk '{print $1}' \
             | sort \
             | uniq \
-            | sed 's/\.py//g;  s|${SOURCE_DIR}/||g;  s|\/__init__||g;  s|\/|\.|g' \
+            | sed 's/\.py//g;  s|${SOURCE_DIR}||g;  s|\/__init__||g;  s|\/|\.|g' \
             | xargs -I {} echo '"{}",' \
           || true
