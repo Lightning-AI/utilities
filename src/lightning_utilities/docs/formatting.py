@@ -95,7 +95,7 @@ def _adjust_linked_external_docs(
     source_link: str,
     target_link: str,
     browse_folder: Union[str, Iterable[str]],
-    file_extensions: Tuple[str] = (".rst", ".py"),
+    file_extensions: Iterable[str] = (".rst", ".py"),
     version_digits: int = 2,
 ) -> None:
     r"""Adjust the linked external docs to be local.
@@ -130,10 +130,8 @@ def _adjust_linked_external_docs(
     for pkg_ver in pkg_ver_all:
         target_link = _update_link_based_imported_package(target_link, pkg_ver, version_digits)
 
-    # make it unique
-    list_files = set(list_files)
     # replace the source link with target link
-    for fpath in list_files:
+    for fpath in set(list_files):
         with open(fpath, encoding="UTF-8") as fopen:
             body = fopen.read()
         body = body.replace(source_link, target_link)
