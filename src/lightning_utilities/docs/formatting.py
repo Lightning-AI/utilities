@@ -122,7 +122,7 @@ def adjust_linked_external_docs(
         for ext in file_extensions:
             list_files += glob.glob(os.path.join(folder, "**", f"*{ext}"), recursive=True)
     if not list_files:
-        logging.warning(f'no files were listed in folder "{browse_folder}" and pattern "{file_extensions}"')
+        logging.warning(f'No files were listed in folder "{browse_folder}" and pattern "{file_extensions}"')
         return
 
     # find the expression for package version in {} brackets if any, use re to find it
@@ -134,6 +134,9 @@ def adjust_linked_external_docs(
     for fpath in set(list_files):
         with open(fpath, encoding="UTF-8") as fopen:
             body = fopen.read()
-        body = body.replace(source_link, target_link)
+        body_ = body.replace(source_link, target_link)
+        if body == body_:
+            continue
+        logging.debug(f'links adjusting in {fpath}: "{source_link}" -> "{target_link}"')
         with open(fpath, "w", encoding="UTF-8") as fw:
-            fw.write(body)
+            fw.write(body_)
