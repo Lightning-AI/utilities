@@ -91,7 +91,7 @@ def _update_link_based_imported_package(link: str, pkg_ver: str, version_digits:
     return link.replace(f"{{{pkg_ver}}}", ver)
 
 
-def _adjust_linked_external_docs(
+def adjust_linked_external_docs(
     source_link: str,
     target_link: str,
     browse_folder: Union[str, Iterable[str]],
@@ -108,7 +108,7 @@ def _adjust_linked_external_docs(
         version_digits: for semantic versioning, how many digits to be considered
 
     Examples:
-        >>> _adjust_linked_external_docs(
+        >>> adjust_linked_external_docs(
         ...     "https://numpy.org/doc/stable/",
         ...     "https://numpy.org/doc/{numpy.__version__}/",
         ...     "docs/source",
