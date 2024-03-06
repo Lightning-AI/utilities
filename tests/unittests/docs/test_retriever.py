@@ -9,6 +9,7 @@ from lightning_utilities.docs import fetch_external_assets
 def test_retriever_s3(temp_docs):
     # take the index page
     path_index = os.path.join(temp_docs, "index.rst")
+    # copy it to another location to test depth
     path_page = os.path.join(temp_docs, "any", "extra", "page.rst")
     os.makedirs(os.path.dirname(path_page), exist_ok=True)
     shutil.copy(path_index, path_page)
