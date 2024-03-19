@@ -11,6 +11,7 @@ import sys
 from typing import Iterable, Optional, Tuple, Union
 
 
+
 def _transform_changelog(path_in: str, path_out: str) -> None:
     """Adjust changelog titles so not to be duplicated.
 
@@ -69,6 +70,25 @@ def _linkcode_resolve(domain: str, github_user: str, github_repo: str, info: dic
     return f"https://github.com/{github_user}/{github_repo}/blob/{filename}"
 
 
+def _load_pypi_versions(package_name):
+    """Load the versions of the package from PyPI.
+
+    >>> _load_pypi_versions("numpy")  # doctest: +ELLIPSIS
+    ['0.9.6', '0.9.8', '1.0', ...]
+    >>> _load_pypi_versions("scikit-learn")  # doctest: +ELLIPSIS
+    ['0.9', '0.10', '0.11', '0.12', ...]
+    """
+    import requests
+    from distutils.version import LooseVersion
+
+    url = f"https://pypi.org/pypi/{package_name}/json"
+    data = requests.get(url).json()
+    versions = data["releases"].keys()
+    # filter all version which include only numbers and dots
+    versions = {k for k in versions if re.match(r"^\d+(\.\d+)*$", k)}
+    return sorted(versions, key=LooseVersion)
+
+
 def _update_link_based_imported_package(link: str, pkg_ver: str, version_digits: Optional[int]) -> str:
     """Adjust the linked external docs to be local.
 
@@ -79,10 +99,13 @@ def _update_link_based_imported_package(link: str, pkg_ver: str, version_digits:
 
     """
     pkg_att = pkg_ver.split(".")
-    # load the package with all additional sub-modules
-    module = importlib.import_module(".".join(pkg_att[:-1]))
-    # load the attribute
-    ver = getattr(module, pkg_att[-1])
+    try:
+        ver = _load_pypi_versions(pkg_att[0])[-1]
+    except Exception:
+        # load the package with all additional sub-modules
+        module = importlib.import_module(".".join(pkg_att[:-1]))
+        # load the attribute
+        ver = getattr(module, pkg_att[0])
     # drop any additional context after `+`
     ver = ver.split("+")[0]
     # crop the version to the number of digits
