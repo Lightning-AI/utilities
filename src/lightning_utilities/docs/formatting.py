@@ -8,8 +8,7 @@ import logging
 import os
 import re
 import sys
-from typing import Iterable, Optional, Tuple, Union
-
+from typing import Iterable, List, Optional, Tuple, Union
 
 
 def _transform_changelog(path_in: str, path_out: str) -> None:
@@ -70,19 +69,21 @@ def _linkcode_resolve(domain: str, github_user: str, github_repo: str, info: dic
     return f"https://github.com/{github_user}/{github_repo}/blob/{filename}"
 
 
-def _load_pypi_versions(package_name):
+def _load_pypi_versions(package_name: str) -> List[str]:
     """Load the versions of the package from PyPI.
 
     >>> _load_pypi_versions("numpy")  # doctest: +ELLIPSIS
     ['0.9.6', '0.9.8', '1.0', ...]
     >>> _load_pypi_versions("scikit-learn")  # doctest: +ELLIPSIS
     ['0.9', '0.10', '0.11', '0.12', ...]
+
     """
-    import requests
     from distutils.version import LooseVersion
 
+    import requests
+
     url = f"https://pypi.org/pypi/{package_name}/json"
-    data = requests.get(url).json()
+    data = requests.get(url, timeout=10).json()
     versions = data["releases"].keys()
     # filter all version which include only numbers and dots
     versions = {k for k in versions if re.match(r"^\d+(\.\d+)*$", k)}
