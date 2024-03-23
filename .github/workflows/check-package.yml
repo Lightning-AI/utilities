@@ -31,7 +31,7 @@ on:
         required: false
         default: ""
       build-matrix:
-        description: "what building configs in json format"
+        description: "what building configs in json format, expected keys are `os` and `python-version`"
         required: false
         type: string
         default: |
@@ -39,7 +39,7 @@ on:
             "os": ["ubuntu-latest"],
           }
       testing-matrix:
-        description: "what test configs to run in json format"
+        description: "what test configs to run in json format, expected keys are `os` and `python-version`"
         required: false
         type: string
         # default operating systems should be pinned to specific versions instead of "-latest" for stability
