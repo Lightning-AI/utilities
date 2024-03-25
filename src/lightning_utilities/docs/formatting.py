@@ -161,7 +161,7 @@ def adjust_linked_external_docs(
         found, skip = False, False
         for i, ln in enumerate(lines):
             # prevent the replacement its own function calls
-            if "adjust_linked_external_docs(" in ln:
+            if f"{adjust_linked_external_docs.__name__}(" in ln:
                 skip = True
             if not skip and source_link in ln:
                 # replace the link if any found
