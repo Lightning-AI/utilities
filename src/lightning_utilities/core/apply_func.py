@@ -23,7 +23,7 @@ def is_dataclass_instance(obj: object) -> bool:
 def can_roundtrip_sequence(obj: Sequence) -> bool:
     """Check if sequence can be roundtripped."""
     try:
-        return obj == type(obj)(list(obj))
+        return obj == type(obj)(list(obj))  # type: ignore[call-arg]
     except (TypeError, ValueError):
         return False
 
