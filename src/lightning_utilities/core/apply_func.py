@@ -20,6 +20,14 @@ def is_dataclass_instance(obj: object) -> bool:
     return dataclasses.is_dataclass(obj) and not isinstance(obj, type)
 
 
+def can_roundtrip_sequence(obj: Sequence) -> bool:
+    """Check if sequence can be roundtripped."""
+    try:
+        return obj == type(obj)(list(obj))
+    except (TypeError, ValueError):
+        return False
+
+
 def apply_to_collection(
     data: Any,
     dtype: Union[type, Any, Tuple[Union[type, Any]]],
@@ -118,7 +126,7 @@ def _apply_to_collection_slow(
         return elem_type(OrderedDict(out))
 
     is_namedtuple_ = is_namedtuple(data)
-    is_sequence = isinstance(data, Sequence) and not isinstance(data, str)
+    is_sequence = isinstance(data, Sequence) and not isinstance(data, str) and can_roundtrip_sequence(data)
     if is_namedtuple_ or is_sequence:
         out = []
         for d in data:
