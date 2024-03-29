@@ -359,3 +359,13 @@ def test_apply_to_collection_allow_frozen_dataclass():
     foo = Foo(0)
     result = apply_to_collection(foo, int, lambda x: x + 1, allow_frozen=True)
     assert foo == result
+
+
+def test_apply_to_collection_non_roundtrippable_sequence():
+    class NonRoundtrippableSequence(list):
+        def __init__(self, x: int):
+            super().__init__(range(int(x)))
+
+    val = NonRoundtrippableSequence(3)
+    result = apply_to_collection(val, int, lambda x: x + 1)
+    assert val == result
