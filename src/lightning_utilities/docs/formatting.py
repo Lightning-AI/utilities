@@ -61,7 +61,7 @@ def _linkcode_resolve(
         return fname, line_start, line_start + len(source) - 1
 
     if domain != "py" or not info["module"]:
-        return None
+        return ""
     try:
         filename = "%s#L%d-L%d" % find_source()
     except Exception:
