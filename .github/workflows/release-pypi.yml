@@ -32,7 +32,7 @@ jobs:
       - name: Create 📦 package
         uses: ./.github/actions/pkg-create
       - name: Upload 📤 to the share store
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pypi-packages-${{ github.sha }}
           path: dist
@@ -48,7 +48,7 @@ jobs:
         with:
           submodules: recursive
       - name: Download 📥 artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: pypi-packages-${{ github.sha }}
           path: dist
@@ -81,7 +81,7 @@ jobs:
         with:
           submodules: recursive
       - name: Download 📥 artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: pypi-packages-${{ github.sha }}
           path: dist

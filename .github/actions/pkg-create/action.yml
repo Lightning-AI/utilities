@@ -24,7 +24,7 @@ runs:
 
     - name: Download 📥 previous packages
       if: ${{ inputs.artifact-name != '' }}
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: ${{ inputs.artifact-name }}
         path: pypi
@@ -36,7 +36,7 @@ runs:
 
     - name: Upload 📤 to the share store
       if: ${{ inputs.artifact-name != '' }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.artifact-name }}
         path: pypi

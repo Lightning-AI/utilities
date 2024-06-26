@@ -27,7 +27,7 @@ runs:
   steps:
     - name: Download 📥 all packages
       if: ${{ inputs.artifact-name != '' }}
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: ${{ inputs.artifact-name }}
         path: pypi
