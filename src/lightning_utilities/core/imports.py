@@ -79,11 +79,8 @@ def compare_version(package: str, op: Callable, version: str, use_base_version: 
     except ImportError:
         return False
     try:
-        if hasattr(pkg, "__version__"):
-            pkg_version = Version(pkg.__version__)
-        else:
-            # Use importlib.metadata to infer version
-            pkg_version = Version(_version(package))
+        # Use importlib.metadata to infer version
+        pkg_version = Version(pkg.__version__) if hasattr(pkg, "__version__") else Version(_version(package))
     except (TypeError, PackageNotFoundError):
         # this is mocked by Sphinx, so it should return True to generate all summaries
         return True

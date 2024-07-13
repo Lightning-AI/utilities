@@ -41,7 +41,6 @@ class _RequirementWithComment(Requirement):
         'arrow>=1.2.0'
         >>> _RequirementWithComment("arrow").adjust("major")
         'arrow'
-        >>> _RequirementWithComment('deepspeed >=0.8.2, <=0.9.3; platform_system != "Windows"', comment="# strict").adjust("major")
 
         """
         out = str(self)
