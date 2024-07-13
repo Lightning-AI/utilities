@@ -7,13 +7,14 @@ import importlib
 import os
 import warnings
 from functools import lru_cache
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as _version
 from importlib.util import find_spec
 from types import ModuleType
 from typing import Any, Callable, List, Optional, TypeVar
 
 from packaging.requirements import Requirement
-from packaging.version import Version, InvalidVersion
-from importlib.metadata import version as _version, PackageNotFoundError
+from packaging.version import InvalidVersion, Version
 from typing_extensions import ParamSpec
 
 T = TypeVar("T")
