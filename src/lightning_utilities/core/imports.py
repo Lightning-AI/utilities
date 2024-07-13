@@ -127,8 +127,8 @@ class RequirementCache:
 
     def _check_requirement(self) -> None:
         assert self.requirement  # noqa: S101; needed for typing
-        req = Requirement(self.requirement)
         try:
+            req = Requirement(self.requirement)
             pkg_version = Version(_version(req.name))
             if req.specifier.contains(pkg_version):
                 self.available = True
@@ -136,9 +136,9 @@ class RequirementCache:
             else:
                 self.available = False
                 self.message = f"Requirement {self.requirement!r} not met. Current version: {pkg_version}"
-        except (PackageNotFoundError, InvalidVersion):
+        except (PackageNotFoundError, InvalidVersion) as ex:
             self.available = False
-            self.message = f"Package not found: {req.name}. HINT: Try running `pip install -U {self.requirement!r}`"
+            self.message = f"{ex.__class__.__name__}: {ex}. HINT: Try running `pip install -U {self.requirement!r}`"
             req_include_version = any(c in self.requirement for c in "=<>")
             if not req_include_version or self.module is not None:
                 module = self.requirement if self.module is None else self.module
