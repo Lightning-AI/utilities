@@ -130,15 +130,14 @@ class RequirementCache:
         try:
             req = Requirement(self.requirement)
             pkg_version = Version(_version(req.name))
-            if req.specifier.contains(pkg_version):
-                self.available = True
-                self.message = f"Requirement {self.requirement!r} met"
-            else:
-                self.available = False
-                self.message = f"Requirement {self.requirement!r} not met. Current version: {pkg_version}"
+            self.available = req.specifier.contains(pkg_version)
         except (PackageNotFoundError, InvalidVersion) as ex:
             self.available = False
             self.message = f"{ex.__class__.__name__}: {ex}. HINT: Try running `pip install -U {self.requirement!r}`"
+
+        if self.available:
+            self.message = f"Requirement {self.requirement!r} met"
+        else:
             req_include_version = any(c in self.requirement for c in "=<>")
             if not req_include_version or self.module is not None:
                 module = self.requirement if self.module is None else self.module
