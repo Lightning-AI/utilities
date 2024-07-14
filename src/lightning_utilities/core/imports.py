@@ -191,9 +191,7 @@ class RequirementCache:
         dist = distribution(requirement.name)
         # Get the required dependencies for the specified extras
         extra_requirements = dist.metadata.get_all("Requires-Dist") or []
-        return [
-            Requirement(r) for r in extra_requirements if any(extra in r for extra in requirement.extras)
-        ]
+        return [Requirement(r) for r in extra_requirements if any(extra in r for extra in requirement.extras)]
 
     def __bool__(self) -> bool:
         """Format as bool."""
