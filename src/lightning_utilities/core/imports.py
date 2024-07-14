@@ -7,7 +7,8 @@ import importlib
 import os
 import warnings
 from functools import lru_cache
-from importlib.metadata import PackageNotFoundError, distribution, version as _version
+from importlib.metadata import PackageNotFoundError, distribution
+from importlib.metadata import version as _version
 from importlib.util import find_spec
 from types import ModuleType
 from typing import Any, Callable, List, Optional, TypeVar
@@ -127,7 +128,9 @@ class RequirementCache:
         try:
             req = Requirement(self.requirement)
             pkg_version = Version(_version(req.name))
-            self.available = req.specifier.contains(pkg_version) and (not req.extras or self._check_extras_available(req))
+            self.available = req.specifier.contains(pkg_version) and (
+                not req.extras or self._check_extras_available(req)
+            )
         except (PackageNotFoundError, InvalidVersion) as ex:
             self.available = False
             self.message = f"{ex.__class__.__name__}: {ex}. HINT: Try running `pip install -U {self.requirement!r}`"
@@ -142,7 +145,9 @@ class RequirementCache:
                 self.available = module_available(module)
                 if self.available:
                     self.message = f"Module {module!r} available"
-            self.message = f"Requirement {self.requirement!r} not met. HINT: Try running `pip install -U {self.requirement!r}`"
+            self.message = (
+                f"Requirement {self.requirement!r} not met. HINT: Try running `pip install -U {self.requirement!r}`"
+            )
 
     def _check_module(self) -> None:
         assert self.module  # noqa: S101; needed for typing
@@ -185,7 +190,7 @@ class RequirementCache:
     def _get_extra_requirements(self, requirement: Requirement) -> List[Requirement]:
         dist = distribution(requirement.name)
         # Get the required dependencies for the specified extras
-        extra_requirements = dist.metadata.get_all('Requires-Dist') or []
+        extra_requirements = dist.metadata.get_all("Requires-Dist") or []
         extra_requirements = [
             Requirement(r) for r in extra_requirements if any(extra in r for extra in requirement.extras)
         ]

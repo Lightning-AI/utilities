@@ -1,7 +1,7 @@
 import operator
 import re
 from unittest import mock
-from unittest.mock import Mock, MagicMock
+from unittest.mock import Mock
 
 import pytest
 from lightning_utilities.core.imports import (
@@ -82,7 +82,7 @@ def test_requirement_cache_with_extras(distribution_mock, version_mock, requirem
         get_extra_req_mock.return_value = [
             # Extra packages, all versions satisfied
             Mock(name="extra_package1", specifier=Mock(contains=Mock(return_value=True))),
-            Mock(name="extra_package2", specifier=Mock(contains=Mock(return_value=True)))
+            Mock(name="extra_package2", specifier=Mock(contains=Mock(return_value=True))),
         ]
         distribution_mock.return_value = Mock(version="0.10.0")
         requirement_mock().extras = ["signatures"]
@@ -92,7 +92,7 @@ def test_requirement_cache_with_extras(distribution_mock, version_mock, requirem
         get_extra_req_mock.return_value = [
             # Extra packages, but not all versions are satisfied
             Mock(name="extra_package1", specifier=Mock(contains=Mock(return_value=True))),
-            Mock(name="extra_package2", specifier=Mock(contains=Mock(return_value=False)))
+            Mock(name="extra_package2", specifier=Mock(contains=Mock(return_value=False))),
         ]
         distribution_mock.return_value = Mock(version="0.10.0")
         requirement_mock().extras = ["signatures"]
