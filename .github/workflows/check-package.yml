@@ -64,7 +64,7 @@ jobs:
           submodules: recursive
       - run: mkdir dist && touch dist/.placeholder
       - name: Upload 📤
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ inputs.artifact-name }}
           path: dist
