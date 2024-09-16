@@ -35,8 +35,8 @@ runs:
         pip list
       shell: ${{ inputs.shell-type }}
 
-    - run: |
-        echo "artifact=test-results-${{ runner.os }}-py${{ inputs.python-version }}-${{ inputs.requires }}" >> $GITHUB_OUTPUT
+    - name: Determine artifact file name
+      run: echo "artifact=test-results-${{ runner.os }}-py${{ inputs.python-version }}-${{ inputs.requires }}" >> $GITHUB_OUTPUT
       id: location
       shell: bash
 
