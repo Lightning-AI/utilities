@@ -55,7 +55,7 @@ on:
         type: string
         default: |
           {
-            "SPHINX_MOCK_REQUIREMENTS": 0,
+            "SAMPLE_ENV_VARIABLE": 1,
           }
 
 defaults:
