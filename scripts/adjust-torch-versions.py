@@ -21,13 +21,13 @@ def _determine_torchaudio(torch_version: str) -> str:
     '0.9.1'
 
     """
-    _VERSION_EXCEPTIONS = {
+    _version_exceptions = {
         "1.8.2": "0.9.1",
     }
     # drop all except semantic version
     torch_ver = re.search(r"([\.\d]+)", torch_version).groups()[0]
-    if torch_ver in _VERSION_EXCEPTIONS:
-        return _VERSION_EXCEPTIONS[torch_ver]
+    if torch_ver in _version_exceptions:
+        return _version_exceptions[torch_ver]
     ver_major, ver_minor, ver_bugfix = map(int, torch_ver.split("."))
     ta_ver_array = [ver_major, ver_minor, ver_bugfix]
     if ver_major == 1:
@@ -47,15 +47,15 @@ def _determine_torchtext(torch_version: str) -> str:
     '0.9.1'
 
     """
-    _VERSION_EXCEPTIONS = {
+    _version_exceptions = {
         "2.0.1": "0.15.2",
         "2.0.0": "0.15.1",
         "1.8.2": "0.9.1",
     }
     # drop all except semantic version
     torch_ver = re.search(r"([\.\d]+)", torch_version).groups()[0]
-    if torch_ver in _VERSION_EXCEPTIONS:
-        return _VERSION_EXCEPTIONS[torch_ver]
+    if torch_ver in _version_exceptions:
+        return _version_exceptions[torch_ver]
     ver_major, ver_minor, ver_bugfix = map(int, torch_ver.split("."))
     tt_ver_array = [0, 0, 0]
     if ver_major == 1:
@@ -83,7 +83,7 @@ def _determine_torchvision(torch_version: str) -> str:
     '0.15.2'
 
     """
-    _VERSION_EXCEPTIONS = {
+    _version_exceptions = {
         "2.0.1": "0.15.2",
         "2.0.0": "0.15.1",
         "1.10.2": "0.11.3",
@@ -93,8 +93,8 @@ def _determine_torchvision(torch_version: str) -> str:
     }
     # drop all except semantic version
     torch_ver = re.search(r"([\.\d]+)", torch_version).groups()[0]
-    if torch_ver in _VERSION_EXCEPTIONS:
-        return _VERSION_EXCEPTIONS[torch_ver]
+    if torch_ver in _version_exceptions:
+        return _version_exceptions[torch_ver]
     ver_major, ver_minor, ver_bugfix = map(int, torch_ver.split("."))
     tv_ver_array = [0, 0, 0]
     if ver_major == 1:
@@ -173,7 +173,7 @@ def adjust(requires: List[str], pytorch_version: Optional[str] = None) -> List[s
 
 
 def _offset_print(reqs: List[str], offset: str = "\t|\t") -> str:
-    """Adding offset to each line for the printing requirements.
+    r"""Adding offset to each line for the printing requirements.
 
     >>> _offset_print(["torch==2.1.0", "torchvision==0.16.0", "torchtext==0.16.0", "torchaudio==2.1.0"])
     '\t|\ttorch==2.1.0\n\t|\ttorchvision==0.16.0\n\t|\ttorchtext==0.16.0\n\t|\ttorchaudio==2.1.0'
