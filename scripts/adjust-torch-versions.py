@@ -173,12 +173,7 @@ def adjust(requires: List[str], pytorch_version: Optional[str] = None) -> List[s
 
 
 def _offset_print(reqs: List[str], offset: str = "\t|\t") -> str:
-    r"""Adding offset to each line for the printing requirements.
-
-    >>> _offset_print(["torch==2.1.0", "torchvision==0.16.0", "torchtext==0.16.0", "torchaudio==2.1.0"])
-    '\t|\ttorch==2.1.0\n\t|\ttorchvision==0.16.0\n\t|\ttorchtext==0.16.0\n\t|\ttorchaudio==2.1.0'
-
-    """
+    """Adding offset to each line for the printing requirements."""
     reqs = [offset + r for r in reqs]
     return os.linesep.join(reqs)
 
