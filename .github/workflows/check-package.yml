@@ -91,6 +91,7 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
         with:
+          fetch-depth: 0 # checkout entire history for all branches (required when using scm-based versioning)
           submodules: recursive
       - name: Set up Python 🐍
         uses: actions/setup-python@v5
