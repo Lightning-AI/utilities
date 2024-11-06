@@ -49,10 +49,15 @@ runs:
         pip list
       shell: bash
 
-    - name: package check
+    - name: package check / import
+      if: ${{ inputs.import-name != '' }}
       run: |
-        set -ex
         python -c "import ${{ inputs.import-name }} as pkg; print(f'version: {pkg.__version__}')"
+      shell: bash
+
+    - name: package check / custom import
+      if: ${{ inputs.custom-import != '' }}
+      run: |
         python -c '${{ inputs.custom-import }}'
       shell: bash
 
