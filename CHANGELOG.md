@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- CI: split and rename `custom-import` to `custom-import-code`
+- CI: split and rename `custom-import` to `custom-import-code` ([#325](https://github.com/Lightning-AI/utilities/pull/325))
 
 
 ## [0.11.8] - 2024-10-15
