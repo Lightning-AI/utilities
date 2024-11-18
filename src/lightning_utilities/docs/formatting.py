@@ -8,7 +8,8 @@ import logging
 import os
 import re
 import sys
-from typing import Iterable, List, Optional, Tuple, Union
+from collections.abc import Iterable
+from typing import List, Optional, Tuple, Union
 
 
 def _transform_changelog(path_in: str, path_out: str) -> None:

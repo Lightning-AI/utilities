@@ -2,9 +2,10 @@
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 import re
+from collections.abc import Iterable, Iterator
 from distutils.version import LooseVersion
 from pathlib import Path
-from typing import Any, Iterable, Iterator, List, Optional, Union
+from typing import Any, List, Optional, Union
 
 from pkg_resources import Requirement, yield_lines
 

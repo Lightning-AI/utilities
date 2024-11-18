@@ -4,8 +4,8 @@
 #
 import glob
 import os.path
+from collections.abc import Sequence
 from pprint import pprint
-from typing import Sequence
 
 REQUIREMENT_ROOT = "requirements.txt"
 REQUIREMENT_FILES_ALL: list = glob.glob(os.path.join("requirements", "*.txt"))

@@ -3,8 +3,9 @@
 #
 import re
 import warnings
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Generator, Optional, Type
+from typing import Optional, Type
 
 
 @contextmanager

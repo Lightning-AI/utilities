@@ -4,8 +4,9 @@
 #
 import dataclasses
 from collections import OrderedDict, defaultdict
+from collections.abc import Mapping, Sequence
 from copy import deepcopy
-from typing import Any, Callable, List, Mapping, Optional, Sequence, Tuple, Union
+from typing import Any, Callable, List, Optional, Tuple, Union
 
 
 def is_namedtuple(obj: object) -> bool:
