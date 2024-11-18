@@ -25,7 +25,7 @@ jobs:
       - name: Set up Python 🐍
         uses: actions/setup-python@v5
         with:
-          python-version: 3.8
+          python-version: "3.9"
 
       - name: Prepare build env.
         run: pip install -r ./requirements/gha-package.txt
