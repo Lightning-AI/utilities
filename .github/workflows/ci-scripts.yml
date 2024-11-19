@@ -1,4 +1,4 @@
-name: Test scripts
+name: Test scripts / CLI
 
 on:
   push:
@@ -40,6 +40,14 @@ jobs:
       - name: test Scripts
         working-directory: ./scripts
         run: pytest . -v
+
+      - name: install package
+        run: pip install -e '.[cli]'
+      - name: run CLI
+        working-directory: ./scripts
+        run: | 
+          python -m lightning_utilities.cli version
+          python -m lightning_utilities.cli --help
 
   scripts-guardian:
     runs-on: ubuntu-latest
