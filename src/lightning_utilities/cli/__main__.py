@@ -8,9 +8,9 @@ from lightning_utilities.cli.dependencies import prune_pkgs_in_requirements, rep
 
 def main() -> None:
     """CLI entry point."""
-    import fire
+    from fire import Fire
 
-    fire.Fire({
+    Fire({
         "requirements": {
             "prune-pkgs": prune_pkgs_in_requirements,
             "set-oldest": replace_oldest_ver,
