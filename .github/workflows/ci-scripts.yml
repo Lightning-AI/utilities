@@ -45,7 +45,7 @@ jobs:
         run: pip install -e '.[cli]'
       - name: run CLI
         working-directory: ./scripts
-        run: | 
+        run: |
           python -m lightning_utilities.cli version
           python -m lightning_utilities.cli --help
 
