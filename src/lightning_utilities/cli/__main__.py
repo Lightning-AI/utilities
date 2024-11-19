@@ -2,7 +2,6 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-import fire
 
 import lightning_utilities
 from lightning_utilities.cli.dependencies import prune_pkgs_in_requirements, replace_oldest_ver
@@ -10,7 +9,9 @@ from lightning_utilities.cli.dependencies import prune_pkgs_in_requirements, rep
 
 def main() -> None:
     """CLI entry point."""
-    fire.Fire({
+    from fire import Fire
+
+    Fire({
         "requirements": {
             "prune-pkgs": prune_pkgs_in_requirements,
             "set-oldest": replace_oldest_ver,
