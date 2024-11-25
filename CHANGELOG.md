@@ -11,7 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- CLI: update parsing inputs ([#333](https://github.com/Lightning-AI/utilities/pull/333))
+
+
+
+## [0.11.9] - 2024-11-19
+
+### Changed
+
 - CI: split and rename `custom-import` to `custom-import-code` ([#325](https://github.com/Lightning-AI/utilities/pull/325))
+
+### Fixed
+
+- fixed missing package's CLI ([#332](https://github.com/Lightning-AI/utilities/pull/332))
 
 
 ## [0.11.8] - 2024-10-15
