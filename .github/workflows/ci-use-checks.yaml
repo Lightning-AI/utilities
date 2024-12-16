@@ -59,10 +59,10 @@ jobs:
     uses: ./.github/workflows/check-package.yml
     with:
       actions-ref: ${{ github.sha }} # use local version
-      artifact-name: dist-packages-${{ github.sha }}-extras
+      artifact-name: dist-packages-extras-${{ github.sha }}
       import-name: "lightning_utilities"
       install-extras: "[cli]"
-      # todo: when we have a module with depence on extra, replace it
+      # todo: when we have a module with dependence on extra, replace it
       #  tried to import `lightning_utilities.cli.__main__` but told me it does not exits
       custom-import-code: "import fire"
       testing-matrix: |
