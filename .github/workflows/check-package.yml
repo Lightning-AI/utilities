@@ -99,7 +99,7 @@ jobs:
 
   merge-artifacts:
     needs: pkg-build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Download 📥
         uses: actions/download-artifact@v4
@@ -108,7 +108,11 @@ jobs:
           pattern: ${{ inputs.artifact-name }}-build-*
           merge-multiple: true
           path: dist
-      - run: ls -lh dist/
+      - name: Brief look
+        run: |
+          ls -lh dist/
+          pip install -q twine
+          twine check dist/*
       - name: Upload 📤
         uses: actions/upload-artifact@v4
         with:
