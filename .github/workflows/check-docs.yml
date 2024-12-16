@@ -103,8 +103,9 @@ jobs:
           ref: ${{ inputs.actions-ref }}
           path: .cicd
           repository: Lightning-AI/utilities
-      - uses: ./.cicd/.github/actions/pip-list
+      - name: Print 🖨️ dependencies
         if: ${{ inputs.actions-ref != '' }}
+        uses: ./.cicd/.github/actions/pip-list
 
       - name: Build documentation
         working-directory: ${{ inputs.docs-dir }}
