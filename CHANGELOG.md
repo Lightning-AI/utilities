@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CLI: update parsing inputs ([#333](https://github.com/Lightning-AI/utilities/pull/333))
 
 
+- CI: bump upload/download artifact `v4` ([#344](https://github.com/Lightning-AI/utilities/pull/344))
+
 
 ## [0.11.9] - 2024-11-19
 
