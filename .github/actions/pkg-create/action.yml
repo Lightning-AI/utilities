@@ -1,7 +1,6 @@
 name: Create and check package
 description: building, checking the package
 
-
 runs:
   using: "composite"
   steps:

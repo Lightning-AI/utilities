@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       artifact-name:
-        description: "Unique name for collecting artifacts"
+        description: "Unique name for collecting artifacts, it shall be unique for all workflows"
         required: true
         type: string
       install-extras:
@@ -94,7 +94,7 @@ jobs:
         if: ${{ inputs.artifact-name != '' }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ inputs.artifact-name }}-build-${{ github.run_id }}
+          name: ${{ inputs.artifact-name }}-${{ github. }}-${{ github.run_id }}
           path: dist
 
   merge-artifacts:
