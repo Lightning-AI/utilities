@@ -32,7 +32,7 @@ jobs:
         run: pip install -r ./requirements/gha-package.txt
       - name: Create 📦 package
         uses: ./.github/actions/pkg-create
-      - name: Upload 📤 to the share store
+      - name: Upload 📤 packages
         uses: actions/upload-artifact@v4
         with:
           name: pypi-packages-${{ github.sha }}
