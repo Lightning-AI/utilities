@@ -29,6 +29,7 @@ runs:
       working-directory: ${{ inputs.pkg-folder }}
       run: |
         ls -lh
+        pip -V
         echo "PKG_WHEEL=$(ls *.whl | head -n1)" >> $GITHUB_ENV
         echo "PKG_SOURCE=$(ls *.tar.gz | head -n1)" >> $GITHUB_ENV
         pip list
