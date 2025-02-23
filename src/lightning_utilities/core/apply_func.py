@@ -177,7 +177,7 @@ def _apply_to_collection_slow(
 
         # Explicitly resetting cached property.
         for cached_name in filter(
-            lambda k: isinstance(getattr(type(data), k), cached_property), type(data).__dict__.keys()
+            lambda k: isinstance(getattr(type(data), k), cached_property), vars(type(data)).keys()
         ):
             vars(result).pop(cached_name, None)
         return result
