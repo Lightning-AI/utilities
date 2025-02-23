@@ -373,7 +373,7 @@ def test_apply_to_collection_with_cached_property_dataclass():
             return self.var * 2
 
     foo = Foo(torch.tensor(1))
-    assert foo.cached_property.equal(torch.tensor(2))
+    assert torch.equal(foo.cached_property, torch.tensor(2))
     result = apply_to_collection(foo, torch.Tensor, lambda x: x.add_(3))
-    assert result.var.equal(torch.tensor(4))
-    assert result.cached_property.equal(torch.tensor(8))
+    assert torch.equal(result.var, torch.tensor(4))
+    assert torch.equal(result.cached_property, torch.tensor(8))
