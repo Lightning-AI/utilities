@@ -81,7 +81,7 @@ jobs:
     with:
       actions-ref: ${{ github.sha }} # use local version
       requirements-file: "requirements/_docs.txt"
-      install-tex: true
+      # install-tex: true  # todo: enable when install does not take that long
 
   check-md-links-default:
     uses: ./.github/workflows/check-md-links.yml
