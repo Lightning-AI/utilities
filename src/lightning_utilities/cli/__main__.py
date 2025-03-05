@@ -7,16 +7,22 @@ import lightning_utilities
 from lightning_utilities.cli.dependencies import prune_pkgs_in_requirements, replace_oldest_ver
 
 
+def _get_version() -> None:
+    """Prints the version of the lightning_utilities package."""
+    print(lightning_utilities.__version__)
+
+
 def main() -> None:
     """CLI entry point."""
-    from fire import Fire  # type: ignore[import-untyped]
+    from jsonargparse import CLI
 
-    Fire({
+    CLI({
         "requirements": {
+            "_help": "Manage requirements files.",
             "prune-pkgs": prune_pkgs_in_requirements,
             "set-oldest": replace_oldest_ver,
         },
-        "version": lambda: print(lightning_utilities.__version__),
+        "version": _get_version
     })
 
 
