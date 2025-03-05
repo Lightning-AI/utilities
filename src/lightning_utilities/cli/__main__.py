@@ -22,7 +22,7 @@ def main() -> None:
             "prune-pkgs": prune_pkgs_in_requirements,
             "set-oldest": replace_oldest_ver,
         },
-        "version": _get_version
+        "version": _get_version,
     })
 
 
