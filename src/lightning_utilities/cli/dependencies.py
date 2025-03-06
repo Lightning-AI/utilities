@@ -62,7 +62,7 @@ def _replace_package_name(requirements: Sequence[str], old_package: str, new_pac
     """Replace one package by another with same version in given requirement file.
 
     >>> _replace_package_name(["torch>=1.0", "torchvision>=0.2", "torchtext <0.3"], "torch", "pytorch")
-    ['pytorch=1.0', 'torchvision>=0.2', 'torchtext <0.3']
+    ['pytorch>=1.0', 'torchvision>=0.2', 'torchtext <0.3']
     """
     for i, req in enumerate(requirements):
         requirements[i] = re.sub(r"^" + old_package + "[ <=>#]", new_package, req)
@@ -70,7 +70,7 @@ def _replace_package_name(requirements: Sequence[str], old_package: str, new_pac
 
 
 def replace_package_in_requirements(
-    olf_package: str, new_package: str, req_files: Union[str, Sequence[str]] = REQUIREMENT_FILES_ALL
+    old_package: str, new_package: str, req_files: Union[str, Sequence[str]] = REQUIREMENT_FILES_ALL
 ) -> None:
     """Replace one package by another with same version in given requirement files."""
     if isinstance(req_files, str):
@@ -78,6 +78,6 @@ def replace_package_in_requirements(
     for fname in req_files:
         with open(fname) as fopen:
             reqs = fopen.readlines()
-        reqs = _replace_package_name(reqs, olf_package, new_package)
+        reqs = _replace_package_name(reqs, old_package, new_package)
         with open(fname, "w") as fw:
-            fw.write(reqs)
+            fw.writelines(reqs)
