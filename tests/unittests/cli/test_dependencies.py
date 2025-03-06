@@ -33,7 +33,7 @@ def test_replace_packages(tmpdir):
     req_file = tmpdir / "requirements.txt"
     with open(req_file, "w") as fp:
         fp.writelines(["torchvision>=0.2\n", "torch>=1.0 # comment\n", "torchtext <0.3\n"])
-    replace_package_in_requirements(old_package="torch",new_package="pytorch", req_files=[str(req_file)])
+    replace_package_in_requirements(old_package="torch", new_package="pytorch", req_files=[str(req_file)])
     with open(req_file) as fp:
         lines = fp.readlines()
     assert lines == ["torchvision>=0.2\n", "pytorch>=1.0 # comment\n", "torchtext <0.3\n"]

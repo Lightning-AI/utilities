@@ -63,6 +63,7 @@ def _replace_package_name(requirements: Sequence[str], old_package: str, new_pac
 
     >>> _replace_package_name(["torch>=1.0 # comment", "torchvision>=0.2", "torchtext <0.3"], "torch", "pytorch")
     ['pytorch>=1.0 # comment', 'torchvision>=0.2', 'torchtext <0.3']
+
     """
     for i, req in enumerate(requirements):
         requirements[i] = re.sub(r"^" + re.escape(old_package) + r"(?=[ <=>#]|$)", new_package, req)
