@@ -7,7 +7,7 @@ import os.path
 import re
 from collections.abc import Sequence
 from pprint import pprint
-from typing import Union, List
+from typing import Union
 
 REQUIREMENT_ROOT = "requirements.txt"
 REQUIREMENT_FILES_ALL: list = glob.glob(os.path.join("requirements", "*.txt"))
@@ -58,10 +58,11 @@ def replace_oldest_version(req_files: Union[str, Sequence[str]] = REQUIREMENT_FI
         _replace_min(fname)
 
 
-def _replace_package_name(requirements: List[str], old_package: str, new_package: str) -> List[str]:
+def _replace_package_name(requirements: Sequence[str], old_package: str, new_package: str) -> Sequence[str]:
     """Replace one package by another with same version in given requirement file.
 
     >>> _replace_package_name(["torch>=1.0", "torchvision>=0.2", "torchtext <0.3"], "torch", "pytorch")
+
     """
     for i, req in enumerate(requirements):
         requirements[i] = re.sub(r"^" + old_package + "[ <=>#]", new_package, req)
