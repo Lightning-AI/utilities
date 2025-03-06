@@ -58,7 +58,7 @@ def replace_oldest_version(req_files: Union[str, Sequence[str]] = REQUIREMENT_FI
         _replace_min(fname)
 
 
-def _replace_package_name(requirements: Sequence[str], old_package: str, new_package: str) -> Sequence[str]:
+def _replace_package_name(requirements: list[str], old_package: str, new_package: str) -> list[str]:
     """Replace one package by another with same version in given requirement file.
 
     >>> _replace_package_name(["torch>=1.0 # comment", "torchvision>=0.2", "torchtext <0.3"], "torch", "pytorch")
