@@ -4,7 +4,11 @@
 #
 
 import lightning_utilities
-from lightning_utilities.cli.dependencies import prune_packages_in_requirements, replace_oldest_version, replace_package_in_requirements
+from lightning_utilities.cli.dependencies import (
+    prune_packages_in_requirements,
+    replace_oldest_version,
+    replace_package_in_requirements,
+)
 
 
 def main() -> None:
