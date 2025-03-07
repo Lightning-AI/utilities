@@ -21,16 +21,11 @@ def main() -> None:
             "_help": "Manage requirements files.",
             "prune-pkgs": {
                 "_help": "Prune specified packages from requirements file.",
-                "_func": prune_pkgs_in_requirements
+                "_func": prune_pkgs_in_requirements,
             },
-            "set-oldest": {
-                "_help": "Set package to use oldest compatible version.",
-                "_func": replace_oldest_ver
-            },
+            "set-oldest": {"_help": "Set package to use oldest compatible version.", "_func": replace_oldest_ver},
         },
-        "version": {
-            "_help": "Prints the version of the lightning_utilities package.",
-            "_func": _get_version},
+        "version": {"_help": "Prints the version of the lightning_utilities package.", "_func": _get_version},
     })
 
 
