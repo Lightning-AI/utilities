@@ -4,7 +4,11 @@
 #
 
 import lightning_utilities
-from lightning_utilities.cli.dependencies import prune_pkgs_in_requirements, replace_oldest_ver
+from lightning_utilities.cli.dependencies import (
+    prune_packages_in_requirements,
+    replace_oldest_version,
+    replace_package_in_requirements,
+)
 
 
 def _get_version() -> None:
@@ -19,8 +23,9 @@ def main() -> None:
     CLI({
         "requirements": {
             "_help": "Manage requirements files.",
-            "prune-pkgs": prune_pkgs_in_requirements,
-            "set-oldest": replace_oldest_ver,
+            "prune-pkgs": prune_packages_in_requirements,
+            "set-oldest": replace_oldest_version,
+            "replace-pkg": replace_package_in_requirements,
         },
         "version": _get_version,
     })
