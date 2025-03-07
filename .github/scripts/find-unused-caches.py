@@ -80,6 +80,6 @@ def main(repository: str, token: str, age_days: float = 7, output_file: str = "u
 
 
 if __name__ == "__main__":
-    from fire import Fire
+    from jsonargparse import CLI
 
-    Fire(main)
+    CLI(main)
