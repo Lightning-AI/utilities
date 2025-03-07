@@ -89,7 +89,6 @@ jobs:
       - name: Prepare build env.
         run: |
           pip install -q -r ./.cicd/requirements/gha-package.txt
-          pip install --upgrade setuptools pip wheel  # FIXME: remove debug line
           pip list
       - name: Create package 📦
         uses: ./.cicd/.github/actions/pkg-create
