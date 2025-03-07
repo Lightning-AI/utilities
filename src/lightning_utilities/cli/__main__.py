@@ -25,7 +25,7 @@ def main() -> None:
             },
             "set-oldest": {"_help": "Set package to use oldest compatible version.", "_func": replace_oldest_ver},
         },
-        "version": {"_help": "Prints the version of the lightning_utilities package.", "_func": _get_version},
+        "version": _get_version,
     })
 
 
