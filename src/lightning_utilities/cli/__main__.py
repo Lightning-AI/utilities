@@ -19,11 +19,8 @@ def main() -> None:
     CLI({
         "requirements": {
             "_help": "Manage requirements files.",
-            "prune-pkgs": {
-                "_help": "Prune specified packages from requirements file.",
-                "_func": prune_pkgs_in_requirements,
-            },
-            "set-oldest": {"_help": "Set package to use oldest compatible version.", "_func": replace_oldest_ver},
+            "prune-pkgs": prune_pkgs_in_requirements,
+            "set-oldest": replace_oldest_ver,
         },
         "version": _get_version,
     })
