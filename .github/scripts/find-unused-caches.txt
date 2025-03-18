@@ -1,6 +1,6 @@
 # Requirements for running equally named script,
 #  having it in extra file to prevent version discrepancy if hardcoded in workflow
 
-jsonargparse
+jsonargparse[signatures] @ https://github.com/omni-us/jsonargparse/archive/refs/heads/issue-690-parse-optionals-as-positionals.zip
 requests
 pandas
