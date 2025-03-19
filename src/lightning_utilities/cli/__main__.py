@@ -18,9 +18,10 @@ def _get_version() -> None:
 
 def main() -> None:
     """CLI entry point."""
-    from jsonargparse import CLI
+    from jsonargparse import auto_cli, set_parsing_settings
 
-    CLI({
+    set_parsing_settings(parse_optionals_as_positionals=True)
+    auto_cli({
         "requirements": {
             "_help": "Manage requirements files.",
             "prune-pkgs": prune_packages_in_requirements,
