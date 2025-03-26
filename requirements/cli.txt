@@ -1,1 +1,1 @@
-jsonargparse[signatures] @ https://github.com/omni-us/jsonargparse/archive/refs/heads/issue-690-parse-optionals-as-positionals.zip
+jsonargparse[signatures] >=4.38.0
