@@ -33,7 +33,11 @@ test_timeout="${TEST_TIMEOUT:-1200}"
 COLLECTED_TESTS_FILE="collected_tests.txt"
 
 ls -lh .  # show the contents of the directory
-rm -f .coverage
+
+# Clean up the coverage file if it exists
+if [ -n "$codecov_source" ]; then
+  rm -f .coverage
+fi
 
 # Check if the coverage source is empty.
 defaults=""
