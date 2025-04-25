@@ -36,13 +36,12 @@ ls -lh .  # show the contents of the directory
 
 # If codecov_source is set, prepend the coverage command
 if [ -n "$codecov_source" ]; then
-  cli_coverage=" -m coverage run --source ${codecov_source} --append "
-else
-  # If not, just run pytest
+  cli_coverage="-m coverage run --source ${codecov_source} --append"
+else # If not, just keep it empty
   cli_coverage=""
 fi
 # Append the common pytest arguments
-cli_pytest=" -m pytest --no-header -v -s --color=yes --timeout=${test_timeout} --durations=0 "
+cli_pytest="-m pytest --no-header -v -s --color=yes --timeout=${test_timeout}"
 
 # Python arguments for running the tests and optional coverage
 printf "\e[35mUsing defaults: ${cli_coverage} ${cli_pytest}\e[0m\n"
@@ -82,9 +81,9 @@ printf "\e[34m==================================================================
 
 # if test count is one print warning
 if [[ $test_count -eq 1 ]]; then
-  printf "WARNING: only one test found!\n"
+  printf "\e[33mWARNING: only one test found!\e[0m\n"
 elif [ $test_count -eq 0 ]; then
-  printf "ERROR: no tests found!\n"
+  printf "\e[31mERROR: no tests found!\e[0m\n"
   exit 1
 fi
 
