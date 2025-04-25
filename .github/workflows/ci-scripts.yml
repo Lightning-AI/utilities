@@ -41,7 +41,6 @@ jobs:
         working-directory: ./scripts
         run: pytest . -v
 
-
   standalone-run:
     runs-on: "ubuntu-22.04"
     timeout-minutes: 20
@@ -65,7 +64,6 @@ jobs:
         run: bash ./scripts/run_standalone_tests.sh "tests"
         env:
           COVERAGE_SOURCE: "lightning_utilities"
-
 
   scripts-guardian:
     runs-on: ubuntu-latest
