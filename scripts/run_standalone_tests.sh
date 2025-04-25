@@ -39,17 +39,18 @@ if [ -n "$codecov_source" ]; then
   rm -f .coverage
 fi
 
-# Check if the coverage source is empty.
-defaults=""
 # If codecov_source is set, prepend the coverage command
 if [ -n "$codecov_source" ]; then
-  defaults=" -m coverage run --source ${codecov_source} --append "
+  cli_coverage=" -m coverage run --source ${codecov_source} --append "
+else
+  # If not, just run pytest
+  cli_coverage=""
 fi
 # Append the common pytest arguments
-defaults="${defaults}  -m pytest --no-header -v -s --color=yes --timeout=${test_timeout} --durations=0 "
+cli_pytest=" -m pytest --no-header -v -s --color=yes --timeout=${test_timeout} --durations=0 "
 
 # Python arguments for running the tests and optional coverage
-printf "\e[35mUsing defaults: ${defaults}\e[0m\n"
+printf "\e[35mUsing defaults: ${cli_coverage} ${cli_pytest}\e[0m\n"
 
 # Get the list of parametrizations. we need to call them separately. the last two lines are removed.
 # note: if there's a syntax error, this will fail with some garbled output
@@ -106,10 +107,19 @@ for i in "${!tests[@]}"; do
   test=${tests[$i]}
   printf "\e[95m* Running test $((i+1))/$test_count: $test\e[0m\n"
 
+  cli_test="python "
+  if [ -n "$codecov_source" ]; then
+    # append cli_coverage to the test command
+    cli_test="${cli_test} ${cli_coverage} --data-file=run-${i}.coverage"
+  fi
+  # add the pytest cli to the test command
+  cli_test="${cli_test} ${cli_pytest}"
+
+
   # execute the test in the background
   # redirect to a log file that buffers test output. since the tests will run in the background,
   # we cannot let them output to std{out,err} because the outputs would be garbled together
-  python ${defaults} "$test" &> "parallel_test_output-$i.txt" &
+  ${cli_test} "$test" &> "parallel_test_output-$i.txt" &
   test_ids+=($i) # save the test's id in an array with running tests
   pids+=($!) # save the PID in an array with running tests
 

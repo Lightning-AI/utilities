@@ -74,7 +74,7 @@ jobs:
           name: codecov-umbrella
           fail_ci_if_error: false
 
-      - name: test Scripts
+      - name: test CI scripts
         working-directory: ./tests
         run: python -m pytest scripts --durations=50 --timeout=120
 
