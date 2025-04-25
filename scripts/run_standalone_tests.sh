@@ -105,7 +105,6 @@ failed_tests=() # array of failed tests
 printf "Running $test_count tests in batches of $test_batch_size:\n"
 for i in "${!tests[@]}"; do
   test=${tests[$i]}
-  printf "\e[95m* Running test $((i+1))/$test_count: $test\e[0m\n"
 
   cli_test="python "
   if [ -n "$codecov_source" ]; then
@@ -115,6 +114,7 @@ for i in "${!tests[@]}"; do
   # add the pytest cli to the test command
   cli_test="${cli_test} ${cli_pytest}"
 
+  printf "\e[95m* Running test $((i+1))/$test_count: $cli_test $test\e[0m\n"
 
   # execute the test in the background
   # redirect to a log file that buffers test output. since the tests will run in the background,
