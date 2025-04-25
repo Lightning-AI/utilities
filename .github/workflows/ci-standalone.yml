@@ -34,4 +34,3 @@ jobs:
         run: bash ./scripts/run_standalone_tests.sh "tests"
         env:
           COVERAGE_SOURCE: "lightning_utilities"
-
