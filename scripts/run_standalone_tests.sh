@@ -34,11 +34,6 @@ COLLECTED_TESTS_FILE="collected_tests.txt"
 
 ls -lh .  # show the contents of the directory
 
-# Clean up the coverage file if it exists
-if [ -n "$codecov_source" ]; then
-  rm -f .coverage
-fi
-
 # If codecov_source is set, prepend the coverage command
 if [ -n "$codecov_source" ]; then
   cli_coverage=" -m coverage run --source ${codecov_source} --append "
