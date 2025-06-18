@@ -140,7 +140,9 @@ def adjust(requires: list[str], pytorch_version: Optional[str] = None) -> list[s
     """Adjust the versions to be paired within pytorch ecosystem.
 
     >>> from pprint import pprint
-    >>> pprint(adjust(["torch>=1.9.0", "torchvision>=0.10.0", "torchtext>=0.10.0", "torchaudio>=0.9.0", "vmaf-torch >=1.1.0"], "2.1.0"))
+    >>> pprint(adjust([
+    ...     "torch>=1.9.0", "torchvision>=0.10.0", "torchtext>=0.10.0", "torchaudio>=0.9.0", "vmaf-torch >=1.1.0"
+    ... ], "2.1.0"))
     ['torch==2.1.0',
      'torchvision==0.16.0',
      'torchtext==0.16.0',
