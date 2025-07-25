@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CLI: switch from `fire` to `jsonargparse` ([#371](https://github.com/Lightning-AI/utilities/pull/371))
 
 
+- CI: relax markdown-link-check ([#416](https://github.com/Lightning-AI/utilities/pull/416))
+
+
 ### Fixed
 
 -
