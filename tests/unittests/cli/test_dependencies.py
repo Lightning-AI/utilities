@@ -42,15 +42,13 @@ def test_replace_packages_txt(tmpdir):
 def test_oldest_packages_pyproject_toml(tmpdir):
     req_file = tmpdir / "pyproject.toml"
     with open(req_file, "w") as fp:
-        fp.writelines(
-            [
-                "[project]\n",
-                "dependencies = [\n",
-                '    "fire>0.2",\n',
-                '    "abc>=0.1",\n',
-                "]\n",
-            ]
-        )
+        fp.writelines([
+            "[project]\n",
+            "dependencies = [\n",
+            '    "fire>0.2",\n',
+            '    "abc>=0.1",\n',
+            "]\n",
+        ])
     replace_oldest_version(req_files=[str(req_file)])
     with open(req_file) as fp:
         lines = fp.readlines()
