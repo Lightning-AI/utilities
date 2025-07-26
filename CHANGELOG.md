@@ -5,23 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+---
 
-## [Unreleased] - YYYY-MM-DD
+## [0.15.0] - 2025-07-26
 
 ### Added
 
 - CI: add `force-check-all` input to MD link check workflow ([#408](https://github.com/Lightning-AI/utilities/pull/408))
+- CLI: replace min dependencies also in `pyproject.toml` ([#414](https://github.com/Lightning-AI/utilities/pull/414))
 
 
 ### Changed
 
 - CLI: switch from `fire` to `jsonargparse` ([#371](https://github.com/Lightning-AI/utilities/pull/371))
-
-
-### Fixed
-
--
-
+- CI: relax markdown-link-check ([#416](https://github.com/Lightning-AI/utilities/pull/416))
 
 ---
 
