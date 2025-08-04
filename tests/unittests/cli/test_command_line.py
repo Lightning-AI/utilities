@@ -26,7 +26,7 @@ torchmetrics >=0.10.0, <1.3.0
 deepspeed >=0.8.2, <=0.9.3; platform_system != "Windows"  # strict
     """
 
-    def _create_requirements_file(self, local_path: Path, filename: str = "requirements.txt"):
+    def _create_requirements_file(self, local_path: Path, filename: str = "testing-cli-requirements.txt"):
         """Create a sample requirements file."""
         req_file = local_path / filename
         with open(req_file, "w", encoding="utf8") as fopen:
