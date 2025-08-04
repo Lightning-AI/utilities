@@ -6,13 +6,14 @@ import pytest
 
 def test_version():
     """Prints the help message for the requirements commands."""
-    return_code = subprocess.call(["python", "-m" "lightning_utilities.cli", "version"])  # noqa: S603
+    return_code = subprocess.call(["python", "-mlightning_utilities.cli", "version"])
     assert return_code == 0
 
 
 @pytest.mark.parametrize("args", ["positional", "optional"])
 class TestRequirements:
     """Test requirements commands."""
+
     BASE_CMD = ("python", "-m", "lightning_utilities.cli", "requirements")
     REQUIREMENTS_SAMPLE = """
 # This is sample requirements file
@@ -25,7 +26,7 @@ torchmetrics >=0.10.0, <1.3.0
 deepspeed >=0.8.2, <=0.9.3; platform_system != "Windows"  # strict
     """
 
-    def _create_requirements_file(self, local_path: Path, filename:str="requirements.txt"):
+    def _create_requirements_file(self, local_path: Path, filename: str = "requirements.txt"):
         """Create a sample requirements file."""
         req_file = local_path / filename
         with open(req_file, "w", encoding="utf8") as fopen:
@@ -36,7 +37,7 @@ deepspeed >=0.8.2, <=0.9.3; platform_system != "Windows"  # strict
         """Build the command for the CLI."""
         if arg_style == "positional":
             return list(self.BASE_CMD) + [subcommand] + [value for _, value in cli_params]
-        elif arg_style == "optional":
+        if arg_style == "optional":
             return list(self.BASE_CMD) + [subcommand] + [f"--{key}={value}" for key, value in cli_params]
         raise ValueError(f"Unknown test configuration: {arg_style}")
 
@@ -48,7 +49,6 @@ deepspeed >=0.8.2, <=0.9.3; platform_system != "Windows"  # strict
         return_code = subprocess.call(cmd)  # noqa: S603
         assert return_code == 0
 
-
     def test_requirements_set_oldest(self, args):
         """Set the oldest version of packages in requirement files."""
         req_file = self._create_requirements_file(Path("."), "requirements.txt")
@@ -56,7 +56,6 @@ deepspeed >=0.8.2, <=0.9.3; platform_system != "Windows"  # strict
         cmd = self._build_command("set-oldest", cli_params, args)
         return_code = subprocess.call(cmd)  # noqa: S603
         assert return_code == 0
-
 
     def test_requirements_replace_pkg(self, args):
         """Replace a package in requirements files."""
