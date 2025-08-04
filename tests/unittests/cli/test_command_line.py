@@ -6,7 +6,7 @@ import pytest
 
 def test_version():
     """Prints the help message for the requirements commands."""
-    return_code = subprocess.call(["python", "-mlightning_utilities.cli", "version"])
+    return_code = subprocess.call(["python", "-mlightning_utilities.cli", "version"])  # noqa: S607
     assert return_code == 0
 
 
@@ -62,5 +62,5 @@ deepspeed >=0.8.2, <=0.9.3; platform_system != "Windows"  # strict
         req_file = self._create_requirements_file(Path("."), "requirements.txt")
         cli_params = (("old_package", "torchvision"), ("new_package", "torchtext"), ("req_files", req_file))
         cmd = self._build_command("replace-pkg", cli_params, args)
-        return_code = subprocess.call(cmd)
+        return_code = subprocess.call(cmd)  # noqa: S603
         assert return_code == 0
