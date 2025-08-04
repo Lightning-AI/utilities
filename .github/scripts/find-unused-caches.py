@@ -81,9 +81,8 @@ def main(repository: str, token: str, age_days: float = 7, output_file: str = "u
 
 if __name__ == "__main__":
     import logging
-    logging.basicConfig(
-        level=logging.INFO
-    )
+
+    logging.basicConfig(level=logging.INFO)
     try:
         from jsonargparse import auto_cli, set_parsing_settings
 
@@ -99,8 +98,6 @@ if __name__ == "__main__":
         )
         cli_args = sys.argv[1:]
         if len(cli_args) < 3:
-            logging.error(
-                "Expected at least 3 positional arguments: <repository> <token> <age_days> [<output_file>]"
-            )
+            logging.error("Expected at least 3 positional arguments: <repository> <token> <age_days> [<output_file>]")
             sys.exit(1)
         main(*cli_args)

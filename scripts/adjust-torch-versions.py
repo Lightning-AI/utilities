@@ -213,8 +213,6 @@ if __name__ == "__main__":
         )
         cli_args = sys.argv[1:]
         if len(cli_args) < 1:
-            logging.error(
-                "Expected at least 1 positional argument: <requirements_path> [<torch_version>]"
-            )
+            logging.error("Expected at least 1 positional argument: <requirements_path> [<torch_version>]")
             sys.exit(1)
         main(*cli_args)

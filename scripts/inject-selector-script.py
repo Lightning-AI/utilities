@@ -51,9 +51,7 @@ if __name__ == "__main__":
         )
         cli_args = sys.argv[1:]
         if len(cli_args) < 2:
-            logging.error(
-                "Expected at least 2 positional arguments: <folder> <selector_name>"
-            )
+            logging.error("Expected at least 2 positional arguments: <folder> <selector_name>")
             sys.exit(1)
         # Use sys.argv directly if jsonargparse is not available
         main(*cli_args)
