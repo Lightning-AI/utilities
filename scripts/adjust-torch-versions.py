@@ -215,4 +215,5 @@ if __name__ == "__main__":
         if len(cli_args) < 1:
             logging.error("Expected at least 1 positional argument: <requirements_path> [<torch_version>]")
             sys.exit(1)
+        # Use sys.argv directly if jsonargparse is not available
         main(*cli_args)
