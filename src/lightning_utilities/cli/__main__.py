@@ -29,7 +29,7 @@ def main() -> None:
             "replace-pkg": replace_package_in_requirements,
         },
         "version": _get_version,
-    })
+    }, as_positional=False)
 
 
 if __name__ == "__main__":
