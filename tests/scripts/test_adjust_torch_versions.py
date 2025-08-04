@@ -41,9 +41,9 @@ def test_adjust_torch_versions_call(args, tmp_path) -> None:
     main_params = (("requirements_path", path_req_file), ("torch_version", "1.10.0"))
     cli_call = [sys.executable, path_script]
     if args == "positional":
-        cli_call += [p[1] for p in main_params]
+        cli_call += [value for _, value in main_params]
     elif args == "optional":
-        cli_call += [f"--{p[0]}={p[1]}" for p in main_params]
+        cli_call += [f"--{key}={value}" for key, value in main_params]
     elif args == "mixed":
         cli_call += [main_params[0][1], f"--{main_params[1][0]}={main_params[1][1]}"]
     return_code = subprocess.call(cli_call)  # noqa: S603
