@@ -49,17 +49,17 @@ deepspeed >=0.8.2, <=0.9.3; platform_system != "Windows"  # strict
         return_code = subprocess.call(cmd)  # noqa: S603
         assert return_code == 0
 
-    def test_requirements_set_oldest(self, args):
+    def test_requirements_set_oldest(self, args, tmp_path):
         """Set the oldest version of packages in requirement files."""
-        req_file = self._create_requirements_file(Path("."), "requirements.txt")
+        req_file = self._create_requirements_file(tmp_path, "requirements.txt")
         cli_params = (("req_files", req_file),)
         cmd = self._build_command("set-oldest", cli_params, args)
         return_code = subprocess.call(cmd)  # noqa: S603
         assert return_code == 0
 
-    def test_requirements_replace_pkg(self, args):
+    def test_requirements_replace_pkg(self, args, tmp_path):
         """Replace a package in requirements files."""
-        req_file = self._create_requirements_file(Path("."), "requirements.txt")
+        req_file = self._create_requirements_file(tmp_path, "requirements.txt")
         cli_params = (("old_package", "torchvision"), ("new_package", "torchtext"), ("req_files", req_file))
         cmd = self._build_command("replace-pkg", cli_params, args)
         return_code = subprocess.call(cmd)  # noqa: S603
