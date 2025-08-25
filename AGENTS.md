@@ -40,11 +40,11 @@ ______________________________________________________________________
 - **Functionality**: Stores and restores pip/wheel caches, reducing CI overhead and redundant downloads.
 - **Relative Location**: `.github/actions/cache`
 
-### Agent: setup-python (in workflows)
+### Agent: setup-python (standard GitHub Action)
 
-- **Purpose**: Sets up specified Python version for CI jobs.
-- **Functionality**: Ensures a clean Python install with exact version matching workflow needs.
-- **Relative Location**: Referenced in `.github/workflows/*.yml`
+- **Purpose**: Sets up the specified Python version for CI jobs using the official GitHub Actions action.
+- **Functionality**: Ensures a clean Python install with exact version matching workflow needs by leveraging [`actions/setup-python`](https://github.com/actions/setup-python).
+- **Relative Location**: Referenced in `.github/workflows/*.yml` (not a custom agent or composite action in this repository)
 
 ______________________________________________________________________
 
