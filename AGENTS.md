@@ -1,6 +1,8 @@
 # AGENTS.md
 
-This document identifies and describes all agent and agent-like components in the [Lightning-AI/utilities](https://github.com/Lightning-AI/utilities) repository. Agents are defined as independently-triggerable components responsible for automating tasks, orchestrating workflows, or executing delegated utility operations. For each agent, its **name**, **purpose**, **functionality**, and **relative file location** are given.
+This document identifies and describes all agent and agent-like components in the [Lightning-AI/utilities](https://github.com/Lightning-AI/utilities) repository.
+Agents are defined as independently-triggerable components responsible for automating tasks, orchestrating workflows, or executing delegated utility operations.
+For each agent, its **name**, **purpose**, **functionality**, and **relative file location** are given.
 
 ______________________________________________________________________
 
@@ -212,7 +214,7 @@ ______________________________________________________________________
 - **Functionality**: Uses matrix, outputs, and conditional logic in YAML to link agent logic across jobs.
 - **Relative Location**: `.github/workflows/*.yml` (see usage of `needs`, `if`, `with`, outputs)
 
-### Agent pattern: Enum/decisionflow agents
+### Agent pattern: Enum/decision-flow agents
 
 - **Purpose**: Encodes execution paths and decisions for agents.
 - **Functionality**: Provides enumerated constants used throughout automation logic.
@@ -226,7 +228,7 @@ ______________________________________________________________________
 - Use flat Markdown headings for agent categories and individual agents.
 - Reference file locations relative to repository root.
 - Update and expand this file as new agents, utilities, CLI commands, or automation scripts are introduced.
-- Align all documentation with [standard AGENTS.md conventions](https://github.com/openai/agents.md), [Agent Rules](https://agent-rules.org/), and [modern markdown guidelines](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+- Align all documentation with [standard AGENTS.md conventions](https://github.com/openai/agents.md), [Agent Rules](https://agent-rules.org/).
 - Keep instructions clear, explicit, and brief for both human collaborators and machine/agent consumers.
 
 ______________________________________________________________________
