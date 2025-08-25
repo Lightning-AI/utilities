@@ -12,11 +12,35 @@ ______________________________________________________________________
 - **Functionality**: Automatically runs schema checks as a job for every push, using centralized logic.
 - **Relative Location**: `.github/workflows/check-schema.yml`
 
-### Agent: check-code
+### Agent: check-docs
 
-- **Purpose**: Ensures code quality and standards compliance before merging or release.
-- **Functionality**: Runs code style, lint, and other static analysis checks.
-- **Relative Location**: `.github/workflows/check-code.yml`
+- **Purpose**: Validates documentation build and style.
+- **Functionality**: Builds docs and runs documentation-specific checks to keep documentation healthy.
+- **Relative Location**: `.github/workflows/check-docs.yml`
+
+### Agent: check-typing
+
+- **Purpose**: Ensures static typing quality.
+- **Functionality**: Runs type checking to maintain type correctness.
+- **Relative Location**: `.github/workflows/check-typing.yml`
+
+### Agent: check-package
+
+- **Purpose**: Validates packaging.
+- **Functionality**: Builds the distribution and verifies artifacts integrity and metadata.
+- **Relative Location**: `.github/workflows/check-package.yml`
+
+### Agent: check-md-links
+
+- **Purpose**: Verifies Markdown links.
+- **Functionality**: Scans Markdown files for broken or redirected links.
+- **Relative Location**: `.github/workflows/check-md-links.yml`
+
+### Agent: check-precommit
+
+- **Purpose**: Enforces code style and quality gates.
+- **Functionality**: Runs configured pre-commit hooks (formatting, linting, etc.).
+- **Relative Location**: `.github/workflows/check-precommit.yml`
 
 ### Agent: ci-use-checks
 
@@ -24,11 +48,59 @@ ______________________________________________________________________
 - **Functionality**: Calls multiple reusable workflows; acts as a top-level CI orchestrator.
 - **Relative Location**: `.github/workflows/ci-use-checks.yaml`
 
+### Agent: ci-testing
+
+- **Purpose**: Executes the test suite.
+- **Functionality**: Runs unit/integration tests across supported environments.
+- **Relative Location**: `.github/workflows/ci-testing.yml`
+
+### Agent: ci-cli
+
+- **Purpose**: Exercises CLI-related checks/tests.
+- **Functionality**: Validates CLI utilities and their expected behavior.
+- **Relative Location**: `.github/workflows/ci-cli.yml`
+
+### Agent: ci-scripts
+
+- **Purpose**: Validates repository scripts.
+- **Functionality**: Runs tests and checks over automation scripts in this repo.
+- **Relative Location**: `.github/workflows/ci-scripts.yml`
+
+### Agent: deploy-docs
+
+- **Purpose**: Publishes documentation.
+- **Functionality**: Builds and deploys docs to the chosen hosting target.
+- **Relative Location**: `.github/workflows/deploy-docs.yml`
+
+### Agent: release-pypi
+
+- **Purpose**: Publishes releases to PyPI.
+- **Functionality**: Builds and uploads distribution packages upon release conditions.
+- **Relative Location**: `.github/workflows/release-pypi.yml`
+
+### Agent: cleanup-caches
+
+- **Purpose**: Manually clears caches.
+- **Functionality**: Provides a job to purge caches when necessary.
+- **Relative Location**: `.github/workflows/cleanup-caches.yml`
+
 ### Agent: cron-clear-cache
 
 - **Purpose**: Maintains clean build environments by scheduled cache clearance.
 - **Functionality**: Invokes Python/environment cache clearing on a weekly schedule to keep CI fast.
 - **Relative Location**: `.github/workflows/cron-clear-cache.yml`
+
+### Agent: label-pr
+
+- **Purpose**: Automatically labels pull requests.
+- **Functionality**: Applies labels to PRs based on rules to streamline triage.
+- **Relative Location**: `.github/workflows/label-pr.yml`
+
+### Agent: ci-rtfd
+
+- **Purpose**: Integrates with Read the Docs pipeline.
+- **Functionality**: Coordinates or triggers Read the Docs builds/checks.
+- **Relative Location**: `.github/workflows/ci-rtfd.yml`
 
 ______________________________________________________________________
 
@@ -37,8 +109,26 @@ ______________________________________________________________________
 ### Agent: cache
 
 - **Purpose**: Facilitates caching of Python dependencies and environments.
-- **Functionality**: Stores and restores pip/wheel caches, reducing CI overhead and redundant downloads.
+- **Functionality**: Stores and restores pip/conda caches to reduce CI overhead and redundant downloads.
 - **Relative Location**: `.github/actions/cache`
+
+### Agent: pip-list
+
+- **Purpose**: Provides environment visibility.
+- **Functionality**: Prints pip-installed packages and writes a summarized section to the GitHub step summary.
+- **Relative Location**: `.github/actions/pip-list`
+
+### Agent: pkg-create
+
+- **Purpose**: Builds and verifies distribution artifacts.
+- **Functionality**: Creates source/wheel distributions and checks them with strict validation.
+- **Relative Location**: `.github/actions/pkg-create`
+
+### Agent: pkg-install
+
+- **Purpose**: Installs the package in CI jobs.
+- **Functionality**: Installs the built package and its dependencies for downstream steps.
+- **Relative Location**: `.github/actions/pkg-install`
 
 ### Agent: setup-python (standard GitHub Action)
 
@@ -50,35 +140,17 @@ ______________________________________________________________________
 
 ## 3. CLI Utility Agents
 
-### Agent: lightning_utilities.cli.requirements
+### Agent: lightning_utilities.cli.dependencies
 
-- **Purpose**: Automates manipulation of requirements files for testing compatibility.
-- **Functionality**: CLI group for managing and editing dependency specification (e.g., pinning constraints).
-- **Relative Location**: `src/lightning_utilities/cli/requirements.py`
+- **Purpose**: Automates manipulation of requirement files and dependency specifications.
+- **Functionality**: Provides utilities to prune packages, pin/replace minimal versions, and swap package names across requirement files and pyproject.
+- **Relative Location**: `src/lightning_utilities/cli/dependencies.py`
 
-### Agent: lightning_utilities.cli.run
+### Agent: lightning_utilities.cli.__main__
 
-- **Purpose**: Provides entry point for executing Python scripts.
-- **Functionality**: Runs user-specified scripts/modules with logging and reproducibility enhancements.
-- **Relative Location**: `src/lightning_utilities/cli/run.py`
-
-### Agent: lightning_utilities.cli.install
-
-- **Purpose**: Automates Python dependency installation.
-- **Functionality**: CLI agent for installing required packages with optional command-line constraints or options.
-- **Relative Location**: `src/lightning_utilities/cli/install.py`
-
-### Agent: lightning_utilities.cli.console
-
-- **Purpose**: Manages output, error, and logging for CLI commands.
-- **Functionality**: Formats and routes output, controls verbosity, and ensures consistent messaging.
-- **Relative Location**: `src/lightning_utilities/cli/console.py`
-
-### Agent: lightning_utilities.cli.run_app
-
-- **Purpose**: Launches application modules through the CLI.
-- **Functionality**: Orchestrates app startup and configuration via command-line interface.
-- **Relative Location**: `src/lightning_utilities/cli/run_app.py`
+- **Purpose**: Entry point for CLI utilities.
+- **Functionality**: Enables invoking the CLI package via `python -m lightning_utilities.cli` and orchestrates subcommands.
+- **Relative Location**: `src/lightning_utilities/cli/__main__.py`
 
 ______________________________________________________________________
 
@@ -124,16 +196,10 @@ ______________________________________________________________________
 
 ## 5. Agent-like Scripts
 
-### Agent: install.sh
+### Agent: (repository scripts)
 
-- **Purpose**: Automates environment setup and dependency installation.
-- **Functionality**: Executable shell script for batch installations, often called in setup routines.
-- **Relative Location**: `scripts/install.sh`
-
-### Agent: (other scripts)
-
-- **Purpose**: (Varies) May provide changelog, release, or status automation.
-- **Functionality**: Targeted agents for specialized project tasks.
+- **Purpose**: Various automation helpers (e.g., changelog, release, status).
+- **Functionality**: Targeted, self-contained scripts for specialized project tasks.
 - **Relative Location**: `scripts/` (per script)
 
 ______________________________________________________________________
