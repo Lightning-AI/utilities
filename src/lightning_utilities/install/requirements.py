@@ -22,8 +22,8 @@ class _RequirementWithComment(Requirement):
 
     Attributes:
         comment: The trailing comment captured from the requirement line (including the leading '# ...').
-        pip_argument: A preceding pip argument line (e.g., ``"--extra-index-url ..."``) associated with this requirement,
-            or ``None`` if not provided.
+        pip_argument: A preceding pip argument line (e.g., ``"--extra-index-url ..."``) associated
+            with this requirement, or ``None`` if not provided.
         strict: Whether the special marker ``"# strict"`` appears in ``comment`` (case-insensitive), in which case
             upper bound adjustments are disabled.
 
