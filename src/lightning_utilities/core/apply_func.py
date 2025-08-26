@@ -14,6 +14,7 @@ def is_namedtuple(obj: object) -> bool:
     """Return True if the given object is a namedtuple instance.
 
     This checks for a tuple with the namedtuple-specific attributes `_asdict` and `_fields`.
+
     """
     # https://github.com/pytorch/pytorch/blob/v1.8.1/torch/nn/parallel/scatter_gather.py#L4-L8
     return isinstance(obj, tuple) and hasattr(obj, "_asdict") and hasattr(obj, "_fields")

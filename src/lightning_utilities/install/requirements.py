@@ -5,7 +5,9 @@
 
 This module parses requirement lines while preserving inline comments and pip arguments and
 supports relaxing version pins based on a chosen unfreeze strategy: "none", "major", or "all".
+
 """
+
 import re
 from collections.abc import Iterable, Iterator
 from distutils.version import LooseVersion
@@ -26,6 +28,7 @@ class _RequirementWithComment(Requirement):
             upper bound adjustments are disabled.
 
     """
+
     strict_string = "# strict"
 
     def __init__(self, *args: Any, comment: str = "", pip_argument: Optional[str] = None, **kwargs: Any) -> None:

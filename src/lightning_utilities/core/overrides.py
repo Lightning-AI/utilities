@@ -20,6 +20,7 @@ def is_overridden(method_name: str, instance: object, parent: type[object]) -> b
 
     Returns:
         True if the method implementation on the instance differs from the parent's; otherwise False.
+
     """
     instance_attr = getattr(instance, method_name, None)
     if instance_attr is None:
