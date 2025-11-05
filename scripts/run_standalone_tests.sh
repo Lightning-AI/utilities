@@ -166,7 +166,7 @@ for i in "${!tests[@]}"; do
   # mark the port as used
   used_ports+=($available_port)
 
-  test_command="STANDALONE_PORT=${available_port} ${cli_test} $test"
+  test_command="env STANDALONE_PORT=${available_port} ${cli_test} $test"
 
   printf "\e[95m* Running test $((i+1))/$test_count: $test_command\e[0m\n"
 
