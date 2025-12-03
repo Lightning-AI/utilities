@@ -7,7 +7,7 @@ import pytest
 
 def test_version():
     """Prints the help message for the requirements commands."""
-    return_code = subprocess.call([sys.executable, "-m", "lightning_utilities.cli", "version"])  # noqa: S607
+    return_code = subprocess.call([sys.executable, "-m", "lightning_utilities.cli", "version"])  # noqa: S603
     assert return_code == 0
 
 
