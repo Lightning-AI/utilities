@@ -41,6 +41,7 @@ jobs:
       - name: Set up uv and Python 🐍
         uses: astral-sh/setup-uv@v7
         with:
+          activate-environment: true
           python-version: ${{ inputs.python-version }}
           enable-cache: true
 
