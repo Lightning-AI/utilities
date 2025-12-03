@@ -118,6 +118,12 @@ jobs:
           ref: ${{ inputs.actions-ref }}
           path: .cicd
           repository: Lightning-AI/utilities
+      - name: Set up uv and Python
+        uses: astral-sh/setup-uv@v7
+        with:
+          activate-environment: true
+          python-version: "3.10"
+          enable-cache: true
       - name: Prepare build env.
         run: |
           uv pip install -q -r ./.cicd/requirements/gha-package.txt
