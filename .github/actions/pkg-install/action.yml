@@ -74,5 +74,5 @@ runs:
       # TODO: reset env / consider add as conda
       run: |
         uv pip freeze > _reqs.txt
-        uv pip uninstall -y -r _reqs.txt
+        uv pip uninstall -r _reqs.txt
       shell: bash
