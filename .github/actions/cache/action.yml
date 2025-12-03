@@ -1,5 +1,5 @@
 name: Complex caching
-description: some more complex caching - pip & conda
+description: some more complex caching - conda
 
 inputs:
   python-version:
@@ -21,19 +21,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Determine caches
-      id: cache_dirs
-      run: echo "pip_dir=$(pip cache dir)" >> $GITHUB_OUTPUT
-      shell: bash
-
-    - name: Cache 💽 pip
-      uses: actions/cache@v3
-      with:
-        path: ${{ steps.cache_dirs.outputs.pip_dir }}
-        key: py${{ inputs.python-version }}-pip-${{ inputs.offset }}-${{ hashFiles('requirements.txt') }}
-        restore-keys: py${{ inputs.python-version }}-pip-${{ inputs.offset }}-
-        enableCrossOsArchive: true
-
     - name: Cache 💽 conda
       uses: actions/cache@v3
       if: runner.os == 'Linux'

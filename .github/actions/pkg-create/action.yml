@@ -6,7 +6,7 @@ runs:
   steps:
     - name: Create package 📦
       # python setup.py clean
-      run: python -m build --verbose
+      run: uv build --verbose
       shell: bash
 
     - name: Check package 📦
