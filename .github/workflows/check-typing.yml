@@ -50,7 +50,7 @@ jobs:
         timeout-minutes: 20
         run: |
           # don't use --upgrade to respect the version installed via setup.py
-          uv pip install -e '.[${{ inputs.extra-typing }}]' mypy \
+          uv pip install -e '.[${{ inputs.extra-typing }}]' mypy types-requests \
             --extra-index-url https://download.pytorch.org/whl/cpu/torch_stable.html
           uv pip list
 
