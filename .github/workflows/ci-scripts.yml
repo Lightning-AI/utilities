@@ -41,7 +41,7 @@ jobs:
 
       - name: test Scripts
         working-directory: ./scripts
-        run: pytest . -v
+        run: uv run pytest . -v
 
   standalone-run:
     runs-on: "ubuntu-22.04"

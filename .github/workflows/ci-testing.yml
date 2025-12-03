@@ -65,7 +65,7 @@ jobs:
 
       - name: Unittests
         working-directory: ./tests
-        run: python -m pytest unittests --cov=lightning_utilities --durations=50 --timeout=120
+        run: uv run python -m pytest unittests --cov=lightning_utilities --durations=50 --timeout=120
 
       - name: Statistics
         working-directory: ./tests
@@ -86,7 +86,7 @@ jobs:
 
       - name: test CI scripts
         working-directory: ./tests
-        run: python -m pytest scripts --durations=50 --timeout=120
+        run: uv run python -m pytest scripts --durations=50 --timeout=120
 
   testing-guardian:
     runs-on: ubuntu-latest
