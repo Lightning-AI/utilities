@@ -200,6 +200,9 @@ jobs:
           import-name: ${{ inputs.import-name }}
           custom-import-code: ${{ inputs.custom-import-code }}
 
+      - name: Minimize uv cache
+        run: uv cache prune --ci
+
   # TODO: add run doctests
 
   pkg-guardian:
