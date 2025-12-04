@@ -53,9 +53,6 @@ jobs:
           uv pip install -r ./.cicd/requirements/gha-schema.txt
           uv pip list | grep "check-jsonschema"
 
-      - name: Minimize uv cache
-        run: uv cache prune --ci
-
       # otherwise fall back to using the latest
       - name: "[default] Install recommended dependencies"
         if: inputs.actions-ref == ''
@@ -63,9 +60,6 @@ jobs:
         run: |
           uv pip install -q check-jsonschema
           uv pip list | grep "check-jsonschema"
-
-      - name: Minimize uv cache
-        run: uv cache prune --ci
 
       - name: Scan repo
         id: folders
@@ -101,3 +95,6 @@ jobs:
             echo $f;
             check-jsonschema -v $f --schemafile "$SCHEMA_FILE" --regex-variant="nonunicode";
           done
+
+      - name: Minimize uv cache
+        run: uv cache prune --ci
