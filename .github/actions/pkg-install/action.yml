@@ -32,10 +32,10 @@ runs:
       working-directory: ${{ inputs.pkg-folder }}
       run: |
         ls -lh
-        uv --version
+        pip -V
         echo "PKG_WHEEL=$(ls *.whl | head -n1)" >> $GITHUB_ENV
         echo "PKG_SOURCE=$(ls *.tar.gz | head -n1)" >> $GITHUB_ENV
-        uv pip list
+        pip list
       shell: bash
 
     - name: Install package (archive)
@@ -43,9 +43,9 @@ runs:
       working-directory: ${{ inputs.pkg-folder }}
       run: |
         set -ex
-        uv pip install '${{ env.PKG_SOURCE }}${{ inputs.pkg-extras }}' \
+        pip install '${{ env.PKG_SOURCE }}${{ inputs.pkg-extras }}' \
           --force-reinstall ${{ inputs.pip-flags }}
-        uv pip list
+        pip list
       shell: bash
 
     - name: Install package (wheel)
@@ -53,9 +53,9 @@ runs:
       working-directory: ${{ inputs.pkg-folder }}
       run: |
         set -ex
-        uv pip install '${{ env.PKG_WHEEL }}${{ inputs.pkg-extras }}' \
+        pip install '${{ env.PKG_WHEEL }}${{ inputs.pkg-extras }}' \
           --force-reinstall ${{ inputs.pip-flags }}
-        uv pip list
+        pip list
       shell: bash
 
     - name: package check / import
@@ -73,6 +73,6 @@ runs:
     - name: Uninstall all
       # TODO: reset env / consider add as conda
       run: |
-        uv pip freeze > _reqs.txt
-        uv pip uninstall -r _reqs.txt
+        pip freeze > _reqs.txt
+        pip uninstall -y -r _reqs.txt
       shell: bash
