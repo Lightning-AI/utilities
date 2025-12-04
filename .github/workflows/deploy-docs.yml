@@ -46,9 +46,6 @@ jobs:
           uv pip list
         shell: bash
 
-      - name: Minimize uv cache
-        run: uv cache prune --ci
-
       - name: Make Documentation
         working-directory: ./docs
         run: make html --jobs 2
@@ -63,3 +60,6 @@ jobs:
           clean: true # Automatically remove deleted files from the deploy branch
           target-folder: docs # If you'd like to push the contents of the deployment folder into a specific directory
           single-commit: true # you'd prefer to have a single commit on the deployment branch instead of full history
+
+      - name: Minimize uv cache
+        run: uv cache prune --ci

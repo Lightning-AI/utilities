@@ -58,9 +58,6 @@ jobs:
         timeout-minutes: 20
         run: uv pip install -U -r ./.cicd/.github/scripts/find-unused-caches.txt
 
-      - name: Minimize uv cache
-        run: uv cache prune --ci
-
       - name: List and Filer 🔍 caches
         run: |
           python ./.cicd/.github/scripts/find-unused-caches.py \
@@ -76,3 +73,6 @@ jobs:
               # delete each cache based on file...
               gh api --method DELETE  -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/actions/caches/ $line;
           done < "unused-cashes.txt"
+
+      - name: Minimize uv cache
+        run: uv cache prune --ci

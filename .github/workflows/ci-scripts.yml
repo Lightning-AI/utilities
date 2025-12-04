@@ -36,12 +36,12 @@ jobs:
           uv --version
           uv pip list
 
-      - name: Minimize uv cache
-        run: uv cache prune --ci
-
       - name: test Scripts
         working-directory: ./scripts
         run: uv run pytest . -v
+
+      - name: Minimize uv cache
+        run: uv cache prune --ci
 
   standalone-run:
     runs-on: "ubuntu-22.04"
@@ -66,13 +66,13 @@ jobs:
           uv --version
           uv pip list
 
-      - name: Minimize uv cache
-        run: uv cache prune --ci
-
       - name: Run standalone script
         run: bash ./scripts/run_standalone_tests.sh "tests"
         env:
           COVERAGE_SOURCE: "lightning_utilities"
+
+      - name: Minimize uv cache
+        run: uv cache prune --ci
 
   scripts-guardian:
     runs-on: ubuntu-latest

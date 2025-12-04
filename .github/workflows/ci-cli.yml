@@ -34,9 +34,6 @@ jobs:
           uv pip install -e '.[cli]'
           uv pip list
 
-      - name: Minimize uv cache
-        run: uv cache prune --ci
-
       - name: run CLI
         working-directory: ./requirements
         run: |
@@ -44,6 +41,9 @@ jobs:
           python -m lightning_utilities.cli --help
           python -m lightning_utilities.cli requirements set-oldest --req_files="cli.txt"
           python -m lightning_utilities.cli requirements set-oldest --req_files='["cli.txt", "docs.txt"]'
+
+      - name: Minimize uv cache
+        run: uv cache prune --ci
 
   cli-guardian:
     runs-on: ubuntu-latest
