@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Dropped support for Python 3.9, now requires Python >=3.10
+- Dropped support for Python 3.9, now requires Python >=3.10 ([#463](https://github.com/Lightning-AI/utilities/pull/463))
 
 ### Fixed
 
