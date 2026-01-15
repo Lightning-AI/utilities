@@ -10,7 +10,7 @@ on:
         default: ""
       python-version:
         description: "Python version to use"
-        default: "3.9"
+        default: "3.10"
         required: false
         type: string
       docs-dir:
@@ -69,7 +69,7 @@ jobs:
         target: ${{ fromJSON(inputs.make-target) }}
     steps:
       - name: Checkout 🛎
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           submodules: recursive
 
@@ -100,7 +100,7 @@ jobs:
 
       - name: Pull reusable 🤖 actions️
         if: ${{ inputs.actions-ref != '' }}
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: ${{ inputs.actions-ref }}
           path: .cicd
@@ -119,7 +119,7 @@ jobs:
         if: startsWith(github.event_name, 'pull_request')
         run: echo "KEEP_DAYS=7" >> $GITHUB_ENV
       - name: Upload built docs
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: docs-${{ matrix.target }}-${{ github.sha }}
           path: ${{ inputs.docs-dir }}/build/

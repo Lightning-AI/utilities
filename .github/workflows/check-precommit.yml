@@ -9,7 +9,7 @@ on:
     inputs:
       python-version:
         description: "Python version to use"
-        default: "3.9"
+        default: "3.10"
         required: false
         type: string
       use-cache:
@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           submodules: recursive
