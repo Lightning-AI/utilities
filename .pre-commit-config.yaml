@@ -47,7 +47,7 @@ repos:
         exclude: CHANGELOG.md
 
   - repo: https://github.com/JoC0de/pre-commit-prettier
-    rev: v3.7.4 # v3.6.2 using SHA as tags are not persistent
+    rev: v3.7.4 
     hooks:
       - id: prettier
         files: \.(json|yml|yaml|toml)
