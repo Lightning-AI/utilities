@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Set up uv and Python 🐍
         uses: astral-sh/setup-uv@v7
         with:
@@ -33,7 +33,7 @@ jobs:
       - name: Create 📦 package
         uses: ./.github/actions/pkg-create
       - name: Upload 📤 packages
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: pypi-packages-${{ github.sha }}
           path: dist
@@ -48,9 +48,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Download 📥 artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: pypi-packages-${{ github.sha }}
           path: dist
@@ -70,11 +70,11 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Download 📥 artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: pypi-packages-${{ github.sha }}
           path: dist
