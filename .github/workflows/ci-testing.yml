@@ -18,7 +18,6 @@ jobs:
       matrix:
         os: ["ubuntu-22.04", "macos-latest", "windows-2022"]
         python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
-        requires: ["latest"]
         include:
           - { python-version: "3.10", requires: "oldest" }
           - { python-version: "3.11", requires: "oldest" }
