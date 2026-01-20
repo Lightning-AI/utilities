@@ -1,3 +1,5 @@
+import re
+
 import pytest
 
 from lightning_utilities.core.rank_zero import rank_prefixed_message, rank_zero_only
@@ -5,7 +7,7 @@ from lightning_utilities.core.rank_zero import rank_prefixed_message, rank_zero_
 
 def test_rank_zero_only_raises():
     foo = rank_zero_only(lambda x: x + 1)
-    with pytest.raises(RuntimeError, match="rank_zero_only.rank` needs to be set "):
+    with pytest.raises(RuntimeError, match=re.escape("rank_zero_only.rank` needs to be set ")):
         foo(1)
 
 

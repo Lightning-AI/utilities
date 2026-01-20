@@ -153,7 +153,7 @@ def my_torch_func(i: int) -> int:
 def test_torch_func_raised():
     with pytest.raises(
         ModuleNotFoundError,
-        match="Required dependencies not available: \nModule not found: 'torch.unknown.subpackage'. ",
+        match=re.escape("Required dependencies not available: \nModule not found: 'torch.unknown.subpackage'. "),
     ):
         my_torch_func(42)
 
@@ -181,7 +181,7 @@ class MyTorchClass:
 
 def test_torch_class_raised():
     with pytest.raises(
-        ModuleNotFoundError, match="Required dependencies not available: \nModule not found: 'torch>99.0'."
+        ModuleNotFoundError, match=re.escape("Required dependencies not available: \nModule not found: 'torch>99.0'.")
     ):
         MyTorchClass()
 
