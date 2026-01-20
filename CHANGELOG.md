@@ -8,7 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [UnReleased] - 2025-MM-DD
+## [UnReleased] - 2026-MM-DD
+
+### Added
+
+- Added support for Python 3.14 ([#464](https://github.com/Lightning-AI/utilities/pull/464))
 
 ### Changed
 
