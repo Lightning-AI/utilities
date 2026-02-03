@@ -1,6 +1,6 @@
 twine ==6.2.*
 setuptools ==80.10.*
-wheel ==0.45.*
+wheel ==0.46.*
 build ==1.4.*
 importlib_metadata ==8.7.*
-packaging ==25.0
+packaging ==26.0
