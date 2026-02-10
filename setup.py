@@ -4,7 +4,6 @@ import os
 from collections.abc import Iterator
 from importlib.util import module_from_spec, spec_from_file_location
 
-from packaging.requirements import Requirement
 from setuptools import find_packages, setup
 
 _PATH_ROOT = os.path.realpath(os.path.dirname(__file__))
