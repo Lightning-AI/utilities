@@ -18,13 +18,13 @@ from packaging.version import Version
 
 
 def yield_lines(strs: Union[str, Iterable[str]]) -> Iterator[str]:
-    """Yield lines from a string or iterable, handling line continuations.
+    """Yield non-empty, non-comment lines from a string or iterable.
 
     Args:
         strs: Either an iterable of strings or a single multi-line string.
 
     Yields:
-        Individual lines with continuations resolved.
+        Individual stripped lines. Line continuations are handled in ``_parse_requirements``.
 
     """
     if isinstance(strs, str):
