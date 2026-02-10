@@ -10,11 +10,29 @@ supports relaxing version pins based on a chosen unfreeze strategy: "none", "maj
 
 import re
 from collections.abc import Iterable, Iterator
-from distutils.version import LooseVersion
 from pathlib import Path
 from typing import Any, Optional, Union
 
-from pkg_resources import Requirement, yield_lines  # type: ignore[import-untyped]
+from packaging.requirements import Requirement
+from packaging.version import Version
+
+
+def yield_lines(strs: Union[str, Iterable[str]]) -> Iterator[str]:
+    """Yield lines from a string or iterable, handling line continuations.
+
+    Args:
+        strs: Either an iterable of strings or a single multi-line string.
+
+    Yields:
+        Individual lines with continuations resolved.
+    """
+    if isinstance(strs, str):
+        strs = strs.splitlines()
+    for line in strs:
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        yield line
 
 
 class _RequirementWithComment(Requirement):
@@ -77,23 +95,23 @@ class _RequirementWithComment(Requirement):
         if self.strict:
             return f"{out}  {self.strict_string}"
         if unfreeze == "major":
-            for operator, version in self.specs:
-                if operator in ("<", "<="):
-                    major = LooseVersion(version).version[0]
+            for spec in self.specifier:
+                if spec.operator in ("<", "<="):
+                    major = Version(spec.version).major
                     # replace upper bound with major version increased by one
-                    return out.replace(f"{operator}{version}", f"<{int(major) + 1}.0")
+                    return out.replace(f"{spec.operator}{spec.version}", f"<{int(major) + 1}.0")
         elif unfreeze == "all":
-            for operator, version in self.specs:
-                if operator in ("<", "<="):
+            for spec in self.specifier:
+                if spec.operator in ("<", "<="):
                     # drop upper bound
-                    return out.replace(f"{operator}{version},", "")
+                    return out.replace(f"{spec.operator}{spec.version},", "")
         elif unfreeze != "none":
             raise ValueError(f"Unexpected unfreeze: {unfreeze!r} value.")
         return out
 
 
 def _parse_requirements(strs: Union[str, Iterable[str]]) -> Iterator[_RequirementWithComment]:
-    r"""Adapted from ``pkg_resources.parse_requirements`` to include comments and pip arguments.
+    r"""Parse requirement lines preserving comments and pip arguments.
 
     Parses a sequence or string of requirement lines, preserving trailing comments and associating any
     preceding pip arguments (``--...``) with the subsequent requirement. Lines starting with ``-r`` or
