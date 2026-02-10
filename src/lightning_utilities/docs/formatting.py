@@ -86,16 +86,15 @@ def _load_pypi_versions(package_name: str) -> list[str]:
     ['0.9', '0.10', '0.11', '0.12', ...]
 
     """
-    from distutils.version import LooseVersion
-
     import requests
+    from packaging.version import Version
 
     url = f"https://pypi.org/pypi/{package_name}/json"
     data = requests.get(url, timeout=10).json()
     versions = data["releases"].keys()
     # filter all version which include only numbers and dots
     versions = {k for k in versions if re.match(r"^\d+(\.\d+)*$", k)}
-    return sorted(versions, key=LooseVersion)
+    return sorted(versions, key=Version)
 
 
 def _update_link_based_imported_package(link: str, pkg_ver: str, version_digits: Optional[int]) -> str:
