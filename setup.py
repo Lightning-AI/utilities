@@ -20,16 +20,13 @@ def _load_py_module(fname: str, pkg: str = "lightning_utilities"):
 
 
 about = _load_py_module("__about__.py")
+requirements_module = _load_py_module(os.path.join("install", "requirements.py"))
 
 
-# load basic requirements
+# load basic requirements using the central parser from lightning_utilities.install.requirements
 def _parse_requirements(lines: list[str]) -> Iterator[str]:
-    """Parse requirements from lines using packaging."""
-    for line in lines:
-        line = line.strip()
-        if not line or line.startswith("#"):
-            continue
-        yield str(Requirement(line))
+    """Parse requirements from lines using the canonical parser."""
+    return requirements_module._parse_requirements(lines)
 
 
 with open(os.path.join(_PATH_REQUIRE, "core.txt")) as fp:
