@@ -48,7 +48,9 @@ def test_requirement_with_comment_pip_argument():
 
 def test_adjust_none():
     assert _RequirementWithComment("arrow<=1.2,>=1.0").adjust("none") == "arrow<=1.2,>=1.0"
-    assert _RequirementWithComment("arrow<=1.2,>=1.0", comment="# strict").adjust("none") == "arrow<=1.2,>=1.0  # strict"
+    assert (
+        _RequirementWithComment("arrow<=1.2,>=1.0", comment="# strict").adjust("none") == "arrow<=1.2,>=1.0  # strict"
+    )
 
 
 def test_adjust_all():
@@ -60,7 +62,10 @@ def test_adjust_all():
 def test_adjust_major():
     assert _RequirementWithComment("arrow>=1.2.0, <=1.2.2").adjust("major") == "arrow<2.0,>=1.2.0"
     assert _RequirementWithComment("lib>=0.5, <=0.9").adjust("major") == "lib<1.0,>=0.5"
-    assert _RequirementWithComment("arrow>=1.2.0, <=1.2.2", comment="# strict").adjust("major") == "arrow<=1.2.2,>=1.2.0  # strict"
+    assert (
+        _RequirementWithComment("arrow>=1.2.0, <=1.2.2", comment="# strict").adjust("major")
+        == "arrow<=1.2.2,>=1.2.0  # strict"
+    )
     assert _RequirementWithComment("arrow>=1.2.0").adjust("major") == "arrow>=1.2.0"
 
 
