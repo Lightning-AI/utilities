@@ -25,6 +25,7 @@ def yield_lines(strs: Union[str, Iterable[str]]) -> Iterator[str]:
 
     Yields:
         Individual lines with continuations resolved.
+
     """
     if isinstance(strs, str):
         strs = strs.splitlines()
