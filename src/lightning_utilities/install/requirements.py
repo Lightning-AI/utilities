@@ -147,7 +147,7 @@ def _parse_requirements(strs: Union[str, Iterable[str]]) -> Iterator[_Requiremen
             comment = ""
         # If there is a line continuation, drop it, and append the next line.
         if line.endswith("\\"):
-            line = line[:-2].strip()
+            line = line[:-1].strip()
             try:
                 line += next(lines)
             except StopIteration:

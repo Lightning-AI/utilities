@@ -105,6 +105,16 @@ def test_parse_requirements_skips():
     assert reqs[0].name == "numpy"
 
 
+def test_parse_requirements_line_continuation():
+    reqs = list(_parse_requirements(["foo\\", ">=1.0"]))
+    assert len(reqs) == 1
+    assert str(reqs[0]) == "foo>=1.0"
+
+    reqs = list(_parse_requirements(["bar \\", ">=2.0,<3.0"]))
+    assert len(reqs) == 1
+    assert str(reqs[0]) == "bar<3.0,>=2.0"
+
+
 def test_load_requirements_core():
     path_req = str(_PATH_ROOT / "requirements")
     reqs = load_requirements(path_req, "core.txt", unfreeze="all")
