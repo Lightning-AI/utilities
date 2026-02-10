@@ -109,7 +109,11 @@ def test_load_requirements_core():
     path_req = str(_PATH_ROOT / "requirements")
     reqs = load_requirements(path_req, "core.txt", unfreeze="all")
     assert len(reqs) > 0
-    assert any("packaging" in r for r in reqs)
+    # Verify that load_requirements returns a cleaned list of requirement strings
+    assert all(isinstance(r, str) for r in reqs)
+    assert all(r for r in reqs)  # no empty strings
+    assert all(not r.lstrip().startswith("#") for r in reqs)  # no comment lines
+    assert all(r == r.strip() for r in reqs)  # no leading/trailing whitespace
 
 
 def test_load_requirements_nonexistent(tmpdir):
