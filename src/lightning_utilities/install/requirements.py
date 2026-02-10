@@ -17,23 +17,17 @@ from packaging.requirements import Requirement
 from packaging.version import Version
 
 
-def yield_lines(strs: Union[str, Iterable[str]]) -> Iterator[str]:
-    """Yield non-empty, non-comment lines from a string or iterable.
+def _yield_lines(strs: Union[str, Iterable[str]]) -> Iterator[str]:
+    """Yield non-empty, non-comment lines from a string or iterable of strings.
 
-    Args:
-        strs: Either an iterable of strings or a single multi-line string.
-
-    Yields:
-        Individual stripped lines. Line continuations are handled in ``_parse_requirements``.
-
+    Adapted from pkg_resources.yield_lines.
     """
     if isinstance(strs, str):
         strs = strs.splitlines()
     for line in strs:
         line = line.strip()
-        if not line or line.startswith("#"):
-            continue
-        yield line
+        if line and not line.startswith("#"):
+            yield line
 
 
 class _RequirementWithComment(Requirement):
@@ -116,7 +110,7 @@ class _RequirementWithComment(Requirement):
 
 
 def _parse_requirements(strs: Union[str, Iterable[str]]) -> Iterator[_RequirementWithComment]:
-    r"""Parse requirement lines preserving comments and pip arguments.
+    r"""Adapted from ``pkg_resources.parse_requirements`` to include comments and pip arguments.
 
     Parses a sequence or string of requirement lines, preserving trailing comments and associating any
     preceding pip arguments (``--...``) with the subsequent requirement. Lines starting with ``-r`` or
@@ -136,7 +130,7 @@ def _parse_requirements(strs: Union[str, Iterable[str]]) -> Iterator[_Requiremen
         _RequirementWithComment: Parsed requirement objects with preserved comment and pip argument.
 
     """
-    lines = yield_lines(strs)
+    lines = _yield_lines(strs)
     pip_argument = None
     for line in lines:
         # Drop comments -- a hash without a space may be in a URL.

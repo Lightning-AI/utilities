@@ -5,24 +5,24 @@ import pytest
 from lightning_utilities.install.requirements import (
     _parse_requirements,
     _RequirementWithComment,
+    _yield_lines,
     load_requirements,
-    yield_lines,
 )
 
 _PATH_ROOT = Path(__file__).parent.parent.parent.parent
 
 
 def test_yield_lines_from_list():
-    assert list(yield_lines(["foo", "  bar  ", "", "# comment", "baz"])) == ["foo", "bar", "baz"]
+    assert list(_yield_lines(["foo", "  bar  ", "", "# comment", "baz"])) == ["foo", "bar", "baz"]
 
 
 def test_yield_lines_from_string():
-    assert list(yield_lines("foo\n  bar  \n\n# comment\nbaz")) == ["foo", "bar", "baz"]
+    assert list(_yield_lines("foo\n  bar  \n\n# comment\nbaz")) == ["foo", "bar", "baz"]
 
 
 def test_yield_lines_empty():
-    assert list(yield_lines([])) == []
-    assert list(yield_lines("")) == []
+    assert list(_yield_lines([])) == []
+    assert list(_yield_lines("")) == []
 
 
 def test_requirement_with_comment_attributes():
