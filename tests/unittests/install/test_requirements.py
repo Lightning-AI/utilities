@@ -55,6 +55,8 @@ def test_adjust_none():
 
 def test_adjust_all():
     assert _RequirementWithComment("arrow<=1.2,>=1.0").adjust("all") == "arrow>=1.0"
+    assert _RequirementWithComment("arrow>=1.0,<=1.2").adjust("all") == "arrow>=1.0"
+    assert _RequirementWithComment("arrow<=1.2").adjust("all") == "arrow"
     assert _RequirementWithComment("arrow<=1.2,>=1.0", comment="# strict").adjust("all") == "arrow<=1.2,>=1.0  # strict"
     assert _RequirementWithComment("arrow").adjust("all") == "arrow"
 

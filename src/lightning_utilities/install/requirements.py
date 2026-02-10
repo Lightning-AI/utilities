@@ -104,8 +104,12 @@ class _RequirementWithComment(Requirement):
         elif unfreeze == "all":
             for spec in self.specifier:
                 if spec.operator in ("<", "<="):
-                    # drop upper bound
-                    return out.replace(f"{spec.operator}{spec.version},", "")
+                    # drop upper bound (with or without trailing/leading comma)
+                    upper = f"{spec.operator}{spec.version}"
+                    result = out.replace(f"{upper},", "").replace(f",{upper}", "")
+                    if upper in result:
+                        result = result.replace(upper, "")
+                    return result.strip()
         elif unfreeze != "none":
             raise ValueError(f"Unexpected unfreeze: {unfreeze!r} value.")
         return out
