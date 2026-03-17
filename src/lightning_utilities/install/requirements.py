@@ -10,11 +10,25 @@ supports relaxing version pins based on a chosen unfreeze strategy: "none", "maj
 
 import re
 from collections.abc import Iterable, Iterator
-from distutils.version import LooseVersion
 from pathlib import Path
 from typing import Any, Optional, Union
 
-from pkg_resources import Requirement, yield_lines  # type: ignore[import-untyped]
+from packaging.requirements import Requirement
+from packaging.version import Version
+
+
+def _yield_lines(strs: Union[str, Iterable[str]]) -> Iterator[str]:
+    """Yield non-empty, non-comment lines from a string or iterable of strings.
+
+    Adapted from pkg_resources.yield_lines.
+
+    """
+    if isinstance(strs, str):
+        strs = strs.splitlines()
+    for line in strs:
+        line = line.strip()
+        if line and not line.startswith("#"):
+            yield line
 
 
 class _RequirementWithComment(Requirement):
@@ -77,16 +91,20 @@ class _RequirementWithComment(Requirement):
         if self.strict:
             return f"{out}  {self.strict_string}"
         if unfreeze == "major":
-            for operator, version in self.specs:
-                if operator in ("<", "<="):
-                    major = LooseVersion(version).version[0]
+            for spec in self.specifier:
+                if spec.operator in ("<", "<="):
+                    major = Version(spec.version).major
                     # replace upper bound with major version increased by one
-                    return out.replace(f"{operator}{version}", f"<{int(major) + 1}.0")
+                    return out.replace(f"{spec.operator}{spec.version}", f"<{int(major) + 1}.0")
         elif unfreeze == "all":
-            for operator, version in self.specs:
-                if operator in ("<", "<="):
-                    # drop upper bound
-                    return out.replace(f"{operator}{version},", "")
+            for spec in self.specifier:
+                if spec.operator in ("<", "<="):
+                    # drop upper bound (with or without trailing/leading comma)
+                    upper = f"{spec.operator}{spec.version}"
+                    result = out.replace(f"{upper},", "").replace(f",{upper}", "")
+                    if upper in result:
+                        result = result.replace(upper, "")
+                    return result.strip()
         elif unfreeze != "none":
             raise ValueError(f"Unexpected unfreeze: {unfreeze!r} value.")
         return out
@@ -113,7 +131,7 @@ def _parse_requirements(strs: Union[str, Iterable[str]]) -> Iterator[_Requiremen
         _RequirementWithComment: Parsed requirement objects with preserved comment and pip argument.
 
     """
-    lines = yield_lines(strs)
+    lines = _yield_lines(strs)
     pip_argument = None
     for line in lines:
         # Drop comments -- a hash without a space may be in a URL.
@@ -124,7 +142,7 @@ def _parse_requirements(strs: Union[str, Iterable[str]]) -> Iterator[_Requiremen
             comment = ""
         # If there is a line continuation, drop it, and append the next line.
         if line.endswith("\\"):
-            line = line[:-2].strip()
+            line = line[:-1].strip()
             try:
                 line += next(lines)
             except StopIteration:

@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed `compare_version` if runtime error ([#427](https://github.com/Lightning-AI/utilities/pull/427))
+- Remove deprecated `pkg_resources` usage for `setuptools >= 82` compatibility ([#473](https://github.com/Lightning-AI/utilities/pull/473))
 
 
 ---

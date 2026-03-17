@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 import glob
 import os
+from collections.abc import Iterator
 from importlib.util import module_from_spec, spec_from_file_location
 
-from pkg_resources import parse_requirements
 from setuptools import find_packages, setup
 
 _PATH_ROOT = os.path.realpath(os.path.dirname(__file__))
@@ -19,10 +19,17 @@ def _load_py_module(fname: str, pkg: str = "lightning_utilities"):
 
 
 about = _load_py_module("__about__.py")
+requirements_module = _load_py_module(os.path.join("install", "requirements.py"))
 
-# load basic requirements
+
+# load basic requirements using the central parser from lightning_utilities.install.requirements
+def _parse_requirements(lines: list[str]) -> Iterator[str]:
+    """Parse requirements from lines using the canonical parser."""
+    return (str(req) for req in requirements_module._parse_requirements(lines))
+
+
 with open(os.path.join(_PATH_REQUIRE, "core.txt")) as fp:
-    requirements = list(map(str, parse_requirements(fp.readlines())))
+    requirements = list(_parse_requirements(fp.readlines()))
 
 
 # make extras as automated loading
@@ -36,8 +43,7 @@ def _requirement_extras(path_req: str = _PATH_REQUIRE) -> dict:
             continue
         name, _ = os.path.splitext(fname)
         with open(fpath) as fp:
-            reqs = parse_requirements(fp.readlines())
-            extras[name] = list(map(str, reqs))
+            extras[name] = list(_parse_requirements(fp.readlines()))
     return extras
 
 
