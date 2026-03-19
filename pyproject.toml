@@ -7,14 +7,13 @@ requires = [
 
 [tool.ruff]
 target-version = "py39"
-
 line-length = 120
 format.preview = true
 lint.select = [
   "D",      # see: https://pypi.org/project/pydocstyle
   "E",
   "F",      # see: https://pypi.org/project/pyflakes
-  "I",      #see: https://pypi.org/project/isort/
+  "I",      # see: https://pypi.org/project/isort/
   "N",      # see: https://pypi.org/project/pep8-naming
   "RUF100", # see: https://docs.astral.sh/ruff/rules/#ruff-specific-rules-ruf
   "S",      # see: https://pypi.org/project/flake8-bandit
@@ -92,13 +91,14 @@ lint.mccabe.max-complexity = 10
 lint.pydocstyle.convention = "google"
 
 [tool.codespell]
-#skip = '*.py'
+# skip = '*.py'
 quiet-level = 3
+
 # comma separated list of words; waiting for:
 #  https://github.com/codespell-project/codespell/issues/2839#issuecomment-1731601603
 # also adding links until they ignored by its: nature
 #  https://github.com/codespell-project/codespell/issues/2243#issuecomment-1732019960
-#ignore-words-list = ""
+# ignore-words-list = ""
 
 [tool.docformatter]
 recursive = true
@@ -114,39 +114,39 @@ ignore = [
   ".github/*",
 ]
 
-[tool.pytest.ini_options]
-norecursedirs = [
+[tool.pytest]
+ini_options.norecursedirs = [
   ".git",
   ".github",
   "dist",
   "build",
   "docs",
 ]
-addopts = [
+ini_options.addopts = [
   "--strict-markers",
   "--doctest-modules",
   "--durations=25",
   "--color=yes",
   "--disable-pytest-warnings",
 ]
-markers = [
+ini_options.markers = [
   "online: run tests that require internet connection",
 ]
-filterwarnings = [
+ini_options.filterwarnings = [
   "error::FutureWarning",
-] # todo: "error::DeprecationWarning"
-xfail_strict = true
+]  # todo: "error::DeprecationWarning"
+ini_options.xfail_strict = true
 
-[tool.coverage.report]
-exclude_lines = [
-  "pragma: no cover",
+[tool.coverage]
+report.exclude_lines = [
   "pass",
+  "pragma: no cover",
 ]
 
-#[tool.coverage.run]
-#parallel = true
-#concurrency = ['thread']
-#relative_files = true
+# [tool.coverage.run]
+# parallel = true
+# concurrency = ['thread']
+# relative_files = true
 
 [tool.mypy]
 files = [
