@@ -9,7 +9,7 @@ on:
     inputs:
       python-version:
         description: "Python version to use"
-        default: "3.10"
+        default: "3.12"
         required: false
         type: string
       use-cache:
