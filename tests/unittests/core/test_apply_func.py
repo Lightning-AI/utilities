@@ -3,7 +3,7 @@ import numbers
 from collections import OrderedDict, defaultdict, namedtuple
 from dataclasses import InitVar
 from functools import cached_property
-from typing import Any, ClassVar, Optional
+from typing import Any, ClassVar
 
 import pytest
 from unittests.mocks import torch
@@ -66,9 +66,9 @@ class WithClassVar:
 @dataclasses.dataclass
 class WithInitVar:
     dummy: Any
-    override: InitVar[Optional[Any]] = None
+    override: InitVar[Any | None] = None
 
-    def __post_init__(self, override: Optional[Any]):
+    def __post_init__(self, override: Any | None):
         if override is not None:
             self.dummy = override
 
@@ -85,9 +85,9 @@ class WithInitVar:
 class WithClassAndInitVar:
     class_var: ClassVar[torch.Tensor] = _TENSOR_0
     dummy: Any
-    override: InitVar[Optional[Any]] = _TENSOR_1
+    override: InitVar[Any | None] = _TENSOR_1
 
-    def __post_init__(self, override: Optional[Any]):
+    def __post_init__(self, override: Any | None):
         if override is not None:
             self.dummy = override
 

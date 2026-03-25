@@ -9,7 +9,6 @@ import os
 import re
 import sys
 from collections.abc import Iterable
-from typing import Optional, Union
 
 
 def _transform_changelog(path_in: str, path_out: str) -> None:
@@ -97,7 +96,7 @@ def _load_pypi_versions(package_name: str) -> list[str]:
     return sorted(versions, key=Version)
 
 
-def _update_link_based_imported_package(link: str, pkg_ver: str, version_digits: Optional[int]) -> str:
+def _update_link_based_imported_package(link: str, pkg_ver: str, version_digits: int | None) -> str:
     """Resolve a ``{package.version}`` placeholder in a link using the latest available version.
 
     Args:
@@ -128,7 +127,7 @@ def _update_link_based_imported_package(link: str, pkg_ver: str, version_digits:
 def adjust_linked_external_docs(
     source_link: str,
     target_link: str,
-    browse_folder: Union[str, Iterable[str]],
+    browse_folder: str | Iterable[str],
     file_extensions: Iterable[str] = (".rst", ".py"),
     version_digits: int = 2,
 ) -> None:

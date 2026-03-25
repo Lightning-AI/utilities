@@ -11,13 +11,13 @@ supports relaxing version pins based on a chosen unfreeze strategy: "none", "maj
 import re
 from collections.abc import Iterable, Iterator
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any
 
 from packaging.requirements import Requirement
 from packaging.version import Version
 
 
-def _yield_lines(strs: Union[str, Iterable[str]]) -> Iterator[str]:
+def _yield_lines(strs: str | Iterable[str]) -> Iterator[str]:
     """Yield non-empty, non-comment lines from a string or iterable of strings.
 
     Adapted from pkg_resources.yield_lines.
@@ -45,7 +45,7 @@ class _RequirementWithComment(Requirement):
 
     strict_string = "# strict"
 
-    def __init__(self, *args: Any, comment: str = "", pip_argument: Optional[str] = None, **kwargs: Any) -> None:
+    def __init__(self, *args: Any, comment: str = "", pip_argument: str | None = None, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.comment = comment
         if not (pip_argument is None or pip_argument):  # sanity check that it's not an empty str
@@ -110,7 +110,7 @@ class _RequirementWithComment(Requirement):
         return out
 
 
-def _parse_requirements(strs: Union[str, Iterable[str]]) -> Iterator[_RequirementWithComment]:
+def _parse_requirements(strs: str | Iterable[str]) -> Iterator[_RequirementWithComment]:
     r"""Adapted from ``pkg_resources.parse_requirements`` to include comments and pip arguments.
 
     Parses a sequence or string of requirement lines, preserving trailing comments and associating any
