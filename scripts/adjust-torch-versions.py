@@ -7,7 +7,6 @@ import logging
 import os
 import re
 import sys
-from typing import Optional
 
 
 def _determine_torchaudio(torch_version: str) -> str:
@@ -136,7 +135,7 @@ def find_latest(ver: str) -> dict[str, str]:
     }
 
 
-def adjust(requires: list[str], pytorch_version: Optional[str] = None) -> list[str]:
+def adjust(requires: list[str], pytorch_version: str | None = None) -> list[str]:
     """Adjust the versions to be paired within pytorch ecosystem.
 
     >>> from pprint import pprint
@@ -184,7 +183,7 @@ def _offset_print(reqs: list[str], offset: str = "\t|\t") -> str:
     return os.linesep.join(reqs)
 
 
-def main(requirements_path: str, torch_version: Optional[str] = None) -> None:
+def main(requirements_path: str, torch_version: str | None = None) -> None:
     """The main entry point with mapping to the CLI for positional arguments only."""
     # rU - universal line ending - https://stackoverflow.com/a/2717154/4521646
     with open(requirements_path, encoding="utf8") as fopen:

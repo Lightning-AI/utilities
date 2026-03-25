@@ -1,6 +1,7 @@
+from collections.abc import Callable
 from contextlib import contextmanager
 from functools import partial, wraps
-from typing import Any, Callable
+from typing import Any
 from unittest.mock import Mock
 
 import pytest
