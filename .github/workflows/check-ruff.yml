@@ -5,7 +5,7 @@ on:
     inputs:
       ruff-version:
         description: "Ruff version to use, defaults to latest"
-        default: ""
+        default: "0.15.4"
         required: false
         type: string
 
