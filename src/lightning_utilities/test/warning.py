@@ -5,11 +5,10 @@ import re
 import warnings
 from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Optional
 
 
 @contextmanager
-def no_warning_call(expected_warning: type[Warning] = Warning, match: Optional[str] = None) -> Generator:
+def no_warning_call(expected_warning: type[Warning] = Warning, match: str | None = None) -> Generator:
     """Assert that no matching warning is emitted within the context.
 
     Args:

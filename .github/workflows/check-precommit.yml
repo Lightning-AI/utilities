@@ -54,9 +54,7 @@ jobs:
 
       - name: Run pre-commit 🤖
         id: precommit
-        run: |
-          uv pip install -q pre-commit
-          pre-commit run --all-files
+        run: uvx pre-commit run --all-files
 
       - name: Minimize uv cache
         run: uv cache prune --ci

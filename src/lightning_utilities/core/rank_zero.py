@@ -6,8 +6,9 @@
 
 import logging
 import warnings
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Callable, Optional, TypeVar, Union
+from typing import Any, TypeVar
 
 from typing_extensions import ParamSpec, overload
 
@@ -18,14 +19,14 @@ P = ParamSpec("P")
 
 
 @overload
-def rank_zero_only(fn: Callable[P, T]) -> Callable[P, Optional[T]]: ...
+def rank_zero_only(fn: Callable[P, T]) -> Callable[P, T | None]: ...
 
 
 @overload
 def rank_zero_only(fn: Callable[P, T], default: T) -> Callable[P, T]: ...
 
 
-def rank_zero_only(fn: Callable[P, T], default: Optional[T] = None) -> Callable[P, Optional[T]]:
+def rank_zero_only(fn: Callable[P, T], default: T | None = None) -> Callable[P, T | None]:
     """Decorator to run the wrapped function only on global rank 0.
 
     Set ``rank_zero_only.rank`` before use. On non-zero ranks, the function is skipped and the provided
@@ -34,7 +35,7 @@ def rank_zero_only(fn: Callable[P, T], default: Optional[T] = None) -> Callable[
     """
 
     @wraps(fn)
-    def wrapped_fn(*args: P.args, **kwargs: P.kwargs) -> Optional[T]:
+    def wrapped_fn(*args: P.args, **kwargs: P.kwargs) -> T | None:
         rank = getattr(rank_zero_only, "rank", None)
         if rank is None:
             raise RuntimeError("The `rank_zero_only.rank` needs to be set before use")
@@ -67,12 +68,12 @@ def rank_zero_info(*args: Any, stacklevel: int = 4, **kwargs: Any) -> None:
     _info(*args, stacklevel=stacklevel, **kwargs)
 
 
-def _warn(message: Union[str, Warning], stacklevel: int = 2, **kwargs: Any) -> None:
+def _warn(message: str | Warning, stacklevel: int = 2, **kwargs: Any) -> None:
     warnings.warn(message, stacklevel=stacklevel, **kwargs)
 
 
 @rank_zero_only
-def rank_zero_warn(message: Union[str, Warning], stacklevel: int = 4, **kwargs: Any) -> None:
+def rank_zero_warn(message: str | Warning, stacklevel: int = 4, **kwargs: Any) -> None:
     """Emit warn-level messages only on global rank 0."""
     _warn(message, stacklevel=stacklevel, **kwargs)
 
@@ -80,13 +81,13 @@ def rank_zero_warn(message: Union[str, Warning], stacklevel: int = 4, **kwargs: 
 rank_zero_deprecation_category = DeprecationWarning
 
 
-def rank_zero_deprecation(message: Union[str, Warning], stacklevel: int = 5, **kwargs: Any) -> None:
+def rank_zero_deprecation(message: str | Warning, stacklevel: int = 5, **kwargs: Any) -> None:
     """Emit a deprecation warning only on global rank 0."""
     category = kwargs.pop("category", rank_zero_deprecation_category)
     rank_zero_warn(message, stacklevel=stacklevel, category=category, **kwargs)
 
 
-def rank_prefixed_message(message: str, rank: Optional[int]) -> str:
+def rank_prefixed_message(message: str, rank: int | None) -> str:
     """Add a ``[rank: X]`` prefix to the message if ``rank`` is provided; otherwise return the message unchanged."""
     if rank is not None:
         # specify the rank of the process being logged
