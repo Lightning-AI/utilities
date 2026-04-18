@@ -169,8 +169,6 @@ if [[ $? -ne 0 ]]; then
     exit 1
 fi
 
-print_magenta "Collected tests file:"
-cat "$collected_tests_file"
 
 # Parse the collected output into an array.
 # pytest --collect-only lines that contain "test_" are the individual test IDs.
