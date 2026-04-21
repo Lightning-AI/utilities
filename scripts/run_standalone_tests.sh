@@ -13,224 +13,329 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# THIS FILE ASSUMES IT IS RUN INSIDE THE tests DIRECTORY.
 
-# Batch size for testing: Determines how many standalone test invocations run in parallel
-# It can be set through the env variable NUM_PARALLEL_TESTS and defaults to 5 if not set
-test_batch_size="${NUM_PARALLEL_TESTS:-5}"
+# USAGE:
+#   ./run_standalone_tests.sh <test_dir_or_file_or_function>
 
-# Source directory for coverage runs can be set with CODECOV_SOURCE.
-codecov_source="${COVERAGE_SOURCE}"
+# ENVIRONMENT VARIABLES:
+#   NUM_PARALLEL_TESTS        Number of tests to run in parallel per batch (default: 5)
+#   TEST_TIMEOUT              Per-test timeout in seconds (default: 1200)
+#   BASE_PORT                 Starting port for assigning standalone test ports (default: 12000)
+#   PORT_MARGIN               Port increment between successive test slots (default: 20)
+#   STANDALONE_ARTIFACTS_DIR  Directory for log files and collected-tests output (default: .)
+#   COVERAGE_SOURCE           If set, wraps each test run with `coverage run --source <value>`
 
-# The test directory is passed as the first argument to the script
-test_dir=$1 # parse the first argument
+set -uo pipefail  # Exit on unset variables and propagate pipe failures.
+                  # Intentionally NOT using -e so we can collect all test exit codes
+                  # rather than aborting on the first non-zero one.
 
-# There is also timeout for the tests.
-# It can be set through the env variable TEST_TIMEOUT and defaults to 1200 seconds.
-test_timeout="${TEST_TIMEOUT:-1200}"
+# =============================================================================
+# Helpers
+# =============================================================================
 
-# Base port to start assigning from (default: 12000)
-last_used_port="${BASE_PORT:-12000}"
+# join_path <base> <sub>
+#   Joins two path segments with exactly one slash between them,
+#   analogous to Python's os.path.join.
+join_path() {
+    local base="${1%/}"   # strip trailing slash from base
+    local sub="${2#/}"    # strip leading slash from sub-path
+    echo "${base}/${sub}"
+}
 
-# Port spacing between attempts (default: 20)
-port_margin="${PORT_MARGIN:-20}"
+# array_contains <needle> <haystack_element>...
+#   Returns 0 (success/true) if needle is found in the remaining arguments;
+#   returns 1 (failure/false) otherwise.
+#
+#   NOTE: `0` in return is success, and `1` is failure, which is the opposite of typical boolean logic.
+#   Usage:
+#     if array_contains "$value" "${my_array[@]}"; then ...
+array_contains() {
+    local needle="$1"
+    shift
+    local item
+    for item in "$@"; do
+        [[ "$item" == "$needle" ]] && return 0
+    done
+    return 1
+}
 
-
-# Temporary file to store the collected tests
-COLLECTED_TESTS_FILE="collected_tests.txt"
-
-ls -lh .  # show the contents of the directory
-
-# If codecov_source is set, prepend the coverage command
-if [ -n "$codecov_source" ]; then
-  cli_coverage="-m coverage run --source ${codecov_source} --append"
-else # If not, just keep it empty
-  cli_coverage=""
-fi
-# Append the common pytest arguments
-cli_pytest="-m pytest --no-header -v -s --color=yes --timeout=${test_timeout}"
-
-# Python arguments for running the tests and optional coverage
-printf "\e[35mUsing defaults: ${cli_coverage} ${cli_pytest}\e[0m\n"
-
-# Get the list of parametrizations. we need to call them separately. the last two lines are removed.
-# note: if there's a syntax error, this will fail with some garbled output
-python -um pytest ${test_dir} -q --collect-only --pythonwarnings ignore 2>&1 > $COLLECTED_TESTS_FILE
-# Early terminate if collection failed (e.g. syntax error)
-if [[ $? != 0 ]]; then
-  cat $COLLECTED_TESTS_FILE
-  printf "ERROR: test collection failed!\n"
-  exit 1
-fi
-
-# Initialize empty array
-tests=()
-
-# Read from file line by line
-while IFS= read -r line; do
-    # Only keep lines containing "test_"
-    if [[ $line == *"test_"* ]]; then
-        # Extract part after test_dir/
-        pruned_line="${line#*${test_dir}/}"
-        tests+=("${test_dir}/$pruned_line")
-    fi
-done < $COLLECTED_TESTS_FILE
-
-# Count tests
-test_count=${#tests[@]}
-
-# Display results
-printf "\e[34m================================================================================\e[0m\n"
-printf "\e[34mCOLLECTED $test_count TESTS:\e[0m\n"
-printf "\e[34m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\e[0m\n"
-printf "\e[34m%s\e[0m\n" "${tests[@]}"
-printf "\e[34m================================================================================\e[0m\n"
-
-# if test count is one print warning
-if [[ $test_count -eq 1 ]]; then
-  printf "\e[33mWARNING: only one test found!\e[0m\n"
-elif [ $test_count -eq 0 ]; then
-  printf "\e[31mERROR: no tests found!\e[0m\n"
-  exit 1
-fi
-
-if [ -n "$codecov_source" ]; then
-  coverage combine
-fi
-
-status=0 # aggregated script status
-report=() # final report
-pids=() # array of PID for running tests
-test_ids=() # array of indexes of running tests
-failed_tests=() # array of failed tests
-used_ports=() # array of used ports
-
-# --- helper functions ---
-
+# get_available_port <preferred_port>
+#   Prints an available TCP port.  Tries <preferred_port> first; if it is
+#   already bound, falls back to a kernel-assigned ephemeral port.
 get_available_port() {
-    preferred_port="$1"
-
-    # Check the preferred port first
+    local preferred_port="$1"
     if nc -z localhost "$preferred_port" 2>/dev/null; then
-        # Preferred port is busy, grab an ephemeral one
-        port=$(python3 -c "import socket as s; sock=s.socket(); sock.bind(('',0)); print(sock.getsockname()[1]); sock.close()")
-        echo "$port"
+        # Preferred port is busy — ask the kernel for a free ephemeral port.
+        python3 -c "
+import socket
+s = socket.socket()
+s.bind(('', 0))
+print(s.getsockname()[1])
+s.close()
+"
     else
-        # Preferred port is free
         echo "$preferred_port"
     fi
 }
 
-contains() {
-    local element="$1"
+# print_color <color_code> <message>
+#   Wraps a message in ANSI escape codes for coloured terminal output.
+print_color() {
+    local code="$1"
     shift
-    local array=("$@")
-
-    for item in "${array[@]}"; do
-        if [[ "$item" == "$element" ]]; then
-            echo "true"
-            return 0
-        fi
-    done
-
-    echo "false"
-    return 1
+    printf "\e[${code}m%s\e[0m\n" "$*"
 }
 
+# Convenience wrappers used throughout the script.
+print_blue()    { print_color 34 "$*"; }
+print_green()   { print_color 32 "$*"; }
+print_yellow()  { print_color 33 "$*"; }
+print_red()     { print_color 31 "$*"; }
+print_magenta() { print_color 35 "$*"; }
+print_purple()  { print_color 95 "$*"; }
 
-# --- Start running tests in parallel batches ---
+# =============================================================================
+# Configuration — all values can be overridden via environment variables
+# =============================================================================
 
-printf "Running $test_count tests in batches of $test_batch_size:\n"
-for i in "${!tests[@]}"; do
-  test=${tests[$i]}
+# Number of tests that execute simultaneously in each batch.
+test_batch_size="${NUM_PARALLEL_TESTS:-5}"
 
-  cli_test="python "
-  if [ -n "$codecov_source" ]; then
-    # append cli_coverage to the test command
-    cli_test="${cli_test} ${cli_coverage} --data-file=run-${i}.coverage"
-  fi
-  # add the pytest cli to the test command
-  cli_test="${cli_test} ${cli_pytest}"
+# Per-test timeout (seconds).
+test_timeout="${TEST_TIMEOUT:-1200}"
 
-  # get the next available unique port based on last_used_port and port_margin
-  ((last_used_port+=port_margin))
-  available_port=$(get_available_port $last_used_port)
+# Port from which sequential allocation begins.
+last_used_port="${BASE_PORT:-12000}"
 
-  # ensure the port is unique among used ports
-  while [[ $(contains $available_port "${used_ports[@]}") == "true" ]]; do
-    # get the next available unique port
-    ((last_used_port+=port_margin))
-    available_port=$(get_available_port $last_used_port)
-  done
+# Gap between successive port allocations (gives headroom for services that
+# open multiple sockets, e.g. distributed-training rendezvous).
+port_margin="${PORT_MARGIN:-20}"
 
-  # mark the port as used
-  used_ports+=($available_port)
+# Directory that receives log files, the collected-tests list, and coverage data.
+artifacts_dir="${STANDALONE_ARTIFACTS_DIR:-.}"
 
-  test_command="env STANDALONE_PORT=${available_port} ${cli_test} $test"
+# Optional coverage source package/path.
+codecov_source="${COVERAGE_SOURCE:-}"
 
-  printf "\e[95m* Running test $((i+1))/$test_count: $test_command\e[0m\n"
+# =============================================================================
+# Argument validation
+# =============================================================================
 
-  # execute the test in the background
-  # redirect to a log file that buffers test output. since the tests will run in the background,
-  # we cannot let them output to std{out,err} because the outputs would be garbled together
-  $test_command &> "parallel_test_output-$i.txt" &
-  test_ids+=($i) # save the test's id in an array with running tests
-  pids+=($!) # save the PID in an array with running tests
-
-  # if we reached the batch size, wait for all tests to finish
-  if (( (($i + 1) % $test_batch_size == 0) || $i == $test_count-1 )); then
-    printf "Waiting for batch to finish: $(IFS=' '; echo "${pids[@]}")\n"
-    # wait for running tests
-    for j in "${!test_ids[@]}"; do
-      i=${test_ids[$j]} # restore the global test's id
-      pid=${pids[$j]} # restore the particular PID
-      test=${tests[$i]} # restore the test name
-      printf "\e[33m? Waiting for $test @ parallel_test_output-$i.txt (PID: $pid)\e[0m\n"
-      wait -n $pid
-      # get the exit status of the test
-      test_status=$?
-      # add row to the final report
-      report+=("Ran $test >> exit:$test_status")
-      if [[ $test_status != 0 ]]; then
-        # add the test to the failed tests array
-        failed_tests+=($i)
-        # Process exited with a non-zero exit status
-        status=$test_status
-      fi
-    done
-    printf "Starting over with a new batch...\n"
-    test_ids=()  # reset the test's id array
-    pids=()  # reset the PID array
-  fi
-done
-
-# print test report with exit code for each test
-printf "\e[35m================================================================================\e[0m\n"
-for line in "${report[@]}"; do
-    if [[ "$line" == *"exit:0"* ]]; then
-        printf "\e[32m%s\e[0m\n" "$line"  # Green for lines containing exit:0
-    else
-        printf "\e[31m%s\e[0m\n" "$line" # Red for all other lines
-    fi
-done
-printf "\e[35m================================================================================\e[0m\n"
-
-# print failed tests from duped logs
-if [[ ${#failed_tests[@]} -gt 0 ]]; then
-  printf "\e[34mFAILED TESTS:\e[0m\n"
-  for i in "${failed_tests[@]}"; do
-    printf "\e[34m================================================================================\e[0m\n"
-    printf "\e[34m=== ${tests[$i]} ===\e[0m\n"
-    printf "\e[34m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\e[0m\n\n"
-    # show the output of the failed test
-    cat "parallel_test_output-$i.txt"
-    printf "\e[34m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\e[0m\n"
-    printf "\e[34m================================================================================\e[0m\n"
-    printf '\n\n\n'
-  done
-else
-  printf "\e[32mAll tests passed!\e[0m\n"
+if [[ $# -lt 1 ]]; then
+    print_red "ERROR: No test path supplied."
+    print_red "Usage: $0 <test_dir_or_file_or_function>"
+    exit 1
 fi
 
-# exit with the worse test result
-exit $status
+test_dir="$1"
+
+mkdir -p "$artifacts_dir"
+
+print_magenta "Artifacts directory : $artifacts_dir"
+print_magenta "Test target         : $test_dir"
+ls -lh .
+
+# =============================================================================
+# Build pytest / coverage CLI fragments
+# =============================================================================
+
+# If COVERAGE_SOURCE is set, each test is wrapped with `coverage run`.
+# The --data-file flag is populated per-test below so parallel runs don't
+# clobber each other's .coverage files.
+if [[ -n "$codecov_source" ]]; then
+    cli_coverage="-m coverage run --source ${codecov_source} --append"
+else
+    cli_coverage=""
+fi
+
+cli_pytest="-m pytest --no-header -v -s --color=yes --timeout=${test_timeout}"
+
+print_magenta "Python flags : ${cli_coverage} ${cli_pytest}"
+
+# =============================================================================
+# Test collection
+# =============================================================================
+
+collected_tests_file="$(join_path "$artifacts_dir" "collected_tests.txt")"
+
+# Run pytest in collection-only mode.  stdout+stderr are merged so that syntax
+# errors (which land on stderr) are captured alongside the collected list.
+python -um pytest "${test_dir}" -q --collect-only --pythonwarnings ignore \
+    > "$collected_tests_file" 2>&1
+
+if [[ $? -ne 0 ]]; then
+    cat "$collected_tests_file"
+    print_red "ERROR: test collection failed — check the output above for syntax errors."
+    exit 1
+fi
+
+
+# Parse the collected output into an array.
+# pytest --collect-only lines that contain "test_" are the individual test IDs.
+# Each ID looks like:  <test_dir>/path/to/test_file.py::TestClass::test_method[param]
+# We strip the leading <test_dir> fragment then re-attach it to avoid double
+# slashes when test_dir itself contains a trailing slash.
+tests=()
+while IFS= read -r line; do
+    if [[ "$line" != *"test_"* ]]; then
+        continue
+    fi
+
+    # Remove the test_dir prefix (if present) to get the relative portion.
+    # Pattern: strip everything up to and including the first occurrence of test_dir.
+    relative="${line#*${test_dir}}"
+
+    if [[ -z "$relative" ]]; then
+        # The whole line *is* test_dir (single-file invocation).
+        tests+=("$test_dir")
+    else
+        # Re-attach test_dir with a guaranteed single slash.
+        tests+=("$(join_path "$test_dir" "$relative")")
+    fi
+done < "$collected_tests_file"
+
+test_count="${#tests[@]}"
+
+# =============================================================================
+# Display collected tests
+# =============================================================================
+
+print_blue "================================================================================"
+print_blue "COLLECTED ${test_count} TESTS:"
+print_blue "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+printf "\e[34m%s\e[0m\n" "${tests[@]}"
+print_blue "================================================================================"
+
+if [[ $test_count -eq 0 ]]; then
+    print_red "ERROR: no tests found.  Check that the path is correct and tests are discoverable."
+    exit 1
+elif [[ $test_count -eq 1 ]]; then
+    print_yellow "WARNING: only one test found — verify the test path if this looks wrong."
+fi
+
+# =============================================================================
+# Parallel test execution
+# =============================================================================
+
+aggregated_status=0   # Becomes non-zero if any test fails.
+report=()             # Human-readable one-liner per completed test.
+failed_tests=()       # Indexes (into tests[]) of failed tests.
+used_ports=()         # Ports already reserved so we don't assign duplicates.
+pids=()               # PIDs of currently-running background tests.
+test_ids=()           # tests[] indexes corresponding to pids[].
+
+print_magenta "Running ${test_count} tests in batches of ${test_batch_size}:"
+
+for i in "${!tests[@]}"; do
+    test="${tests[$i]}"
+
+    # Build the per-test python invocation.
+    if [[ -n "$codecov_source" ]]; then
+        # Each parallel run writes its own .coverage file to avoid races.
+        cli_test="python ${cli_coverage} --data-file=$(join_path "$artifacts_dir" "run-${i}.coverage") ${cli_pytest}"
+    else
+        cli_test="python ${cli_pytest}"
+    fi
+
+    # --- Port allocation ---
+    # Advance the counter and find an unbound port that we haven't used yet.
+    (( last_used_port += port_margin ))
+    available_port="$(get_available_port "$last_used_port")"
+
+    # If the returned port was already reserved by a previous test in this run,
+    # keep incrementing until we find a truly free slot.
+    while array_contains "$available_port" "${used_ports[@]+"${used_ports[@]}"}"; do
+        (( last_used_port += port_margin ))
+        available_port="$(get_available_port "$last_used_port")"
+    done
+
+    used_ports+=("$available_port")
+    print_magenta "Assigned port ${available_port} for test index ${i}: ${test}"
+
+    test_command="env STANDALONE_PORT=${available_port} ${cli_test} ${test}"
+    print_purple "* Launching test $((i+1))/${test_count}: ${test_command}"
+
+    # Run the test in the background; buffer its output to avoid garbled stdout.
+    log_file="$(join_path "$artifacts_dir" "parallel_test_output-${i}.txt")"
+    $test_command &> "$log_file" &
+
+    pids+=($!)
+    test_ids+=($i)
+
+    # --- Batch synchronisation ---
+    # Flush the batch when it is full, or when this is the very last test.
+    local_batch_idx=$(( i + 1 ))
+    if (( local_batch_idx % test_batch_size == 0 || i == test_count - 1 )); then
+        print_magenta "Waiting for batch: PIDs ${pids[*]}"
+
+        for j in "${!test_ids[@]}"; do
+            batch_test_idx="${test_ids[$j]}"
+            batch_pid="${pids[$j]}"
+            batch_test="${tests[$batch_test_idx]}"
+            batch_log="$(join_path "$artifacts_dir" "parallel_test_output-${batch_test_idx}.txt")"
+
+            print_yellow "? Waiting for ${batch_test} (PID: ${batch_pid}) → ${batch_log}"
+            wait "$batch_pid"
+            test_exit_status=$?
+
+            report+=("Ran ${batch_test} >> exit:${test_exit_status}")
+
+            if [[ $test_exit_status -ne 0 ]]; then
+                failed_tests+=("$batch_test_idx")
+                aggregated_status=$test_exit_status
+            fi
+        done
+
+        print_magenta "Batch done — starting next batch."
+        test_ids=()
+        pids=()
+    fi
+done
+
+# =============================================================================
+# Coverage combination (only meaningful when all tests have finished)
+# =============================================================================
+
+if [[ -n "$codecov_source" ]]; then
+    print_magenta "Combining per-test coverage files..."
+    # Gather only the per-test data files we wrote above.
+    coverage_files=("$(join_path "$artifacts_dir" "run-"*.coverage)")
+    if [[ ${#coverage_files[@]} -gt 0 ]]; then
+        coverage combine "${coverage_files[@]}"
+    fi
+fi
+
+# =============================================================================
+# Final report
+# =============================================================================
+
+print_magenta "================================================================================"
+for line in "${report[@]}"; do
+    if [[ "$line" == *"exit:0"* ]]; then
+        print_green "$line"
+    else
+        print_red "$line"
+    fi
+done
+print_magenta "================================================================================"
+
+# Print full buffered output for every failed test so CI logs are self-contained.
+if [[ ${#failed_tests[@]} -gt 0 ]]; then
+    print_blue "FAILED TESTS:"
+    for idx in "${failed_tests[@]}"; do
+        failed_log="$(join_path "$artifacts_dir" "parallel_test_output-${idx}.txt")"
+        print_blue "================================================================================"
+        print_blue "=== ${tests[$idx]} ==="
+        print_blue "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        echo ""
+        cat "$failed_log"
+        print_blue "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        print_blue "================================================================================"
+        printf "\n\n\n"
+    done
+else
+    print_green "All tests passed!"
+fi
+
+# Propagate the worst non-zero exit code so the CI step is marked failed.
+exit $aggregated_status
