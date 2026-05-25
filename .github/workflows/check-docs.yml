@@ -58,6 +58,8 @@ env:
   UV_TORCH_BACKEND: cpu
   # default 0 means to keep for the maximum time
   KEEP_DAYS: 0
+  # Supply-chain guard: skip PyPI releases newer than this. See https://docs.astral.sh/uv/reference/settings/#exclude-newer
+  UV_EXCLUDE_NEWER: "2 days"
 
 jobs:
   make-docs:
