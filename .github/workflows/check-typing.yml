@@ -52,11 +52,8 @@ jobs:
         timeout-minutes: 20
         run: |
           # don't use --upgrade to respect the version installed via setup.py
-          # `unsafe-best-match` required: PyTorch extra-index mirrors older packages that
-          # conflict with version ranges under UV_EXCLUDE_NEWER without fallback to PyPI.
           uv pip install -e '.[${{ inputs.extra-typing }}]' mypy types-requests \
-            --extra-index-url https://download.pytorch.org/whl/cpu/torch_stable.html \
-            --index-strategy unsafe-best-match
+            --extra-index-url https://download.pytorch.org/whl/cpu/torch_stable.html
           uv pip list
 
       - name: Pull reusable 🤖 actions️
