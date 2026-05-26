@@ -6,7 +6,7 @@ requires = [
 ]
 
 [tool.ruff]
-target-version = "py39"
+target-version = "py310"
 line-length = 120
 format.preview = true
 lint.select = [

@@ -8,7 +8,6 @@ import re
 import warnings
 from collections.abc import Sequence
 from pprint import pprint
-from typing import Union
 
 REQUIREMENT_ROOT = "requirements.txt"
 REQUIREMENT_FILES_ALL: list = glob.glob(os.path.join("requirements", "*.txt"))
@@ -19,7 +18,7 @@ if os.path.isfile(REQUIREMENT_ROOT):
 
 
 def prune_packages_in_requirements(
-    packages: Union[str, Sequence[str]], req_files: Union[str, Sequence[str]] = REQUIREMENT_FILES_ALL
+    packages: str | Sequence[str], req_files: str | Sequence[str] = REQUIREMENT_FILES_ALL
 ) -> None:
     """Remove one or more packages from the specified requirement files.
 
@@ -101,7 +100,7 @@ def _replace_min_req_in_pyproject_toml(proj_file: str = "pyproject.toml") -> Non
         f.write(tomlkit.dumps(doc))
 
 
-def replace_oldest_version(req_files: Union[str, Sequence[str]] = REQUIREMENT_FILES_ALL) -> None:
+def replace_oldest_version(req_files: str | Sequence[str] = REQUIREMENT_FILES_ALL) -> None:
     """Convert minimal version specifiers (>=) to pinned ones (==) in the given requirement files.
 
     Supports plain *.txt requirements and pyproject.toml files. Unsupported file types trigger a warning.
@@ -178,7 +177,7 @@ def _replace_package_name_in_pyproject_toml(proj_file: str, old_package: str, ne
 
 
 def replace_package_in_requirements(
-    old_package: str, new_package: str, req_files: Union[str, Sequence[str]] = REQUIREMENT_FILES_ALL
+    old_package: str, new_package: str, req_files: str | Sequence[str] = REQUIREMENT_FILES_ALL
 ) -> None:
     """Rename a package across multiple requirement files while keeping version constraints intact.
 
