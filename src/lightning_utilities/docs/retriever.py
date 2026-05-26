@@ -12,9 +12,8 @@ import requests
 def _download_file(file_url: str, folder: str) -> str:
     """Download a file from a URL into the given folder.
 
-    If a file with the same name already exists, it will be overwritten.
-    Returns the basename of the downloaded file. Network-related exceptions from
-    ``requests.get`` (e.g., timeouts or connection errors) may propagate to the caller.
+    If a file with the same name already exists, it will be overwritten. Returns the basename of the downloaded file.
+    Network-related exceptions from ``requests.get`` (e.g., timeouts or connection errors) may propagate to the caller.
 
     """
     fname = os.path.basename(file_url)
