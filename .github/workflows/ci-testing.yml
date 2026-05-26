@@ -26,6 +26,8 @@ jobs:
     env:
       TORCH_URL: "https://download.pytorch.org/whl/cpu/torch_stable.html"
       UV_TORCH_BACKEND: cpu
+      # Supply-chain guard: skip PyPI releases newer than this. See https://docs.astral.sh/uv/reference/settings/#exclude-newer
+      UV_EXCLUDE_NEWER: "2 days"
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@v6
