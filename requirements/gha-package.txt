@@ -2,5 +2,5 @@ twine ==6.2.*
 setuptools ==82.0.*
 wheel ==0.46.*
 build ==1.4.*
-importlib_metadata ==8.7.*
+importlib_metadata ==9.0.*
 packaging ==26.0
