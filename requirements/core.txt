@@ -1,2 +1,2 @@
-packaging >=22
+packaging >=26.2
 typing_extensions

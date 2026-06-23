@@ -29,8 +29,8 @@ def rank_zero_only(fn: Callable[P, T], default: T) -> Callable[P, T]: ...
 def rank_zero_only(fn: Callable[P, T], default: T | None = None) -> Callable[P, T | None]:
     """Decorator to run the wrapped function only on global rank 0.
 
-    Set ``rank_zero_only.rank`` before use. On non-zero ranks, the function is skipped and the provided
-    ``default`` is returned (or ``None`` if not given).
+    Set ``rank_zero_only.rank`` before use. On non-zero ranks, the function is skipped and the provided ``default`` is
+    returned (or ``None`` if not given).
 
     """
 

@@ -3,8 +3,8 @@
 #
 """Utilities to parse and adjust Python requirements files.
 
-This module parses requirement lines while preserving inline comments and pip arguments and
-supports relaxing version pins based on a chosen unfreeze strategy: "none", "major", or "all".
+This module parses requirement lines while preserving inline comments and pip arguments and supports relaxing version
+pins based on a chosen unfreeze strategy: "none", "major", or "all".
 
 """
 
