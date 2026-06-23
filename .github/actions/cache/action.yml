@@ -27,7 +27,7 @@ runs:
       shell: bash
 
     - name: Cache 💽 pip
-      uses: actions/cache@v3
+      uses: actions/cache@6f8efc29b200d32929f49075959781ed54ec270c # v3.5.0
       with:
         path: ${{ steps.cache_dirs.outputs.pip_dir }}
         key: py${{ inputs.python-version }}-pip-${{ inputs.offset }}-${{ hashFiles('requirements.txt') }}
@@ -35,7 +35,7 @@ runs:
         enableCrossOsArchive: true
 
     - name: Cache 💽 conda
-      uses: actions/cache@v3
+      uses: actions/cache@6f8efc29b200d32929f49075959781ed54ec270c # v3.5.0
       if: runner.os == 'Linux'
       with:
         path: ~/conda_pkgs_dir
