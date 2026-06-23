@@ -41,7 +41,7 @@ jobs:
       UV_EXCLUDE_NEWER: "2 days"
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up uv and Python
         uses: astral-sh/setup-uv@v7
@@ -51,7 +51,7 @@ jobs:
           enable-cache: true
 
       - name: Pull reusable 🤖 actions️
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ inputs.scripts-ref }}
           path: .cicd
