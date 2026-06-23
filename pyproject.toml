@@ -6,7 +6,7 @@ requires = [
 ]
 
 [tool.ruff]
-target-version = "py39"
+target-version = "py310"
 line-length = 120
 format.preview = true
 lint.select = [
@@ -99,7 +99,6 @@ quiet-level = 3
 # also adding links until they ignored by its: nature
 #  https://github.com/codespell-project/codespell/issues/2243#issuecomment-1732019960
 # ignore-words-list = ""
-
 [tool.docformatter]
 recursive = true
 # this need to be shorter as some docstings are r"""...
@@ -114,12 +113,23 @@ ignore = [
   ".github/*",
 ]
 
+# [tool.coverage.run]
+# parallel = true
+# concurrency = ['thread']
+# relative_files = true
+[tool.mypy]
+files = [
+  "src/lightning_utilities",
+]
+ignore_missing_imports = true
+disallow_untyped_defs = true
+
 [tool.pytest]
 ini_options.norecursedirs = [
   ".git",
   ".github",
-  "dist",
   "build",
+  "dist",
   "docs",
 ]
 ini_options.addopts = [
@@ -132,25 +142,13 @@ ini_options.addopts = [
 ini_options.markers = [
   "online: run tests that require internet connection",
 ]
+ini_options.xfail_strict = true
 ini_options.filterwarnings = [
   "error::FutureWarning",
 ]  # todo: "error::DeprecationWarning"
-ini_options.xfail_strict = true
 
 [tool.coverage]
 report.exclude_lines = [
   "pass",
   "pragma: no cover",
 ]
-
-# [tool.coverage.run]
-# parallel = true
-# concurrency = ['thread']
-# relative_files = true
-
-[tool.mypy]
-files = [
-  "src/lightning_utilities",
-]
-disallow_untyped_defs = true
-ignore_missing_imports = true

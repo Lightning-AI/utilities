@@ -6,12 +6,13 @@ import functools
 import importlib
 import os
 import warnings
+from collections.abc import Callable
 from functools import lru_cache
 from importlib.metadata import PackageNotFoundError, distribution
 from importlib.metadata import version as _version
 from importlib.util import find_spec
 from types import ModuleType
-from typing import Any, Callable, Optional, TypeVar
+from typing import Any, TypeVar
 
 from packaging.requirements import Requirement
 from packaging.version import InvalidVersion, Version
@@ -117,7 +118,7 @@ class RequirementCache:
 
     """
 
-    def __init__(self, requirement: Optional[str] = None, module: Optional[str] = None) -> None:
+    def __init__(self, requirement: str | None = None, module: str | None = None) -> None:
         if not (requirement or module):
             raise ValueError("At least one arguments need to be set.")
         self.requirement = requirement
@@ -262,7 +263,7 @@ class LazyModule(ModuleType):
 
     """
 
-    def __init__(self, module_name: str, callback: Optional[Callable] = None) -> None:
+    def __init__(self, module_name: str, callback: Callable | None = None) -> None:
         super().__init__(module_name)
         self._module: Any = None
         self._callback = callback
@@ -294,7 +295,7 @@ class LazyModule(ModuleType):
         self.__dict__.update(self._module.__dict__)
 
 
-def lazy_import(module_name: str, callback: Optional[Callable] = None) -> LazyModule:
+def lazy_import(module_name: str, callback: Callable | None = None) -> LazyModule:
     """Return a proxy module object that will lazily import the given module the first time it is used.
 
     Example usage:

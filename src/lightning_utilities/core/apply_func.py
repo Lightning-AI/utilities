@@ -4,10 +4,10 @@
 #
 import dataclasses
 from collections import OrderedDict, defaultdict
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from copy import deepcopy
 from functools import cached_property
-from typing import Any, Callable, Optional, Union
+from typing import Any
 
 
 def is_namedtuple(obj: object) -> bool:
@@ -28,10 +28,10 @@ def is_dataclass_instance(obj: object) -> bool:
 
 def apply_to_collection(
     data: Any,
-    dtype: Union[type, Any, tuple[Union[type, Any]]],
+    dtype: type | Any | tuple[type | Any],
     function: Callable,
     *args: Any,
-    wrong_dtype: Optional[Union[type, tuple[type, ...]]] = None,
+    wrong_dtype: type | tuple[type, ...] | None = None,
     include_none: bool = True,
     allow_frozen: bool = False,
     **kwargs: Any,
@@ -89,10 +89,10 @@ def apply_to_collection(
 
 def _apply_to_collection_slow(
     data: Any,
-    dtype: Union[type, Any, tuple[Union[type, Any]]],
+    dtype: type | Any | tuple[type | Any],
     function: Callable,
     *args: Any,
-    wrong_dtype: Optional[Union[type, tuple[type, ...]]] = None,
+    wrong_dtype: type | tuple[type, ...] | None = None,
     include_none: bool = True,
     allow_frozen: bool = False,
     **kwargs: Any,
@@ -191,12 +191,12 @@ def _apply_to_collection_slow(
 
 
 def apply_to_collections(
-    data1: Optional[Any],
-    data2: Optional[Any],
-    dtype: Union[type, Any, tuple[Union[type, Any]]],
+    data1: Any | None,
+    data2: Any | None,
+    dtype: type | Any | tuple[type | Any],
     function: Callable,
     *args: Any,
-    wrong_dtype: Optional[Union[type, tuple[type]]] = None,
+    wrong_dtype: type | tuple[type] | None = None,
     **kwargs: Any,
 ) -> Any:
     """Zip two collections and apply a function to items of a certain dtype.
