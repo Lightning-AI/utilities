@@ -28,7 +28,7 @@ jobs:
       MODIFIED_ONLY: "no"
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Create local version of config
         if: ${{ inputs.config-file == '' }}
@@ -63,7 +63,7 @@ jobs:
         run: echo "MODIFIED_ONLY=yes" >> $GITHUB_ENV
 
       - name: Checking markdown link
-        uses: tcort/github-action-markdown-link-check@v1
+        uses: tcort/github-action-markdown-link-check@e7c7a18363c842693fadde5d41a3bd3573a7a225 # v1.1.2
         with:
           base-branch: ${{ inputs.base-branch }}
           use-quiet-mode: "yes"
