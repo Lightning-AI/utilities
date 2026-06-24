@@ -81,19 +81,19 @@ jobs:
       matrix: ${{ fromJSON(inputs.build-matrix) }}
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v6
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0 # checkout entire history for all branches (required when using scm-based versioning)
           submodules: recursive
       - name: Set up uv and Python 🐍
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
         with:
           activate-environment: true
           python-version: ${{ matrix.python-version || '3.x' }}
           enable-cache: true
 
       - name: Pull reusable 🤖 actions️
-        uses: actions/checkout@v6
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           ref: ${{ inputs.actions-ref }}
           path: .cicd
@@ -106,7 +106,7 @@ jobs:
         uses: ./.cicd/.github/actions/pkg-create
       - name: Upload 📤 packages
         if: ${{ inputs.artifact-name != '' }}
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ${{ inputs.artifact-name }}-build-${{ strategy.job-index }}
           path: dist
@@ -119,13 +119,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Pull reusable 🤖 actions️
-        uses: actions/checkout@v6
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           ref: ${{ inputs.actions-ref }}
           path: .cicd
           repository: Lightning-AI/utilities
       - name: Set up uv and Python
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
         with:
           activate-environment: true
           python-version: "3.10"
@@ -136,7 +136,7 @@ jobs:
           uv pip list
 
       - name: Download 📥
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           # download all build artifacts
           pattern: ${{ inputs.artifact-name }}-build-*
@@ -147,7 +147,7 @@ jobs:
           ls -lh dist/
           twine check dist/*
       - name: Upload 📤
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ${{ inputs.artifact-name }}
           path: dist
@@ -164,24 +164,24 @@ jobs:
       matrix: ${{ fromJSON(inputs.testing-matrix) }}
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v6
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           submodules: recursive
       # NOTE: use pip as gold standard for package validation
       - name: Set up Python 🐍 ${{ matrix.python-version }}
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
           python-version: ${{ matrix.python-version || '3.x' }}
 
       - name: Pull reusable 🤖 actions️
-        uses: actions/checkout@v6
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           ref: ${{ inputs.actions-ref }}
           path: .cicd
           repository: Lightning-AI/utilities
       - name: Download 📥 all packages
         if: ${{ inputs.artifact-name != '' }}
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: ${{ inputs.artifact-name }}
           path: pypi
