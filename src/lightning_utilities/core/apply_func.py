@@ -36,9 +36,9 @@ def is_dataclass_frozen(obj: object) -> bool:
 def _dataclass_has_init_vars(data: Any) -> bool:
     """Return True if the dataclass declares any ``InitVar`` (pseudo-)fields.
 
-    ``InitVar`` fields are excluded from ``dataclasses.fields`` and their values are consumed by
-    ``__post_init__`` rather than stored on the instance, so a frozen dataclass that declares them
-    cannot be reconstructed from its stored fields.
+    ``InitVar`` fields are excluded from ``dataclasses.fields`` and their values are consumed by ``__post_init__``
+    rather than stored on the instance, so a frozen dataclass that declares them cannot be reconstructed from its stored
+    fields.
 
     """
     return any(f._field_type is dataclasses._FIELD_INITVAR for f in data.__dataclass_fields__.values())
