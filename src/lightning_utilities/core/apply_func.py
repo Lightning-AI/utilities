@@ -3,6 +3,7 @@
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 import dataclasses
+import warnings
 from collections import OrderedDict, defaultdict
 from collections.abc import Callable, Mapping, Sequence
 from copy import deepcopy
@@ -26,6 +27,55 @@ def is_dataclass_instance(obj: object) -> bool:
     return dataclasses.is_dataclass(obj) and not isinstance(obj, type)
 
 
+def is_dataclass_frozen(obj: object) -> bool:
+    """Return True if the given object is a frozen dataclass instance."""
+    # https://stackoverflow.com/a/75958306
+    return getattr(getattr(obj, "__dataclass_params__", None), "frozen", False)
+
+
+def _dataclass_has_init_vars(data: Any) -> bool:
+    """Return True if the dataclass declares any ``InitVar`` (pseudo-)fields.
+
+    ``InitVar`` fields are excluded from ``dataclasses.fields`` and their values are consumed by
+    ``__post_init__`` rather than stored on the instance, so a frozen dataclass that declares them
+    cannot be reconstructed from its stored fields.
+
+    """
+    return any(f._field_type is dataclasses._FIELD_INITVAR for f in data.__dataclass_fields__.values())
+
+
+def _reconstruct_frozen_dataclass(data: Any, apply_field: Callable[[Any], Any]) -> Any:
+    """Reconstruct a frozen dataclass by applying ``apply_field`` to each ``init`` field's value.
+
+    Frozen dataclasses cannot be mutated in place, so instead of the deepcopy-and-``setattr`` approach
+    used for mutable dataclasses, a new instance is built from the (transformed) init fields. Fields
+    with ``init=False`` are retained from the original instance and written back via
+    ``object.__setattr__`` (this overrides whatever ``__post_init__`` derived during construction,
+    keeping parity with the retain-old behavior of the mutable path).
+
+    Raises:
+        ValueError: If the frozen dataclass declares ``InitVar`` fields, which cannot be reconstructed.
+
+    """
+    if _dataclass_has_init_vars(data):
+        raise ValueError(
+            "A frozen dataclass with `InitVar` fields was passed to `apply_to_collection`(s)"
+            " but this is not supported: such instances cannot be reconstructed."
+        )
+    init_fields = {}
+    non_init_fields = {}
+    for field in dataclasses.fields(data):
+        field_value = getattr(data, field.name)
+        if field.init:
+            init_fields[field.name] = apply_field(field_value)
+        else:
+            non_init_fields[field.name] = field_value
+    result = type(data)(**init_fields)
+    for field_name, field_value in non_init_fields.items():
+        object.__setattr__(result, field_name, field_value)
+    return result
+
+
 def apply_to_collection(
     data: Any,
     dtype: type | Any | tuple[type | Any],
@@ -33,7 +83,6 @@ def apply_to_collection(
     *args: Any,
     wrong_dtype: type | tuple[type, ...] | None = None,
     include_none: bool = True,
-    allow_frozen: bool = False,
     **kwargs: Any,
 ) -> Any:
     """Recursively applies a function to all elements of a certain dtype.
@@ -46,14 +95,24 @@ def apply_to_collection(
         wrong_dtype: the given function won't be applied if this type is specified and the given collections
             is of the ``wrong_dtype`` even if it is of type ``dtype``
         include_none: Whether to include an element if the output of ``function`` is ``None``.
-        allow_frozen: Whether not to error upon encountering a frozen dataclass instance.
         **kwargs: keyword arguments (will be forwarded to calls of ``function``)
 
     Returns:
         The resulting collection
 
     """
-    if include_none is False or wrong_dtype is not None or allow_frozen is True:
+    if "allow_frozen" in kwargs:
+        # `allow_frozen` was removed: frozen dataclasses are now reconstructed automatically.
+        # Drop it here so it is not forwarded to `function`, and warn that it is a no-op.
+        kwargs.pop("allow_frozen")
+        warnings.warn(
+            "The `allow_frozen` argument of `apply_to_collection` is deprecated and has no effect:"
+            " frozen dataclasses are now reconstructed automatically. It will be removed in a future release.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
+    if include_none is False or wrong_dtype is not None:
         # not worth implementing these on the fast path: go with the slower option
         return _apply_to_collection_slow(
             data,
@@ -62,7 +121,6 @@ def apply_to_collection(
             *args,
             wrong_dtype=wrong_dtype,
             include_none=include_none,
-            allow_frozen=allow_frozen,
             **kwargs,
         )
     # fast path for the most common cases:
@@ -82,7 +140,6 @@ def apply_to_collection(
         *args,
         wrong_dtype=wrong_dtype,
         include_none=include_none,
-        allow_frozen=allow_frozen,
         **kwargs,
     )
 
@@ -94,7 +151,6 @@ def _apply_to_collection_slow(
     *args: Any,
     wrong_dtype: type | tuple[type, ...] | None = None,
     include_none: bool = True,
-    allow_frozen: bool = False,
     **kwargs: Any,
 ) -> Any:
     # Breaking condition
@@ -105,6 +161,25 @@ def _apply_to_collection_slow(
 
     # Recursively apply to collection items
     if is_dataclass_instance(data):
+        if is_dataclass_frozen(data):
+            # frozen dataclass: reconstruct a new instance from (transformed) init fields
+            def _apply_field(field_value: Any) -> Any:
+                v = _apply_to_collection_slow(
+                    field_value,
+                    dtype,
+                    function,
+                    *args,
+                    wrong_dtype=wrong_dtype,
+                    include_none=include_none,
+                    **kwargs,
+                )
+                if not include_none and v is None:  # retain old value
+                    v = field_value
+                return v
+
+            return _reconstruct_frozen_dataclass(data, _apply_field)
+
+        # mutable dataclass: deepcopy + setattr (handles InitVar, init=False, and cached_property reset)
         # make a deepcopy of the data,
         # but do not deepcopy mapped fields since the computation would
         # be wasted on values that likely get immediately overwritten
@@ -126,20 +201,11 @@ def _apply_to_collection_slow(
                     *args,
                     wrong_dtype=wrong_dtype,
                     include_none=include_none,
-                    allow_frozen=allow_frozen,
                     **kwargs,
                 )
             if not field_init or (not include_none and v is None):  # retain old value
                 v = getattr(data, field_name)
-            try:
-                setattr(result, field_name, v)
-            except dataclasses.FrozenInstanceError as e:
-                if allow_frozen:
-                    # Quit early if we encounter a frozen data class; return `result` as is.
-                    break
-                raise ValueError(
-                    "A frozen dataclass was passed to `apply_to_collection` but this is not allowed."
-                ) from e
+            setattr(result, field_name, v)
 
         # Explicitly resetting cached property.
         for cached_name in filter(
@@ -158,7 +224,6 @@ def _apply_to_collection_slow(
                 *args,
                 wrong_dtype=wrong_dtype,
                 include_none=include_none,
-                allow_frozen=allow_frozen,
                 **kwargs,
             )
             if include_none or v is not None:
@@ -179,7 +244,6 @@ def _apply_to_collection_slow(
                 *args,
                 wrong_dtype=wrong_dtype,
                 include_none=include_none,
-                allow_frozen=allow_frozen,
                 **kwargs,
             )
             if include_none or v is not None:
@@ -214,7 +278,8 @@ def apply_to_collections(
         A collection with the same structure as the input where matching elements are transformed.
 
     Raises:
-        ValueError: If sequence collections have different sizes.
+        ValueError: If sequence collections have different sizes, or if a frozen dataclass with ``InitVar``
+            fields is passed.
         TypeError: If dataclass inputs are mismatched (different types or fields), or if ``data1`` is a
             dataclass instance but ``data2`` is not.
 
@@ -260,6 +325,27 @@ def apply_to_collections(
             and all(map(lambda f1, f2: isinstance(f1, type(f2)), dataclasses.fields(data1), dataclasses.fields(data2)))
         ):
             raise TypeError("Dataclasses fields do not match.")
+
+        if is_dataclass_frozen(data1):
+            # frozen dataclass: reconstruct from the zipped (transformed) init fields.
+            # build a lookup of data2's fields so we can zip by position during reconstruction.
+            fields2 = {field.name: getattr(data2, field.name) for field in dataclasses.fields(data2)}
+            field_iter = iter(dataclasses.fields(data1))
+
+            def _apply_field(field_value1: Any) -> Any:
+                field = next(field_iter)
+                return apply_to_collections(
+                    field_value1,
+                    fields2[field.name],
+                    dtype,
+                    function,
+                    *args,
+                    wrong_dtype=wrong_dtype,
+                    **kwargs,
+                )
+
+            return _reconstruct_frozen_dataclass(data1, _apply_field)
+
         # make a deepcopy of the data,
         # but do not deepcopy mapped fields since the computation would
         # be wasted on values that likely get immediately overwritten
@@ -292,12 +378,7 @@ def apply_to_collections(
                 )
             if not field_init1 or not field_init2 or v is None:  # retain old value
                 return apply_to_collection(data1, dtype, function, *args, wrong_dtype=wrong_dtype, **kwargs)
-            try:
-                setattr(result, field_name, v)
-            except dataclasses.FrozenInstanceError as e:
-                raise ValueError(
-                    "A frozen dataclass was passed to `apply_to_collections` but this is not allowed."
-                ) from e
+            setattr(result, field_name, v)
         return result
 
     return apply_to_collection(data1, dtype, function, *args, wrong_dtype=wrong_dtype, **kwargs)
