@@ -3,7 +3,6 @@
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 import dataclasses
-import warnings
 from collections import OrderedDict, defaultdict
 from collections.abc import Callable, Mapping, Sequence
 from copy import deepcopy
