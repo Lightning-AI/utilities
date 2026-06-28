@@ -101,17 +101,6 @@ def apply_to_collection(
         The resulting collection
 
     """
-    if "allow_frozen" in kwargs:
-        # `allow_frozen` was removed: frozen dataclasses are now reconstructed automatically.
-        # Drop it here so it is not forwarded to `function`, and warn that it is a no-op.
-        kwargs.pop("allow_frozen")
-        warnings.warn(
-            "The `allow_frozen` argument of `apply_to_collection` is deprecated and has no effect:"
-            " frozen dataclasses are now reconstructed automatically. It will be removed in a future release.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-
     if include_none is False or wrong_dtype is not None:
         # not worth implementing these on the fast path: go with the slower option
         return _apply_to_collection_slow(

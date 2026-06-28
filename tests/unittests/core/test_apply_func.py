@@ -356,19 +356,6 @@ def test_apply_to_collection_frozen_dataclass():
     assert foo == Foo(0)
 
 
-def test_apply_to_collection_allow_frozen_kwarg_is_ignored():
-    @dataclasses.dataclass(frozen=True)
-    class Foo:
-        var: int
-
-    foo = Foo(0)
-    # `allow_frozen` is deprecated; passing it must warn, must not error, and must not be forwarded to `function`
-    with pytest.warns(DeprecationWarning, match="allow_frozen"):
-        result = apply_to_collection(foo, int, lambda x: x + 1, allow_frozen=True)
-    assert result == Foo(1)
-    assert foo == Foo(0)
-
-
 def test_apply_to_collection_frozen_dataclass_nested():
     @dataclasses.dataclass(frozen=True)
     class Inner:
