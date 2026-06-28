@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added support for Python 3.14 ([#464](https://github.com/Lightning-AI/utilities/pull/464))
+- Added `apply_to_collection`(s) support for frozen dataclasses ([#499](https://github.com/Lightning-AI/utilities/pull/499))
 
 ### Changed
 
