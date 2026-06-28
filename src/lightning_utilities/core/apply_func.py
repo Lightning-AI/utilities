@@ -40,7 +40,7 @@ def _dataclass_has_init_vars(data: Any) -> bool:
     fields.
 
     """
-    return any(f._field_type is dataclasses._FIELD_INITVAR for f in data.__dataclass_fields__.values())
+    return any(f._field_type is dataclasses._FIELD_INITVAR for f in data.__dataclass_fields__.values())  # type: ignore[attr-defined]
 
 
 def _reconstruct_frozen_dataclass(data: Any, apply_field: Callable[[Any], Any]) -> Any:
@@ -197,7 +197,8 @@ def _apply_to_collection_slow(
 
         # Explicitly resetting cached property.
         for cached_name in filter(
-            lambda k: isinstance(getattr(type(data), k), cached_property), vars(type(data)).keys()
+            lambda k: isinstance(getattr(type(data), k), cached_property),
+            vars(type(data)).keys(),
         ):
             vars(result).pop(cached_name, None)
         return result
@@ -310,7 +311,13 @@ def apply_to_collections(
             )
         if not (
             len(dataclasses.fields(data1)) == len(dataclasses.fields(data2))
-            and all(map(lambda f1, f2: isinstance(f1, type(f2)), dataclasses.fields(data1), dataclasses.fields(data2)))
+            and all(
+                map(
+                    lambda f1, f2: isinstance(f1, type(f2)),
+                    dataclasses.fields(data1),
+                    dataclasses.fields(data2),
+                )
+            )
         ):
             raise TypeError("Dataclasses fields do not match.")
 
@@ -350,9 +357,10 @@ def apply_to_collections(
         result = deepcopy(data1, memo=memo)
 
         # apply function to each field
-        for (field_name, (field_value1, field_init1)), (_, (field_value2, field_init2)) in zip(
-            fields[0].items(), fields[1].items()
-        ):
+        for (field_name, (field_value1, field_init1)), (
+            _,
+            (field_value2, field_init2),
+        ) in zip(fields[0].items(), fields[1].items()):
             v = None
             if field_init1 and field_init2:
                 v = apply_to_collections(
