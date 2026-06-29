@@ -1,2 +1,2 @@
-jsonargparse[signatures] >=4.38.0
+jsonargparse[signatures] >=4.49.0
 tomlkit
