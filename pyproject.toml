@@ -91,14 +91,14 @@ lint.mccabe.max-complexity = 10
 lint.pydocstyle.convention = "google"
 
 [tool.codespell]
-# skip = '*.py'
-quiet-level = 3
-
 # comma separated list of words; waiting for:
 #  https://github.com/codespell-project/codespell/issues/2839#issuecomment-1731601603
 # also adding links until they ignored by its: nature
 #  https://github.com/codespell-project/codespell/issues/2243#issuecomment-1732019960
 # ignore-words-list = ""
+# skip = "*.py"
+quiet-level = 3
+
 [tool.docformatter]
 recursive = true
 # this need to be shorter as some docstings are r"""...
