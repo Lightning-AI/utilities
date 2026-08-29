@@ -121,3 +121,6 @@ lightning_logs
 
 Formatting
 .ruff_cache/
+
+# do not publish to PyPI
+uv.lock
