@@ -21,7 +21,6 @@ on:
         default: ""
       use-quiet-mode:
         description: "Specify yes to only show errors in output"
-        required: true
         type: string
         default: "no"
 
