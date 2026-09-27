@@ -19,6 +19,16 @@ on:
         required: false
         type: string
         default: ""
+      use-quiet-mode:
+        description: "Use quiet mode for markdown link checks"
+        required: false
+        type: string
+        default: "no"
+      use-verbose-mode:
+        description: "Use verbose mode for markdown link checks"
+        required: false
+        type: string
+        default: "yes"
 
 jobs:
   markdown-link-check:
@@ -26,6 +36,7 @@ jobs:
     env:
       CONFIG_FILE: ${{ inputs.config-file }}
       MODIFIED_ONLY: "no"
+
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -46,7 +57,7 @@ jobs:
                 "Accept-Encoding": "zstd, br, gzip, deflate"
               }
             }
-          ]
+          ],
           "timeout": "10s",
           "retryOn429": true,
           "retryCount": 3,
@@ -66,7 +77,7 @@ jobs:
         uses: tcort/github-action-markdown-link-check@e7c7a18363c842693fadde5d41a3bd3573a7a225 # v1.1.2
         with:
           base-branch: ${{ inputs.base-branch }}
-          use-quiet-mode: "no"
-          use-verbose-mode: "yes"
+          use-quiet-mode: ${{ inputs.use-quiet-mode }}
+          use-verbose-mode: ${{ inputs.use-verbose-mode }}
           check-modified-files-only: ${{ env.MODIFIED_ONLY }}
           config-file: ${{ env.CONFIG_FILE }}
