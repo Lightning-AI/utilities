@@ -19,10 +19,6 @@ on:
         required: false
         type: string
         default: ""
-      use-quiet-mode:
-        description: "Specify yes to only show errors in output"
-        type: string
-        default: "no"
 
 jobs:
   markdown-link-check:
@@ -30,7 +26,6 @@ jobs:
     env:
       CONFIG_FILE: ${{ inputs.config-file }}
       MODIFIED_ONLY: "no"
-      USE_QUIET_MODE: ${{ inputs.use-quiet-mode }}
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -67,10 +62,11 @@ jobs:
         if: startsWith(github.event_name, 'pull_request') && inputs.force-check-all == ''
         run: echo "MODIFIED_ONLY=yes" >> $GITHUB_ENV
 
-      - name: Checking markdown link
-        uses: tcort/github-action-markdown-link-check@e7c7a18363c842693fadde5d41a3bd3573a7a225 # v1.1.2
+      - name: Checking markdown links
+        uses: tcort/github-action-markdown-link-check@275c27c5035a5b4a656fe0e21a4c1403c118c767 # v3.15.0
         with:
           base-branch: ${{ inputs.base-branch }}
-          use-quiet-mode: ${{ env.USE_QUIET_MODE }}
+          use-quiet-mode: "no"
+          use-verbose-mode: "yes"
           check-modified-files-only: ${{ env.MODIFIED_ONLY }}
           config-file: ${{ env.CONFIG_FILE }}
