@@ -45,7 +45,7 @@ on:
         type: string
         # default operating systems should be pinned to specific versions instead of "-latest" for stability
         # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
-        # ubuntu-22.04 is deprecated (retired 2027-04-17) and macos-14 retires 2026-11-02: https://github.com/actions/runner-images/issues/14254 , /13518
+        # runner images (labels, deprecations): https://github.com/actions/runner-images
         default: |
           {
             "os": ["ubuntu-24.04", "macos-26", "windows-2022"],
