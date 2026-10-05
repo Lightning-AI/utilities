@@ -45,7 +45,6 @@ on:
         type: string
         # default operating systems should be pinned to specific versions instead of "-latest" for stability
         # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
-        # Runner images: https://github.com/actions/runner-images
         default: |
           {
             "os": ["ubuntu-24.04", "macos-26", "windows-2022"],
