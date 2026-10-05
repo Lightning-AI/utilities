@@ -9,6 +9,7 @@ def get_all_subclasses_iterator(cls: type) -> Iterator[type]:
     """Depth-first iterator over all subclasses of ``cls`` (recursively)."""
 
     def recurse(cl: type) -> Iterator[type]:
+        subclass: type
         for subclass in cl.__subclasses__():
             yield subclass
             yield from recurse(subclass)
