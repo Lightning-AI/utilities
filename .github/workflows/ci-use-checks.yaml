@@ -47,6 +47,7 @@ jobs:
       actions-ref: ${{ github.sha }} # use this/local version
       artifact-name: dist-packages-${{ github.sha }}
       import-name: "lightning_utilities"
+      # Runner images: https://github.com/actions/runner-images
       build-matrix: |
         {
           "os": ["ubuntu-24.04"],
