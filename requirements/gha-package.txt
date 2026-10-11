@@ -1,4 +1,4 @@
-twine ==6.2.*
+twine ==7.0.*
 setuptools ==82.0.*
 wheel ==0.47.*
 build ==1.5.*
