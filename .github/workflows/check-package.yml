@@ -138,14 +138,45 @@ jobs:
       - name: Download 📥
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
-          # download all build artifacts
+          # download all build artifacts, each into its own sub-folder;
+          #  `merge-multiple` is intentionally NOT used - parallel build jobs produce identically
+          #  named files (e.g. the same pure-python sdist/wheel) and extracting them concurrently
+          #  into one folder interleaves the writes and yields a corrupted archive
           pattern: ${{ inputs.artifact-name }}-build-*
-          merge-multiple: true
-          path: dist
+          path: dist-parts
+      - name: Collect distributions
+        run: |
+          mkdir -p dist
+          # flatten sequentially; identically named files can only come from parallel builds of the
+          #  same platform-independent dist, so keep the first and report the ones we drop.
+          # NOTE: `download-artifact` only gives each artifact its own sub-folder when the pattern
+          #  resolves to several of them, a lone artifact is extracted straight into the path,
+          #  so collect at any depth rather than assuming one of the two layouts
+          while IFS= read -r file; do
+            name=$(basename "$file")
+            if [ -e "dist/$name" ]; then
+              echo "::notice::skipping duplicate $name from ${file%/*}"
+            else
+              mv "$file" "dist/$name"
+            fi
+          done < <(find dist-parts -type f | sort)
+          if [ -z "$(ls -A dist)" ]; then
+            echo "::error::no distributions found in the downloaded artifacts"
+            exit 1
+          fi
       - name: Brief look
         run: |
+          shopt -s nullglob
           ls -lh dist/
           twine check dist/*
+          # `twine check` stops at the first unreadable tar header and treats it as end-of-archive,
+          #  so it passes truncated archives - decompress fully to actually verify the payload
+          for archive in dist/*.tar.gz; do
+            gzip -t "$archive"
+          done
+          for wheel in dist/*.whl; do
+            python -c "import sys, zipfile; sys.exit(zipfile.ZipFile(sys.argv[1]).testzip() is not None)" "$wheel"
+          done
       - name: Upload 📤
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
