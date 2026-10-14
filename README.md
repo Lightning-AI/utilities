@@ -33,10 +33,13 @@ jobs:
     with:
       azure-dir: ""  # skip Azure check
 
-  check-code:
-    uses: Lightning-AI/utilities/.github/workflows/check-code.yml@main
+  check-typing:
+    uses: Lightning-AI/utilities/.github/workflows/check-typing.yml@main
     with:
       actions-ref: main  # normally you shall use the same version as the workflow
+
+  check-precommit:
+    uses: Lightning-AI/utilities/.github/workflows/check-precommit.yml@main
 ```
 
 See usage of other workflows in [.github/workflows/ci-use-checks.yaml](https://github.com/Lightning-AI/utilities/tree/main/.github/workflows/ci-use-checks.yaml).
