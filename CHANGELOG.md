@@ -10,13 +10,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UnReleased] - 2026-MM-DD
 
+### Changed
+
+- CI: added a 2-day package install cooldown as a supply-chain guard ([#494](https://github.com/Lightning-AI/utilities/pull/494))
+- CI: removed `pull_request_target` workflows ([#493](https://github.com/Lightning-AI/utilities/pull/493))
+- CI: pinned GitHub Actions to commit SHAs ([#498](https://github.com/Lightning-AI/utilities/pull/498))
+- CI: pinned runner images to `ubuntu-24.04`, `macos-26` and `windows-2025` ([#526](https://github.com/Lightning-AI/utilities/pull/526))
+
+### Fixed
+
+- Fixed standalone test runner bugs in `run_standalone_tests.sh` ([#487](https://github.com/Lightning-AI/utilities/pull/487))
+- Fixed typing for mypy 2.4 ([#527](https://github.com/Lightning-AI/utilities/pull/527))
+
+
+---
+
+## [0.15.3] - 2026-02-11
+
 ### Added
 
 - Added support for Python 3.14 ([#464](https://github.com/Lightning-AI/utilities/pull/464))
+- Added `AGENTS.md` ([#428](https://github.com/Lightning-AI/utilities/pull/428))
+- Added option to specify the standalone test port ([#447](https://github.com/Lightning-AI/utilities/pull/447))
+- CI: added Python version to the package build matrix ([#465](https://github.com/Lightning-AI/utilities/pull/465))
 
 ### Changed
 
 - Dropped support for Python 3.9, now requires Python >=3.10 ([#463](https://github.com/Lightning-AI/utilities/pull/463))
+- CI: switched GitHub Actions workflows to `uv` ([#453](https://github.com/Lightning-AI/utilities/pull/453))
+- CI: replaced deprecated macOS 13 runner ([#446](https://github.com/Lightning-AI/utilities/pull/446))
+- CI: use maintained fork for markdown link check workflow ([#445](https://github.com/Lightning-AI/utilities/pull/445))
+- Updated documentation ([#430](https://github.com/Lightning-AI/utilities/pull/430))
+- Removed `setuptools` as a core requirement ([#461](https://github.com/Lightning-AI/utilities/pull/461))
 
 ### Fixed
 
