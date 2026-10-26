@@ -47,7 +47,7 @@ jobs:
         uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
         with:
           activate-environment: true
-          python-version: "3.10"
+          python-version: "3.12"
           enable-cache: true
 
       - name: Pull reusable 🤖 actions️

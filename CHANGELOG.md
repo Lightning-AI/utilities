@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Dropped support for Python 3.9, now requires Python >=3.10 ([#463](https://github.com/Lightning-AI/utilities/pull/463))
+- Bumped default Python for CI tooling (docs, typing, build, release) from 3.10 to 3.12; test matrices still cover 3.10 ([#530](https://github.com/Lightning-AI/utilities/pull/530))
 
 ### Fixed
 

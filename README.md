@@ -59,10 +59,10 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
       with:
-        python-version: 3.10
+        python-version: 3.12
     - uses: Lightning-AI/utilities/.github/actions/cache
       with:
-        python-version: 3.10
+        python-version: 3.12
         requires: oldest # or latest
 ```
 
