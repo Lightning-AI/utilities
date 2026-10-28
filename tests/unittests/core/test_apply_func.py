@@ -314,6 +314,16 @@ def test_apply_to_collections():
     assert reduced is None
 
 
+def test_apply_to_collections_defaultdict():
+    data1 = defaultdict(int, count=2)
+    data2 = defaultdict(int, count=3)
+    reduced = apply_to_collections(data1, data2, int, lambda a, b: a + b)
+    assert isinstance(reduced, defaultdict)
+    assert reduced.default_factory is int
+    assert reduced == {"count": 5}
+    assert reduced["missing"] == 0
+
+
 def test_apply_to_collections_dataclass():
     to_reduce_1 = Feature(input_ids=torch.tensor([1.0, 2.0, 3.0]), segment_ids=torch.tensor([4.0, 5.0, 6.0]))
     to_reduce_2 = Feature(input_ids=torch.tensor([1.0, 2.0, 3.0]), segment_ids=torch.tensor([4.0, 5.0, 6.0]))
