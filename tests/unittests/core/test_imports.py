@@ -109,6 +109,10 @@ def test_requirement_cache_with_prerelease_package(version_mock):
     version_mock.return_value = "1.10.0.dev0+931b44f"
     assert RequirementCache("transformer-engine>=0.11.0")
 
+def test_requirement_cache_environment_markers():
+    assert RequirementCache('pytest; python_version >= "3.0"')
+    assert not RequirementCache('pytest; python_version < "3.0"')
+
 
 def test_module_available_cache():
     assert RequirementCache(module="pytest")

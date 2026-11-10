@@ -130,8 +130,11 @@ class RequirementCache:
         try:
             req = Requirement(self.requirement)
             pkg_version = Version(_version(req.name))
-            self.available = req.specifier.contains(pkg_version, prereleases=True) and (
-                not req.extras or self._check_extras_available(req)
+            marker_passes = req.marker.evaluate() if req.marker else True
+            self.available = (
+                marker_passes
+                and req.specifier.contains(pkg_version, prereleases=True)
+                and (not req.extras or self._check_extras_available(req))
             )
         except (PackageNotFoundError, InvalidVersion) as ex:
             self.available = False
