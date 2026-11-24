@@ -50,7 +50,7 @@ jobs:
       build-matrix: |
         {
           "os": ["ubuntu-24.04"],
-          "python-version": ["3.10"]
+          "python-version": ["3.12"]
         }
       testing-matrix: |
         {
@@ -71,7 +71,7 @@ jobs:
       build-matrix: |
         {
           "os": ["ubuntu-24.04", "macos-26"],
-          "python-version": ["3.10"]
+          "python-version": ["3.12"]
         }
       testing-matrix: |
         {
