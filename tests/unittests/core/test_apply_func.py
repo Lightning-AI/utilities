@@ -349,18 +349,132 @@ def test_apply_to_collection_frozen_dataclass():
         var: int
 
     foo = Foo(0)
-    with pytest.raises(ValueError, match="frozen dataclass was passed"):
-        apply_to_collection(foo, int, lambda x: x + 1)
+    # frozen dataclasses are now reconstructed (a new transformed instance is returned)
+    result = apply_to_collection(foo, int, lambda x: x + 1)
+    assert result == Foo(1)
+    # the original instance is left untouched
+    assert foo == Foo(0)
 
 
-def test_apply_to_collection_allow_frozen_dataclass():
+def test_apply_to_collection_frozen_dataclass_nested():
+    @dataclasses.dataclass(frozen=True)
+    class Inner:
+        val: torch.Tensor
+
+    @dataclasses.dataclass(frozen=True)
+    class Outer:
+        inner: Inner
+        label: torch.Tensor
+
+    outer = Outer(inner=Inner(val=torch.tensor(1.0)), label=torch.tensor(2.0))
+    result = apply_to_collection(outer, torch.Tensor, lambda x: x * 3)
+    assert torch.equal(result.inner.val, torch.tensor(3.0))
+    assert torch.equal(result.label, torch.tensor(6.0))
+    # original untouched
+    assert torch.equal(outer.inner.val, torch.tensor(1.0))
+
+
+def test_apply_to_collection_frozen_dataclass_with_non_init_field():
     @dataclasses.dataclass(frozen=True)
     class Foo:
         var: int
+        computed: int = dataclasses.field(init=False)
 
-    foo = Foo(0)
-    result = apply_to_collection(foo, int, lambda x: x + 1, allow_frozen=True)
-    assert foo == result
+        def __post_init__(self):
+            object.__setattr__(self, "computed", self.var * 2)
+
+    foo = Foo(5)
+    result = apply_to_collection(foo, int, lambda x: x + 1)
+    assert result.var == 6
+    # init=False fields are retained from the original (parity with the mutable path),
+    # so `computed` keeps its original value (10) rather than being recomputed from the new var (12)
+    assert result.computed == 10
+    # original untouched
+    assert foo.var == 5
+    assert foo.computed == 10
+
+
+def test_apply_to_collection_frozen_dataclass_with_class_var():
+    @dataclasses.dataclass(frozen=True)
+    class Foo:
+        const: ClassVar[int] = 7
+        var: int
+
+    foo = Foo(5)
+    # a ClassVar must not be mistaken for an InitVar; reconstruction should succeed
+    result = apply_to_collection(foo, int, lambda x: x + 1)
+    assert result.var == 6
+    assert result.const == 7
+    assert Foo.const == 7
+    assert foo.var == 5
+
+
+def test_apply_to_collection_frozen_dataclass_with_init_var_raises():
+    @dataclasses.dataclass(frozen=True)
+    class Foo:
+        var: int
+        scale: InitVar[int] = 1
+
+        def __post_init__(self, scale):
+            object.__setattr__(self, "var", self.var * scale)
+
+    foo = Foo(5, scale=2)
+    # frozen dataclasses with InitVar fields cannot be reconstructed
+    with pytest.raises(ValueError, match="InitVar"):
+        apply_to_collection(foo, int, lambda x: x + 1)
+
+
+def test_apply_to_collections_frozen_dataclass():
+    @dataclasses.dataclass(frozen=True)
+    class Foo:
+        a: torch.Tensor
+        b: torch.Tensor
+
+        def __eq__(self, o: object) -> bool:
+            """Equal."""
+            if not isinstance(o, Foo):
+                return NotImplemented
+            return torch.equal(self.a, o.a) and torch.equal(self.b, o.b)
+
+    f1 = Foo(torch.tensor([1.0]), torch.tensor([2.0]))
+    f2 = Foo(torch.tensor([10.0]), torch.tensor([20.0]))
+    result = apply_to_collections(f1, f2, torch.Tensor, lambda x, y: x + y)
+    assert torch.equal(result.a, torch.tensor([11.0]))
+    assert torch.equal(result.b, torch.tensor([22.0]))
+    # original untouched
+    assert torch.equal(f1.a, torch.tensor([1.0]))
+
+
+def test_apply_to_collections_frozen_dataclass_nested():
+    @dataclasses.dataclass(frozen=True)
+    class Inner:
+        v: torch.Tensor
+
+    @dataclasses.dataclass(frozen=True)
+    class Outer:
+        inner: Inner
+        x: torch.Tensor
+
+    o1 = Outer(Inner(torch.tensor([1.0])), torch.tensor([2.0]))
+    o2 = Outer(Inner(torch.tensor([10.0])), torch.tensor([20.0]))
+    result = apply_to_collections(o1, o2, torch.Tensor, lambda a, b: a + b)
+    assert torch.equal(result.inner.v, torch.tensor([11.0]))
+    assert torch.equal(result.x, torch.tensor([22.0]))
+
+
+def test_apply_to_collections_frozen_dataclass_with_init_var_raises():
+    @dataclasses.dataclass(frozen=True)
+    class Foo:
+        var: int
+        scale: InitVar[int] = 1
+
+        def __post_init__(self, scale):
+            object.__setattr__(self, "var", self.var * scale)
+
+    f1 = Foo(5, scale=2)
+    f2 = Foo(5, scale=2)
+    with pytest.raises(ValueError, match="InitVar"):
+        apply_to_collections(f1, f2, int, lambda a, b: a + b)
 
 
 def test_apply_to_collection_with_cached_property_dataclass():
